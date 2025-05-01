@@ -282,7 +282,7 @@ export default function Home() {
           <ScrollTriggered>
             <div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-12">
               <div className="flex-1 flex items-center justify-center mt-10 lg:mt-0">
-                <div className="relative w-[402px] h-[500px]">
+                <div className="relative w-[280px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
                   <Image
                     src="/banner.png"
                     width={150}
