@@ -7,7 +7,6 @@ import { useScroll, motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const { scrollY } = useScroll();
