@@ -58,7 +58,7 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Link href="/portal">
+          <Link href="/registration">
             <Button
               variant={isScrolled ? "default" : "outline"}
               size="sm"

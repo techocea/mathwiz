@@ -118,3 +118,37 @@
     @apply bg-background text-foreground;
   }
 }
+
+.blur-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.blur-gradient div {
+  position: absolute;
+  border-radius: 100%;
+  filter: blur(70px);
+  opacity: 0.5;
+}
+
+.blur-gradient div:nth-child(1) {
+  width: 500px;
+  height: 500px;
+  top: -200px;
+  right: -100px;
+  background: rgba(132, 90, 223, 0.15);
+}
+
+.blur-gradient div:nth-child(2) {
+  width: 600px;
+  height: 600px;
+  bottom: -200px;
+  left: -100px;
+  background: rgba(78, 152, 237, 0.15);
+}

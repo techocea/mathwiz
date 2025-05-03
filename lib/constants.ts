@@ -1,5 +1,14 @@
 import { Award, Layers, UsersRound } from "lucide-react";
 
+export type Paper = {
+  id: string;
+  title: string;
+  subject: string;
+  durationMinutes: number;
+  fileUrl: string;
+  uploadDeadline: string;
+};
+
 export const NAV_ITEMS = [
   {
     id: 1,
@@ -89,5 +98,48 @@ export const TIMETABLE = [
     day2: "Thursday",
     day2Start: "8:00AM",
     day2Finish: "10:00AM",
+  },
+];
+
+export const MOCK_PAPERS = [
+  {
+    id: "paper-1",
+    title: "Pure Mathematics Paper 1",
+    subject: "Mathematics",
+    durationMinutes: 1,
+    fileUrl: "/papers/pure-math-1.pdf",
+    uploadDeadline: "2025-05-10T00:00:00Z",
+  },
+  {
+    id: "paper-2",
+    title: "Applied Mathematics Paper 1",
+    subject: "Mathematics",
+    durationMinutes: 1,
+    fileUrl: "/papers/applied-math-1.pdf",
+    uploadDeadline: "2025-05-15T00:00:00Z",
+  },
+  {
+    id: "paper-3",
+    title: "Pure Mathematics Paper 2",
+    subject: "Mathematics",
+    durationMinutes: 1,
+    fileUrl: "/papers/pure-math-2.pdf",
+    uploadDeadline: "2025-05-20T00:00:00Z",
+  },
+  {
+    id: "paper-4",
+    title: "Applied Mathematics Paper 2",
+    subject: "Mathematics",
+    durationMinutes: 1,
+    fileUrl: "/papers/applied-math-2.pdf",
+    uploadDeadline: "2025-05-05T00:00:00Z",
+  },
+  {
+    id: "paper-5",
+    title: "Model Paper - Combined Mathematics",
+    subject: "Mathematics",
+    durationMinutes: 1,
+    fileUrl: "/papers/model-paper.pdf",
+    uploadDeadline: "2025-05-25T00:00:00Z",
   },
 ];
