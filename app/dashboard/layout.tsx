@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/app/globals.css";
-import DashboardNavbar from "@/components/DashboardNavbar";
 import { TimerProvider } from "@/components/contexts/TimerContext";
-import { Toaster } from "@/components/ui/sonner";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 
 const poppins = Poppins({
@@ -13,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Mathwiz",
+  title: "Mathwiz - Portal",
   description: "Leading Maths Class in Negombo",
   icons: {
     icon: "/mathwiz.png",
@@ -29,13 +27,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <TimerProvider>
-      {/* <Toaster /> */}
       <Sonner position="top-right" closeButton />
       <html lang="en">
-        <body className={`${poppins.className} antialiased`}>
-          <DashboardNavbar />
-          {children}
-        </body>
+        <body className={`${poppins.className} antialiased`}>{children}</body>
       </html>
     </TimerProvider>
   );

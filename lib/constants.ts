@@ -1,5 +1,11 @@
-import { Award, Layers, UsersRound } from "lucide-react";
-
+import {
+  Award,
+  Layers,
+  UsersRound,
+  LayoutDashboard,
+  FileText,
+  Users,
+} from "lucide-react";
 export type Paper = {
   id: string;
   title: string;
@@ -29,6 +35,24 @@ export const NAV_ITEMS = [
     id: 4,
     label: "Contact",
     href: "#contact",
+  },
+];
+
+export const ADMIN_NAV_ITEMS = [
+  {
+    name: "Dashboard",
+    path: "/dashboard/admin",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Papers",
+    path: "/dashboard/admin/papers",
+    icon: FileText,
+  },
+  {
+    name: "Students",
+    path: "/dashboard/admin/students",
+    icon: Users,
   },
 ];
 
@@ -141,5 +165,91 @@ export const MOCK_PAPERS = [
     durationMinutes: 1,
     fileUrl: "/papers/model-paper.pdf",
     uploadDeadline: "2025-05-25T00:00:00Z",
+  },
+];
+
+export const ADMIN_MOCK_PAPERS = [
+  {
+    id: "paper-1",
+    title: "2023 Combined Maths Paper 1",
+    createdAt: "2023-06-15",
+    timeLimit: 180, // minutes
+    submissions: 87,
+    status: "active",
+  },
+  {
+    id: "paper-2",
+    title: "2023 Combined Maths Paper 2",
+    createdAt: "2023-06-28",
+    timeLimit: 120, // minutes
+    submissions: 65,
+    status: "active",
+  },
+  {
+    id: "paper-3",
+    title: "2023 Combined Maths Paper 3",
+    createdAt: "2023-07-10",
+    timeLimit: 150, // minutes
+    submissions: 72,
+    status: "active",
+  },
+  {
+    id: "paper-4",
+    title: "2022 Combined Maths Model Paper",
+    createdAt: "2022-11-20",
+    timeLimit: 180, // minutes
+    submissions: 124,
+    status: "archived",
+  },
+  {
+    id: "paper-5",
+    title: "2022 Combined Maths Past Paper",
+    createdAt: "2022-09-05",
+    timeLimit: 150, // minutes
+    submissions: 98,
+    status: "archived",
+  },
+];
+
+export const MOCK_STUDENTS = [
+  {
+    id: "student-1",
+    name: "Dasun Silva",
+    email: "dasun@example.com",
+    joinDate: "2023-01-15",
+    completedPapers: 8,
+    status: "active",
+  },
+  {
+    id: "student-2",
+    name: "Malini Perera",
+    email: "malini@example.com",
+    joinDate: "2023-02-03",
+    completedPapers: 7,
+    status: "active",
+  },
+  {
+    id: "student-3",
+    name: "Rajitha Fernando",
+    email: "rajitha@example.com",
+    joinDate: "2023-01-20",
+    completedPapers: 6,
+    status: "active",
+  },
+  {
+    id: "student-4",
+    name: "Dilshan Jayawardena",
+    email: "dilshan@example.com",
+    joinDate: "2023-03-12",
+    completedPapers: 5,
+    status: "inactive",
+  },
+  {
+    id: "student-5",
+    name: "Savini Mendis",
+    email: "savini@example.com",
+    joinDate: "2023-02-18",
+    completedPapers: 8,
+    status: "active",
   },
 ];

@@ -2,6 +2,7 @@
 
 import BlurGradient from "@/components/BlurGradient";
 import { useTimer } from "@/components/contexts/TimerContext";
+import DashboardNavbar from "@/components/DashboardNavbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -32,6 +33,7 @@ const StudentDashboard = () => {
   };
   return (
     <>
+      <DashboardNavbar dashboardType="student" />
       <BlurGradient />
       <div className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
         <div className="flex flex-col space-y-4">

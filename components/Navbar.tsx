@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
+      <motion.header  
         initial={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
         animate={{
           backgroundColor: isScrolled
