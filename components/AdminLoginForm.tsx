@@ -35,10 +35,6 @@ const AdminLoginForm = () => {
       const res = await axios.post("/api/admin", data);
 
       if (res.status === 200) {
-        const token = res.data.token;
-        //save the token in the local Storage
-        localStorage.setItem("adminToken", token);
-
         toast.success("logged in successfully");
         router.push("/dashboard/admin");
       } else {
@@ -65,7 +61,7 @@ const AdminLoginForm = () => {
             className="space-y-4 grid grid-cols-1 gap-2"
           >
             <div className="flex flex-col space-y-4 gap-2">
-              <div>
+              <div className="space-y-3">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" {...register("email")} />
                 {errors.email && (
@@ -73,7 +69,7 @@ const AdminLoginForm = () => {
                 )}
               </div>
 
-              <div>
+              <div className="space-y-3">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"

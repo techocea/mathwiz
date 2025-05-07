@@ -21,10 +21,11 @@ const TOTAL_PAPERS = ADMIN_MOCK_PAPERS.length;
 
 const AdminDashboardPage = () => {
   const router = useRouter();
-  const [adminData, setAdminData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [adminData, setAdminData] = useState<{ email: string } | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchAdminData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("/api/admin", { withCredentials: true });
       setAdminData(res.data);
@@ -59,7 +60,7 @@ const AdminDashboardPage = () => {
       <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
         <div>
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome, Mathwiz</h1>
+            <h1 className="text-3xl font-bold mb-2">Welcome, Admin!</h1>
             <p className="text-muted-foreground">
               Here's an overview of your A/L Combined Mathematics class
             </p>
@@ -158,24 +159,28 @@ const AdminDashboardPage = () => {
               <CardContent>
                 <div className="flex flex-col gap-4">
                   <Button
-                    onClick={() =>
-                      router.push("/dashboard/admin/papers/create")
-                    }
+                    size="lg"
+                    onClick={() => router.push("/dashboard/admin/papers")}
                     className="w-full justify-start cursor-pointer"
                   >
                     <FileText className="mr-2 h-4 w-4" />
-                    Create New Paper
+                    Manage Papers
                   </Button>
                   <Button
+                    size="lg"
                     onClick={() =>
-                      router.push("/dashboard/admin/students/create")
+                      router.push("/dashboard/admin/students")
                     }
                     className="w-full justify-start cursor-pointer"
                   >
                     <Users className="mr-2 h-4 w-4" />
                     Manage Students
                   </Button>
-                  <Button disabled variant="outline" className="w-full justify-start">
+                  <Button
+                    disabled
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
                     <Clock className="mr-2 h-4 w-4" />
                     Upload Marksheet (coming soon)
                   </Button>

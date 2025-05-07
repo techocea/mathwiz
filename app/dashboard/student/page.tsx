@@ -14,13 +14,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { MOCK_PAPERS } from "@/lib/constants";
+import axios from "axios";
 import { Clock, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const StudentDashboard = () => {
-  const { isRunning, currentExamId, startTimer } = useTimer();
   const router = useRouter();
+  const { isRunning, currentExamId, startTimer } = useTimer();
+  const [loading, setLoading] = useState(false);
+  const [studentData, setStudentData] = useState<{ name: string } | null>(null);
+
+  const fetchStudentData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/login", { withCredentials: true });
+      setStudentData(res.data);
+    } catch (error) {
+      console.error("Failed to fetch Student data: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentData();
+  }, []);
 
   const handleStartExam = (paperId: string, durationMinutes: number) => {
     if (isRunning && currentExamId !== paperId) {
@@ -38,7 +58,9 @@ const StudentDashboard = () => {
       <div className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
         <div className="flex flex-col space-y-4">
           <div>
-            <h1 className="text-3xl font-bold">Your Dashboard</h1>
+            <h1 className="text-3xl font-bold">
+              {studentData?.name}&apos;s Dashboard
+            </h1>
             <p className="text-sm text-muted-foreground">
               Browse and start your exams. Remember, once you start, the timer
               cannot be paused.
@@ -63,7 +85,7 @@ const StudentDashboard = () => {
                   return (
                     <TableRow
                       key={paper.id}
-                      //   className={isExpired ? "opacity-70" : ""}
+                    //   className={isExpired ? "opacity-70" : ""}
                     >
                       <TableCell className="font-medium flex items-center gap-2">
                         <FileText size={18} className="text-primary" />
@@ -86,7 +108,7 @@ const StudentDashboard = () => {
                             handleStartExam(paper.id, paper.durationMinutes)
                           }
                           size="sm"
-                          //   disabled={isExpired}
+                        //   disabled={isExpired}
                         >
                           Start Exam
                         </Button>

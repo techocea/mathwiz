@@ -16,8 +16,10 @@ import { FileText, Plus, Search, Edit, Trash, Eye } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { useState } from "react";
 import { ADMIN_MOCK_PAPERS } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 const DisplayPapersPage = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [papers, setPapers] = useState(ADMIN_MOCK_PAPERS);
 
@@ -47,9 +49,13 @@ const DisplayPapersPage = () => {
               </p>
             </div>
 
-            <Button>
+            <Button
+              size="lg" 
+              onClick={() => router.push("/dashboard/admin/papers/create")}
+              className="cursor-pointer"
+            >
               <Plus className="mr-2 h-4 w-4" />
-              Create New Paper
+              Create Paper
             </Button>
           </div>
 
@@ -94,11 +100,10 @@ const DisplayPapersPage = () => {
                       <TableCell>{paper.submissions}</TableCell>
                       <TableCell>
                         <span
-                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            paper.status === "active"
-                              ? "bg-green-50 text-green-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${paper.status === "active"
+                            ? "bg-green-50 text-green-700"
+                            : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {paper.status.charAt(0).toUpperCase() +
                             paper.status.slice(1)}
@@ -109,21 +114,21 @@ const DisplayPapersPage = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            //   onClick={() => handleView(paper.id)}
+                          //   onClick={() => handleView(paper.id)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            //   onClick={() => handleEdit(paper.id)}
+                          //   onClick={() => handleEdit(paper.id)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            //   onClick={() => handleDelete(paper.id)}
+                          //   onClick={() => handleDelete(paper.id)}
                           >
                             <Trash className="h-4 w-4" />
                           </Button>

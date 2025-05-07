@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +22,7 @@ import {
 import Link from "next/link";
 import axios from "axios";
 import { registrationSchema, RegistrationFormValues } from "@/lib/zod";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const {
@@ -41,13 +41,14 @@ const RegisterForm = () => {
     try {
       const res = await axios.post("/api/registration", data);
       if (res.status === 200) {
-        alert("registered successfully");
+        toast.success("Registered Successfully");
+        console.log(data);
       } else {
-        alert("Error in registration");
+        toast.error("Error in registration");
       }
     } catch (error: any) {
       console.error("Error in registration", error);
-      alert(error?.response?.data?.message || "Error in registration");
+      toast.error(error?.response?.data?.message || "Error in registration");
     }
   };
 
@@ -161,7 +162,6 @@ const RegisterForm = () => {
               <Button
                 variant="link"
                 asChild
-                type="submit"
                 className="w-fit text-center cursor-pointer"
               >
                 <Link href="/login">Already a member? Login</Link>

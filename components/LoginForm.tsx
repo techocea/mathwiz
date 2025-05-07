@@ -42,7 +42,7 @@ const LoginForm = () => {
       }
     } catch (error: any) {
       console.error("Error in login", error);
-      alert(error?.response?.data?.message || "Error in login");
+      toast.error(error?.response?.data?.message || "Error in login");
     }
   };
 

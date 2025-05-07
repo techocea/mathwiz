@@ -5,8 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, email, password, contact, year, school } =
-      await req.json();
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      contact,
+      year,
+      school,
+      status,
+    } = await req.json();
 
     await connectDB();
 
@@ -18,6 +26,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -29,10 +38,11 @@ export async function POST(req: NextRequest) {
       contact,
       year,
       school,
+      status: status || "pending",
     });
 
     return NextResponse.json(
-      { message: "user created successfully" },
+      { message: "User created successfully" },
       { status: 200 }
     );
   } catch (error) {
@@ -43,3 +53,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

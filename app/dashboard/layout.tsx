@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/app/globals.css";
 import { TimerProvider } from "@/components/contexts/TimerContext";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { OurFileRouter } from "../api/uploadthing/core";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,9 +29,11 @@ export default function DashboardLayout({
 }>) {
   return (
     <TimerProvider>
-      <Sonner position="top-right" closeButton />
       <html lang="en">
-        <body className={`${poppins.className} antialiased`}>{children}</body>
+        <body className={`${poppins.className} antialiased`}>
+          <NextSSRPlugin routerConfig={extractRouterConfig(OurFileRouter)} />
+          {children}
+        </body>
       </html>
     </TimerProvider>
   );
