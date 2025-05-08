@@ -24,7 +24,7 @@ const paperSchema = new mongoose.Schema(
     title: { type: String },
     durationMinutes: { type: Number },
     paperUrl: { type: String },
-    uploadDeadline: { type: String },
+    uploadDeadline: { type: Date },
   },
   { timestamps: true }
 );

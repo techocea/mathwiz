@@ -14,26 +14,41 @@ import {
 } from "@/components/ui/table";
 import { FileText, Plus, Search, Edit, Trash, Eye } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ADMIN_MOCK_PAPERS } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+
+interface PaperProps {
+  _id: string;
+  title: string;
+  durationMinutes: number;
+  paperUrl: string;
+  uploadDeadline: string;
+  createdAt: string;
+}
 
 const DisplayPapersPage = () => {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [papers, setPapers] = useState(ADMIN_MOCK_PAPERS);
+  const [papers, setPapers] = useState<PaperProps[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    if (e.target.value === "") {
-      setPapers(ADMIN_MOCK_PAPERS);
-    } else {
-      const FILTERED_PAPERS = ADMIN_MOCK_PAPERS.filter((paper) =>
-        paper.title.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-      setPapers(FILTERED_PAPERS);
+  const fetchAllPapers = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/paper");
+      setPapers(res.data.papers);
+    } catch (error) {
+      console.log("Failed to fetch papers: ", error);
+      router.push("/dashboard/admin");
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchAllPapers();
+  }, []);
 
   return (
     <>
@@ -50,27 +65,13 @@ const DisplayPapersPage = () => {
             </div>
 
             <Button
-              size="lg" 
+              size="lg"
               onClick={() => router.push("/dashboard/admin/papers/create")}
               className="cursor-pointer"
             >
               <Plus className="mr-2 h-4 w-4" />
               Create Paper
             </Button>
-          </div>
-
-          <div className="rounded-lg border bg-card mb-8">
-            <div className="p-4">
-              <div className="flex items-center gap-2">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search papers..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="border-0 focus-visible:ring-0 bg-transparent"
-                />
-              </div>
-            </div>
           </div>
 
           <div className="rounded-lg border bg-card">
@@ -81,54 +82,44 @@ const DisplayPapersPage = () => {
                   <TableHead>Created Date</TableHead>
                   <TableHead>Time Limit</TableHead>
                   <TableHead>Submissions</TableHead>
-                  <TableHead>Status</TableHead>
+                  {/* <TableHead>Status</TableHead> */}
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {papers.length > 0 ? (
+                {papers && papers.length > 0 ? (
                   papers.map((paper) => (
-                    <TableRow key={paper.id}>
+                    <TableRow key={paper?._id}>
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
-                          {paper.title}
+                          {paper?.title}
                         </div>
                       </TableCell>
-                      <TableCell>{paper.createdAt}</TableCell>
-                      <TableCell>{paper.timeLimit} mins</TableCell>
-                      <TableCell>{paper.submissions}</TableCell>
-                      <TableCell>
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${paper.status === "active"
-                            ? "bg-green-50 text-green-700"
-                            : "bg-gray-100 text-gray-700"
-                            }`}
-                        >
-                          {paper.status.charAt(0).toUpperCase() +
-                            paper.status.slice(1)}
-                        </span>
-                      </TableCell>
+                      <TableCell>{paper?.createdAt}</TableCell>
+                      <TableCell>{paper?.durationMinutes} mins</TableCell>
+                      <TableCell>{"paper?.submissions"}</TableCell>
+
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                          //   onClick={() => handleView(paper.id)}
+                            //   onClick={() => handleView(paper.id)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                          //   onClick={() => handleEdit(paper.id)}
+                            //   onClick={() => handleEdit(paper.id)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                          //   onClick={() => handleDelete(paper.id)}
+                            //   onClick={() => handleDelete(paper.id)}
                           >
                             <Trash className="h-4 w-4" />
                           </Button>

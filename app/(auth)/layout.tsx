@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/app/globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,7 +27,7 @@ export default function AuthLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <Toaster position="top-right" closeButton />
+        <Sonner position="top-right" closeButton />
         {children}
       </body>
     </html>

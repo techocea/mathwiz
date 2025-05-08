@@ -22,31 +22,39 @@ import { UploadDropzone } from "@/lib/uploadthing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatePaperFormValues, createPaperSchema } from "@/lib/zod";
+import axios from "axios";
 
 const CreatePapersPage = () => {
   const router = useRouter();
-  const [durationMinutes, setDurationMinutes] = useState(60);
-
-  const [paperUrl, setPaperUrl] = useState("");
+  const [durationLimit, setDurationLimit] = useState(60);
+  const [pdfUrl, setPdfUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadDeadline, setUploadDeadline] = useState("");
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<CreatePaperFormValues>({
     resolver: zodResolver(createPaperSchema),
   });
 
   const handleCreatePaper = async (data: CreatePaperFormValues) => {
-    setIsUploading(true);
     try {
-      console.log(data);
-      toast.success("Paper created successfully!");
+      setIsUploading(true);
+      const newData = {
+        ...data,
+        durationMinutes: durationLimit,
+      };
+      const res = await axios.post("/api/paper", newData);
+      if (res.status === 200) {
+        toast.success("Paper created successfully");
+        router.push("/dashboard/admin/papers");
+      } else {
+        toast.error("Something went wrong");
+      }
     } catch (error) {
       toast.error("Failed to create paper");
-      console.error(error);
     } finally {
       setIsUploading(false);
     }
@@ -79,48 +87,54 @@ const CreatePapersPage = () => {
                       id="title"
                       {...register("title")}
                       placeholder="e.g. Pure Mathematics Paper 1"
-                      required
                     />
-                    {errors.title && (
-                      <p className="text-sm text-red-500">
-                        {errors.title.message}
-                      </p>
-                    )}
                   </div>
+                  {errors.title && (
+                    <p className="text-sm text-red-500">
+                      {errors.title.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="duration">Duration (minutes)</Label>
+                    <Label htmlFor="durationLimit">Duration (minutes)</Label>
                     <span className="text-sm text-muted-foreground">
-                      {durationMinutes} minutes
+                      {durationLimit} minutes
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <Slider
-                      id="duration"
+                      id="durationMinutes"
                       min={30}
                       max={180}
                       step={15}
-                      // value={[durationMinutes]}
-                      // onValueChange={(value) => setDurationMinutes(value[0])}
+                      value={[durationLimit]}
+                      onValueChange={(value) => {
+                        setDurationLimit(value[0]);
+                        setValue("durationMinutes", durationLimit); 
+                      }}
                       className="flex-1"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <Label htmlFor="deadline">Upload Deadline</Label>
+                  <Label htmlFor="uploadDeadline">Upload Deadline</Label>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <Input
                       id="uploadDeadline"
-                      type="datetime-local"
+                      type="date"
                       {...register("uploadDeadline")}
-                      required
                     />
                   </div>
+                  {errors.uploadDeadline && (
+                    <p className="text-sm text-red-500">
+                      {errors.uploadDeadline.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -128,16 +142,30 @@ const CreatePapersPage = () => {
                   <UploadDropzone
                     endpoint="pdfUploader"
                     onClientUploadComplete={(res) => {
+                      // alert("ok");
                       const uploadedUrl = res[0].ufsUrl;
-                      setPaperUrl(uploadedUrl);
-                      // setValue("examPaper", uploadedUrl);
-
-                      toast.success("PDF uploaded successfully!");
+                      setPdfUrl(uploadedUrl);
+                      setValue("paperUrl", uploadedUrl);
                     }}
                     onUploadError={(error) => {
                       toast.error(`ERROR! ${error.message}`);
                     }}
                   />
+                  {errors.paperUrl && (
+                    <p className="text-sm text-red-500">
+                      {errors.paperUrl.message}
+                    </p>
+                  )}
+                  {pdfUrl && (
+                    <div className="flex items-center justify-between bg-accent p-2 rounded-md">
+                      <span className="text-sm truncate max-w-[500px]">
+                        {pdfUrl}
+                      </span>
+                      <Button variant={"outline"} size="sm">
+                        {"Change"}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>
@@ -149,11 +177,7 @@ const CreatePapersPage = () => {
                   >
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    disabled={isUploading}
-                    className="cursor-pointer"
-                  >
+                  <Button disabled={isUploading} className="cursor-pointer">
                     <Upload className="h-4 w-4 mr-2" />
                     {isUploading ? "Creating..." : "Create Paper"}
                   </Button>

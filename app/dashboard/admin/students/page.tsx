@@ -57,8 +57,8 @@ const DisplayStudentsPage = () => {
       const res = await axios.get("/api/students");
       setStudents(res.data.students);
     } catch (error) {
-      console.error("Failed to fetch student data:", error);
-      router.push("/dashboard/admin/students");
+      console.log("Failed to fetch student data:", error);
+      router.push("/dashboard/admin");
     } finally {
       setLoading(false);
     }

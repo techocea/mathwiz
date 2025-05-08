@@ -29,6 +29,8 @@ export async function POST(req: NextRequest) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    // const adminPassword = await bcrypt.hash("mathwiz@jangu", salt);
+    // console.log(adminPassword);
 
     await User.create({
       firstName,
@@ -53,4 +55,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

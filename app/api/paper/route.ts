@@ -37,4 +37,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {}
+export async function GET() {
+  try {
+    await connectDB();
+
+    const papers = await Paper.find();
+
+    return NextResponse.json({ papers }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching papers: ", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

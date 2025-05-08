@@ -19,9 +19,9 @@ export const loginSchema = z.object({
 
 export const createPaperSchema = z.object({
   title: z.string().min(6, "This field is required"),
-  duration: z.string().min(6, "This field is required"),
-  paperUrl: z.string().min(6, "This field is required"),
-  uploadDeadline: z.string(),
+  durationMinutes: z.number().min(1, "This field is required"),
+  paperUrl: z.string().min(1, "This field is required"),
+  uploadDeadline: z.string().min(1, "This field is required"),
 });
 
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;

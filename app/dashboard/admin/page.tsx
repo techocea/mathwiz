@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import BlurGradient from "@/components/BlurGradient";
 import {
@@ -14,15 +13,18 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Users, Clock, Calendar, Loader2 } from "lucide-react";
-import { ADMIN_MOCK_PAPERS, MOCK_STUDENTS } from "@/lib/constants";
+import axios from "axios";
 
-const TOTAL_STUDENTS = MOCK_STUDENTS.length;
-const TOTAL_PAPERS = ADMIN_MOCK_PAPERS.length;
+interface AdminProps {
+  email: string;
+}
 
 const AdminDashboardPage = () => {
   const router = useRouter();
-  const [adminData, setAdminData] = useState<{ email: string } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [adminData, setAdminData] = useState<AdminProps | null>(null);
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalPapers, setTotalPapers] = useState(0);
 
   const fetchAdminData = async () => {
     setLoading(true);
@@ -37,10 +39,23 @@ const AdminDashboardPage = () => {
     }
   };
 
-  // const handleLogout = async () => {
-  //   await axios.post("/api/admin/logout");
-  //   router.push("/admin");
-  // };
+  // function to get the students and papers length
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const [studentsRes, papersRes] = await Promise.all([
+          axios.get("/api/students"),
+          axios.get("/api/paper"),
+        ]);
+        setTotalStudents(studentsRes.data.students.length);
+        setTotalPapers(papersRes.data.papers.length);
+      } catch (error) {
+        console.error("Failed to fetch counts:", error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   useEffect(() => {
     fetchAdminData();
@@ -60,7 +75,9 @@ const AdminDashboardPage = () => {
       <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
         <div>
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome, Admin!</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              Welcome, {adminData?.email}
+            </h1>
             <p className="text-muted-foreground">
               Here's an overview of your A/L Combined Mathematics class
             </p>
@@ -75,7 +92,7 @@ const AdminDashboardPage = () => {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">{TOTAL_STUDENTS}</div>
+                <div className="text-3xl font-bold">{totalStudents}</div>
                 <p className="text-xs text-muted-foreground pt-1">
                   Active student accounts
                 </p>
@@ -90,7 +107,7 @@ const AdminDashboardPage = () => {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">{TOTAL_PAPERS}</div>
+                <div className="text-3xl font-bold">{totalPapers}</div>
                 <p className="text-xs text-muted-foreground pt-1">
                   Papers created
                 </p>
@@ -168,9 +185,7 @@ const AdminDashboardPage = () => {
                   </Button>
                   <Button
                     size="lg"
-                    onClick={() =>
-                      router.push("/dashboard/admin/students")
-                    }
+                    onClick={() => router.push("/dashboard/admin/students")}
                     className="w-full justify-start cursor-pointer"
                   >
                     <Users className="mr-2 h-4 w-4" />
