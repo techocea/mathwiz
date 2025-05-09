@@ -27,7 +27,7 @@ export default function AuthLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <Sonner position="top-right" closeButton />
+        <Sonner position="top-right" />
         {children}
       </body>
     </html>

@@ -15,38 +15,65 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
-import { FileText, Clock, Calendar, Upload } from "lucide-react";
+import { FileText, Clock, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { UploadDropzone } from "@/lib/uploadthing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatePaperFormValues, createPaperSchema } from "@/lib/zod";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 
 const CreatePapersPage = () => {
   const router = useRouter();
-  const [durationLimit, setDurationLimit] = useState(60);
-  const [pdfUrl, setPdfUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<CreatePaperFormValues>({
     resolver: zodResolver(createPaperSchema),
+    defaultValues: {
+      title: "",
+      durationMinutes: 60,
+      uploadDeadline: undefined,
+      paperUrl: undefined,
+    },
   });
 
+  const durationMinutes = watch("durationMinutes");
+  const uploadDeadline = watch("uploadDeadline");
+
   const handleCreatePaper = async (data: CreatePaperFormValues) => {
+    setIsUploading(true);
     try {
-      setIsUploading(true);
-      const newData = {
-        ...data,
-        durationMinutes: durationLimit,
-      };
-      const res = await axios.post("/api/paper", newData);
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("durationMinutes", data.durationMinutes.toString());
+      formData.append("uploadDeadline", data.uploadDeadline.toISOString());
+      formData.append("paperUrl", data.paperUrl);
+
+      console.log("Submitting form with data:", {
+        title: data.title,
+        durationMinutes: data.durationMinutes,
+        uploadDeadline: data.uploadDeadline.toISOString(),
+        paperUrlName: data.paperUrl.name,
+        paperUrlSize: data.paperUrl.size,
+        paperUrlType: data.paperUrl.type,
+      });
+
+      const res = await axios.post("/api/paper", formData);
       if (res.status === 200) {
         toast.success("Paper created successfully");
         router.push("/dashboard/admin/papers");
@@ -54,7 +81,9 @@ const CreatePapersPage = () => {
         toast.error("Something went wrong");
       }
     } catch (error) {
-      toast.error("Failed to create paper");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create exam paper"
+      );
     } finally {
       setIsUploading(false);
     }
@@ -98,23 +127,21 @@ const CreatePapersPage = () => {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="durationLimit">Duration (minutes)</Label>
+                    <Label htmlFor="durationMinutes">Duration (minutes)</Label>
                     <span className="text-sm text-muted-foreground">
-                      {durationLimit} minutes
+                      {durationMinutes} minutes
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <Slider
                       id="durationMinutes"
-                      min={30}
+                      min={15}
                       max={180}
-                      step={15}
-                      value={[durationLimit]}
-                      onValueChange={(value) => {
-                        setDurationLimit(value[0]);
-                        setValue("durationMinutes", durationLimit); 
-                      }}
+                      step={5}
+                      onValueChange={(value) =>
+                        setValue("durationMinutes", value[0])
+                      }
                       className="flex-1"
                     />
                   </div>
@@ -123,12 +150,32 @@ const CreatePapersPage = () => {
                 <div className="space-y-3">
                   <Label htmlFor="uploadDeadline">Upload Deadline</Label>
                   <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="uploadDeadline"
-                      type="date"
-                      {...register("uploadDeadline")}
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !uploadDeadline && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {uploadDeadline
+                            ? format(uploadDeadline, "PPP")
+                            : "Select deadline"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={uploadDeadline}
+                          onSelect={(date) =>
+                            date && setValue("uploadDeadline", date)
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   {errors.uploadDeadline && (
                     <p className="text-sm text-red-500">
@@ -138,17 +185,15 @@ const CreatePapersPage = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <Label>Upload Exam Paper</Label>
-                  <UploadDropzone
-                    endpoint="pdfUploader"
-                    onClientUploadComplete={(res) => {
-                      // alert("ok");
-                      const uploadedUrl = res[0].ufsUrl;
-                      setPdfUrl(uploadedUrl);
-                      setValue("paperUrl", uploadedUrl);
-                    }}
-                    onUploadError={(error) => {
-                      toast.error(`ERROR! ${error.message}`);
+                  <Label htmlFor="paperUrl">Upload Exam Paper</Label>
+                  <Input
+                    id="paperUrl"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setValue("paperUrl", e.target.files[0]);
+                      }
                     }}
                   />
                   {errors.paperUrl && (
@@ -156,7 +201,7 @@ const CreatePapersPage = () => {
                       {errors.paperUrl.message}
                     </p>
                   )}
-                  {pdfUrl && (
+                  {/* {pdfUrl && (
                     <div className="flex items-center justify-between bg-accent p-2 rounded-md">
                       <span className="text-sm truncate max-w-[500px]">
                         {pdfUrl}
@@ -165,7 +210,7 @@ const CreatePapersPage = () => {
                         {"Change"}
                       </Button>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </CardContent>
               <CardFooter>

@@ -13,17 +13,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MOCK_PAPERS } from "@/lib/constants";
 import axios from "axios";
 import { Clock, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+interface PaperProps {
+  _id: string;
+  title: string;
+  durationMinutes: number;
+  paperUrl: string;
+  uploadDeadline: string;
+}
+
 const StudentDashboard = () => {
   const router = useRouter();
   const { isRunning, currentExamId, startTimer } = useTimer();
   const [loading, setLoading] = useState(false);
+  const [papers, setPapers] = useState<PaperProps[] | null>(null);
   const [studentData, setStudentData] = useState<{ name: string } | null>(null);
 
   const fetchStudentData = async () => {
@@ -42,9 +50,27 @@ const StudentDashboard = () => {
     fetchStudentData();
   }, []);
 
+  const fetchAllPapers = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/paper");
+      setPapers(res.data.papers);
+    } catch (error) {
+      console.log("Failed to fetch papers: ", error);
+      router.push("/dashboard/student");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPapers();
+  }, []);
+
   const handleStartExam = (paperId: string, durationMinutes: number) => {
     if (isRunning && currentExamId !== paperId) {
-      toast.error("You already have a paper going on!");
+      // toast.error("You already have a paper going on!");
+      router.push(`/dashboard/student/paper/${paperId}`);
       return;
     }
 
@@ -73,18 +99,14 @@ const StudentDashboard = () => {
                 <TableRow>
                   <TableHead>Paper</TableHead>
                   <TableHead>Duration</TableHead>
-                  <TableHead>Deadline</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_PAPERS.map((paper) => {
-                  //   const isExpired = isPaperExpired(paper.uploadDeadline);
-                  const deadlineDate = new Date(paper.uploadDeadline);
-
-                  return (
+                {papers && papers.length > 0 ? (
+                  papers.map((paper) => (
                     <TableRow
-                      key={paper.id}
+                      key={paper._id}
                     //   className={isExpired ? "opacity-70" : ""}
                     >
                       <TableCell className="font-medium flex items-center gap-2">
@@ -97,25 +119,27 @@ const StudentDashboard = () => {
                           {paper.durationMinutes} minutes
                         </div>
                       </TableCell>
-                      <TableCell
-                      // className={isExpired ? "text-destructive" : ""}
-                      >
-                        {/* {formatDistanceToNow(deadlineDate, { addSuffix: true })} */}
-                      </TableCell>
+
                       <TableCell className="text-right">
                         <Button
                           onClick={() =>
-                            handleStartExam(paper.id, paper.durationMinutes)
+                            handleStartExam(paper._id, paper.durationMinutes)
                           }
+                          // onClick={() => toast.success(paper?.title)}
                           size="sm"
-                        //   disabled={isExpired}
                         >
                           Start Exam
                         </Button>
                       </TableCell>
                     </TableRow>
-                  );
-                })}
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-6">
+                      No papers found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </Card>

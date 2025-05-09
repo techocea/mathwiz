@@ -17,13 +17,19 @@ export const loginSchema = z.object({
   password: z.string().min(6, "This field is required"),
 });
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ACCEPTED_FILE_TYPES = ["application/pdf"]
+
 export const createPaperSchema = z.object({
   title: z.string().min(6, "This field is required"),
   durationMinutes: z.number().min(1, "This field is required"),
-  paperUrl: z.string().min(1, "This field is required"),
-  uploadDeadline: z.string().min(1, "This field is required"),
+  paperUrl: z
+  .instanceof(File)
+  .refine((file) => file.size <= MAX_FILE_SIZE, "File size must be less than 5MB")
+  .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), "Only PDF files are accepted"),
+  uploadDeadline: z.date({ required_error: "Please select a deadline date" }),
 });
 
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;
-export type CreatePaperFormValues = z.infer<typeof createPaperSchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
+export type CreatePaperFormValues = z.infer<typeof createPaperSchema>;

@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import Link from "next/link";
 import axios from "axios";
 import { loginSchema, LoginFormValues } from "@/lib/zod";
 import { useRouter } from "next/navigation";
@@ -38,11 +37,11 @@ const AdminLoginForm = () => {
         toast.success("logged in successfully");
         router.push("/dashboard/admin");
       } else {
-        alert("Error in admin login");
+        toast.error("Error in admin login");
       }
     } catch (error: any) {
       console.error("Error in admin login", error);
-      alert(error?.response?.data?.message || "Error in admin login");
+      toast.error(error?.response?.data?.message || "Error in admin login");
     }
   };
 

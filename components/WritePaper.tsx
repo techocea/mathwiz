@@ -21,14 +21,15 @@ import Link from "next/link";
 
 interface PaperProps {
   paperId: string;
+  paper: any;
 }
 
-const Paper = ({ paperId }: PaperProps) => {
+const WritePaper = ({ paperId, paper }: PaperProps) => {
   const router = useRouter();
   const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
     useTimer();
 
-  const paper = MOCK_PAPERS.find((p) => p.id === paperId);
+  // const paper = MOCK_PAPERS.find((p) => p.id === paperId);
 
   // Start the timer if not already running and if the paper exists
   useEffect(() => {
@@ -40,8 +41,8 @@ const Paper = ({ paperId }: PaperProps) => {
   //dangerous level
   const getDangerLevel = (): string => {
     if (isTimeUp) return "text-destructive";
-    if (timeRemaining < 300) return "text-red-500";
-    if (timeRemaining < 600) return "text-orange-500";
+    if (timeRemaining < 3000) return "text-red-500";
+    if (timeRemaining < 6000) return "text-orange-500";
     return "text-green-500";
   };
 
@@ -49,8 +50,8 @@ const Paper = ({ paperId }: PaperProps) => {
   const totalDuration = (paper?.durationMinutes ?? 0) * 1000;
   const timeElapsed = totalDuration - timeRemaining;
   const progress = Math.min(
-    10,
-    Math.max(0, (timeElapsed / totalDuration) * 10)
+    1000,
+    Math.max(0, (timeElapsed / totalDuration) * 1000)
   );
 
   return (
@@ -100,7 +101,9 @@ const Paper = ({ paperId }: PaperProps) => {
             onClick={() => toast.info("Downloading paper...")}
             className="w-full sm:w-auto"
           >
-            <a download={paper?.fileUrl}>Download Exam Paper</a>
+            <a href={`/uploads/${paper.paperUrl}`} download>
+              Download Exam Paper
+            </a>
           </Button>
         </CardFooter>
       </Card>
@@ -149,4 +152,4 @@ const Paper = ({ paperId }: PaperProps) => {
   );
 };
 
-export default Paper;
+export default WritePaper;
