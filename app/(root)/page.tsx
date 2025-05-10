@@ -88,11 +88,11 @@ export default function Home() {
                 </h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 w-full max-w-md">
-                  <Link href="/portal">
+                  <Link href="/dashboard/student">
                     <Button
                       variant="default"
                       size="lg"
-                      className="uppercase rounded-none w-full"
+                      className="uppercase cursor-pointer rounded-none w-full"
                     >
                       student portal
                       <ArrowRight className="ml-2" />

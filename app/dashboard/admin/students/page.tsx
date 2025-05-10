@@ -12,10 +12,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Eye, Mail, Ban, UserPlus, Loader2 } from "lucide-react";
+import {
+  Search,
+  Eye,
+  Mail,
+  Ban,
+  UserPlus,
+  Loader2,
+  Check,
+  X,
+} from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
-import { MOCK_STUDENTS } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -34,8 +42,8 @@ interface StudentProps {
 const DisplayStudentsPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [students, setStudents] = useState<StudentProps[] | null>(null);
+  // const [searchQuery, setSearchQuery] = useState("");
+  const [students, setStudents] = useState<StudentProps[]>([]);
 
   // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
@@ -54,7 +62,7 @@ const DisplayStudentsPage = () => {
   const fetchAllStudents = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/api/students");
+      const res = await axios.get("/api/admin/students");
       setStudents(res.data.students);
     } catch (error) {
       console.log("Failed to fetch student data:", error);
@@ -67,6 +75,45 @@ const DisplayStudentsPage = () => {
   useEffect(() => {
     fetchAllStudents();
   }, []);
+
+  const updateStatus = async (
+    studentId: string,
+    newStatus: StudentProps["status"]
+  ) => {
+    try {
+      await axios.put("/api/admin/update-status", {
+        studentId,
+        newStatus,
+      });
+
+      setStudents((prev) =>
+        prev.map((student) =>
+          student._id === studentId
+            ? { ...student, status: newStatus }
+            : student
+        )
+      );
+
+      toast.success(`Student status update to ${newStatus}`);
+    
+    } catch (error) {
+      console.log("Error updating status: ", error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case "approved":
+        return "bg-green-50 text-green-700";
+      case "rejected":
+        return "bg-red-50 text-red-700";
+      case "banned":
+        return "bg-red-50 text-red-800";
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
 
   if (loading)
     return (
@@ -122,8 +169,8 @@ const DisplayStudentsPage = () => {
               <TableHead>Contact</TableHead>
               <TableHead>Year</TableHead>
               <TableHead>School</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Join Date</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -141,39 +188,48 @@ const DisplayStudentsPage = () => {
                   <TableCell>{student?.createdAt}</TableCell>
                   <TableCell>
                     <span
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        student?.status === "approved"
-                          ? "bg-green-50 text-green-700"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                        student.status
+                      )}`}
                     >
-                      {student.status.charAt(0).toUpperCase() +
-                        student.status.slice(1)}
+                      {student.status}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        // onClick={() => handleViewStudent(student.id)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        // onClick={() => handleContactStudent(student.email)}
-                      >
-                        <Mail className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        // onClick={() => toggleStudentStatus(student.id)}
-                      >
-                        <Ban className="h-4 w-4" />
-                      </Button>
+                      {student.status === "pending" ? (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={loading}
+                            onClick={() =>
+                              updateStatus(student._id, "approved")
+                            }
+                          >
+                            <Check className="text-green-600 h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={loading}
+                            onClick={() =>
+                              updateStatus(student._id, "rejected")
+                            }
+                          >
+                            <X className="text-destructive h-4 w-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={loading}
+                          onClick={() => updateStatus(student._id, "banned")}
+                        >
+                          <Ban className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>

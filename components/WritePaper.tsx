@@ -10,31 +10,39 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { MOCK_PAPERS } from "@/lib/constants";
 import { formatTime } from "@/lib/formatTime";
 import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTimer } from "@/components/contexts/TimerContext";
-import Link from "next/link";
+import { Input } from "./ui/input";
+import axios from "axios";
 
 interface PaperProps {
   paperId: string;
-  paper: any;
+  paper: {
+    _id: string;
+    title: string;
+    durationMinutes: number;
+    uploadDeadline: string;
+    paperUrl: string;
+  };
 }
 
 const WritePaper = ({ paperId, paper }: PaperProps) => {
   const router = useRouter();
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
     useTimer();
 
-  // const paper = MOCK_PAPERS.find((p) => p.id === paperId);
-
   // Start the timer if not already running and if the paper exists
   useEffect(() => {
-    if (paper && !isRunning && !isTimeUp && currentExamId !== paper.id) {
-      startTimer(paper.durationMinutes, paper.id);
+    if (paper && !isRunning && !isTimeUp && currentExamId !== paper._id) {
+      startTimer(paper.durationMinutes, paper._id);
     }
   }, [paper, isRunning, isTimeUp, currentExamId, startTimer]);
 
@@ -53,6 +61,38 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
     1000,
     Math.max(0, (timeElapsed / totalDuration) * 1000)
   );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return toast.error("Please upload a file");
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("paperId", paperId);
+
+    if (!paperId) {
+      return toast.error("Missing paper ID");
+    }
+
+    try {
+      const res = await axios.post("/api/submissions", formData, {
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        toast.success("Paper submitted successfully!");
+        router.push("/dashboard/student");
+        setFile(null);
+      } else {
+        toast.error("Failed to submit paper");
+      }
+    } catch (err) {
+      toast.error("Upload failed");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <>
@@ -101,7 +141,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
             onClick={() => toast.info("Downloading paper...")}
             className="w-full sm:w-auto"
           >
-            <a href={`/uploads/${paper.paperUrl}`} download>
+            <a href={paper.paperUrl} download={paper.title}>
               Download Exam Paper
             </a>
           </Button>
@@ -110,44 +150,44 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
 
       <Separator className="my-8" />
 
-      {/* <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Submit Your Work</h3>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Submit Your Work</h3>
 
-            <div className="bg-secondary rounded-lg p-6">
-              <Input
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                disabled={isTimeUp || isUploading}
-                className="bg-white"
-              />
-              {selectedFile && (
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Selected: {selectedFile.name}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={!selectedFile || isTimeUp || isUploading}
-              variant="default"
-            >
-              {isUploading ? "Submitting..." : "Submit Paper"}
-            </Button>
-          </div>
-
-          {isTimeUp && (
-            <div className="bg-destructive/10 border border-destructive rounded-lg p-4 text-center">
-              <p className="text-destructive font-medium">
-                Time's up! You can no longer submit your paper.
+          <div className="rounded-lg p-6">
+            <Input
+              type="file"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              accept=".pdf"
+              disabled={isTimeUp || isUploading}
+              className="bg-white"
+            />
+            {file && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Selected: {file.name}
               </p>
-            </div>
-          )}
-        </form> */}
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={!file || isTimeUp || isUploading}
+            variant="default"
+          >
+            {isUploading ? "Submitting..." : "Submit Paper"}
+          </Button>
+        </div>
+
+        {isTimeUp && (
+          <div className="bg-destructive/10 border border-destructive rounded-lg p-4 text-center">
+            <p className="text-destructive font-medium">
+              Time's up! You can no longer submit your paper.
+            </p>
+          </div>
+        )}
+      </form>
     </>
   );
 };

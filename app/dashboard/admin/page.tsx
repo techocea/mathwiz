@@ -44,7 +44,7 @@ const AdminDashboardPage = () => {
     const fetchCounts = async () => {
       try {
         const [studentsRes, papersRes] = await Promise.all([
-          axios.get("/api/students"),
+          axios.get("/api/admin/students"),
           axios.get("/api/paper"),
         ]);
         setTotalStudents(studentsRes.data.students.length);

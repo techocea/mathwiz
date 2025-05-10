@@ -1,5 +1,5 @@
 import { mkdir, writeFile } from "fs/promises";
-import path, { join } from "path";
+import { join } from "path";
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import { Paper } from "@/lib/schema";
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     const filename = `${Date.now()}-${paperUrl.name.replace(/\s+/g, "-")}`;
     const filepath = join(uploadDir, filename);
-    // await writeFile(filepath, buffer);
+    await writeFile(filepath, buffer);
 
     await connectDB();
 
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       title,
       durationMinutes,
       uploadDeadline,
-      paperUrl: `/uploads/${filename}`, 
+      paperUrl: `/uploads/${filename}`,
     });
 
     return NextResponse.json(
@@ -91,14 +91,20 @@ export async function GET() {
   try {
     await connectDB();
 
-    const papers = await Paper.find();
-    if (!papers) {
+    const papers = await Paper.find()
+      .populate({
+        path: "submissions",
+        populate: { path: "studentId", select: "email fname contact" },
+      })
+      .lean();
+
+    if (!papers || papers.length === 0) {
       return NextResponse.json(
         {
           message: "No papers found",
         },
         {
-          status: 401,
+          status: 404,
         }
       );
     }

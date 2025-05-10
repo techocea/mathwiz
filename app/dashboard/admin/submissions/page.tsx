@@ -11,41 +11,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText, Plus, Eye } from "lucide-react";
+import { FileText, Plus, Eye, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
-interface PaperProps {
+interface Submission {
   _id: string;
-  title: string;
-  durationMinutes: number;
-  paperUrl: string;
-  submissions: string[];
-  uploadDeadline: string;
-  createdAt: string;
+  file: string;
+  submittedAt: string;
+  studentId: {
+    firstName: string;
+    lastName: string;
+    contact: string;
+  };
+  paperId: {
+    title: string;
+  };
 }
 
-const DisplayPapersPage = () => {
-  const router = useRouter();
-  const [papers, setPapers] = useState<PaperProps[] | null>(null);
+const DisplaySubmissionsPage = () => {
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchAllPapers = async () => {
+  const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/api/paper");
-      setPapers(res.data.papers);
+      const res = await axios.get("/api/submissions");
+      setSubmissions(res.data.submissions);
     } catch (error) {
-      console.log("Failed to fetch papers: ", error);
-      router.push("/dashboard/admin");
+      console.log("Failed to fetch submissions: ", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAllPapers();
+    fetchSubmissions();
   }, []);
 
   return (
@@ -56,65 +59,62 @@ const DisplayPapersPage = () => {
         <div>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Paper Management</h1>
+              <h1 className="text-3xl font-bold mb-2">Student Submissions</h1>
               <p className="text-muted-foreground">
-                Create and manage A/L Combined Mathematics papers
+                View and manage all student examination submissions
               </p>
             </div>
-
-            <Button
-              size="lg"
-              onClick={() => router.push("/dashboard/admin/papers/create")}
-              className="cursor-pointer"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Paper
-            </Button>
           </div>
 
           <div className="rounded-lg border bg-card">
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Student Name</TableHead>
+                  <TableHead>Contact Number</TableHead>
                   <TableHead>Paper Title</TableHead>
-                  <TableHead>Created Date</TableHead>
-                  <TableHead>Time Limit</TableHead>
-                  <TableHead
-                    className="flex items-center justify-center"
-                    align="justify"
-                  >
-                    Submissions
-                  </TableHead>
-                  {/* <TableHead>Status</TableHead> */}
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>View Paper</TableHead>
+                  <TableHead className="text-right">Submission Time</TableHead>
+                  {/* <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {papers && papers.length > 0 ? (
-                  papers.map((paper) => (
-                    <TableRow key={paper?._id}>
+                {submissions.length > 0 ? (
+                  submissions.map((submission) => (
+                    <TableRow key={submission?._id}>
                       <TableCell className="font-medium">
                         <div className="flex items-center capitalize gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
-                          {paper?.title}
+                          {submission?.studentId?.firstName}{" "}
+                          {submission?.studentId?.lastName}
                         </div>
                       </TableCell>
-                      <TableCell>{paper?.createdAt}</TableCell>
-                      <TableCell>{paper?.durationMinutes} mins</TableCell>
-                      <TableCell align="center">
-                        {paper?.submissions?.length}
-                      </TableCell>
-
-                      <TableCell className="text-right">
+                      <TableCell>{submission?.studentId?.contact}</TableCell>
+                      <TableCell>{submission?.paperId?.title}</TableCell>
+                      <TableCell>
                         <Button
                           size="sm"
                           variant="link"
                           className="cursor-pointer"
-                          // onClick={() =>}
+                          onClick={() =>
+                            toast.success(
+                              `downloading ${submission?.paperId?.title}`
+                            )
+                          }
                         >
-                          <Eye className="h-4 w-4" />
-                          View
+                          <Download className="h-4 w-4" />
+
+                          <a
+                            href={submission?.file}
+
+                          >
+                            Download
+                          </a>
                         </Button>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {new Date(submission.submittedAt).toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))
@@ -134,4 +134,4 @@ const DisplayPapersPage = () => {
   );
 };
 
-export default DisplayPapersPage;
+export default DisplaySubmissionsPage;

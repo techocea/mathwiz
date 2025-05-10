@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const isUserExists = await User.findOne({ email });
 
     if (!isUserExists) {
-      return new NextResponse("User not exist", { status: 401 });
+      return NextResponse.json({ message: "User not exist" }, { status: 401 });
     }
 
     const isValidPassword = await bcrypt.compare(
@@ -23,11 +23,21 @@ export async function POST(req: NextRequest) {
     );
 
     if (!isValidPassword) {
-      return new NextResponse("Invalid Password", { status: 401 });
+      return NextResponse.json(
+        { message: "Invalid Password" },
+        { status: 401 }
+      );
+    }
+
+    if (isUserExists.status !== "approved") {
+      return NextResponse.json(
+        { message: `Your account is ${isUserExists.status}` },
+        { status: 403 }
+      );
     }
 
     const token = signToken({
-      id: isUserExists.id,
+      _id: isUserExists._id,
       email: isUserExists.email,
       name: isUserExists.firstName,
       role: isUserExists.role,
@@ -61,7 +71,7 @@ export async function POST(req: NextRequest) {
 }
 
 interface DecodedToken {
-  id: string;
+  _id: string;
   email: string;
   role: string;
   name: string;

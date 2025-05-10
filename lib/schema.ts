@@ -25,6 +25,36 @@ const paperSchema = new mongoose.Schema(
     durationMinutes: { type: Number },
     uploadDeadline: { type: Date },
     paperUrl: { type: String },
+    submissions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Submission",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
+const submissionSchema = new mongoose.Schema(
+  {
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    paperId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Paper",
+      required: true,
+    },
+    file: {
+      type: String,
+      required: true,
+    },
+    submittedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
@@ -32,3 +62,5 @@ const paperSchema = new mongoose.Schema(
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
 export const Paper =
   mongoose.models.Paper || mongoose.model("Paper", paperSchema);
+export const Submission =
+  mongoose.models.Submission || mongoose.model("Submission", submissionSchema);

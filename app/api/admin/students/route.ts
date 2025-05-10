@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const students = await User.find({ role: { $ne: "admin" } }).select("-password");
+    const students = await User.find({ role: "user" }).select("-password");
 
     return NextResponse.json({ students }, { status: 200 });
   } catch (error) {
