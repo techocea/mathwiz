@@ -11,9 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText, Plus, Eye, Download } from "lucide-react";
+import { FileText, Download, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -35,21 +34,28 @@ const DisplaySubmissionsPage = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchSubmissions = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/submissions");
-      setSubmissions(res.data.submissions);
-    } catch (error) {
-      console.log("Failed to fetch submissions: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchSubmissions = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/submissions");
+        setSubmissions(res.data.submissions);
+      } catch (error) {
+        console.log("Failed to fetch submissions: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSubmissions();
   }, []);
+
+  if (loading)
+    return (
+      <div className="min-h-lvh flex items-center justify-center w-full">
+        Please Wait <Loader2 className="animate-spin transition-all" />
+      </div>
+    );
 
   return (
     <>
@@ -105,12 +111,7 @@ const DisplaySubmissionsPage = () => {
                         >
                           <Download className="h-4 w-4" />
 
-                          <a
-                            href={submission?.file}
-
-                          >
-                            Download
-                          </a>
+                          <a href={submission?.file}>Download</a>
                         </Button>
                       </TableCell>
                       <TableCell className="text-right">

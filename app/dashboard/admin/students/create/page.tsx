@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -29,6 +28,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
 
 const CreateStudentsPage = () => {
   const router = useRouter();
@@ -325,7 +325,16 @@ const CreateStudentsPage = () => {
                   >
                     Cancel
                   </Button>
-                  <Button className="w-full">Add Student</Button>
+                  <Button disabled={loading} className="cursor-pointer">
+                    {loading ? (
+                      <div className="flex gap-2">
+                        Please Wait{" "}
+                        <Loader2 className="animate-spin transition-all" />
+                      </div>
+                    ) : (
+                      "Add Student"
+                    )}
+                  </Button>
                 </div>
               </form>
             </CardContent>

@@ -3,7 +3,6 @@
 import DashboardNavbar from "@/components/DashboardNavbar";
 import BlurGradient from "@/components/BlurGradient";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,16 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Search,
-  Eye,
-  Mail,
-  Ban,
-  UserPlus,
-  Loader2,
-  Check,
-  X,
-} from "lucide-react";
+import { Ban, UserPlus, Loader2, Check, X } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -42,39 +32,24 @@ interface StudentProps {
 const DisplayStudentsPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState("");
   const [students, setStudents] = useState<StudentProps[]>([]);
 
-  // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  //   if (e.target.value === "") {
-  //     setStudents(MOCK_STUDENTS);
-  //   } else {
-  //     const FILTERED_STUDENTS = MOCK_STUDENTS.filter(
-  //       (student) =>
-  //         student.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-  //         student.email.toLowerCase().includes(e.target.value.toLowerCase())
-  //     );
-  //     setStudents(FILTERED_STUDENTS);
-  //   }
-  // };
-
-  const fetchAllStudents = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/admin/students");
-      setStudents(res.data.students);
-    } catch (error) {
-      console.log("Failed to fetch student data:", error);
-      router.push("/dashboard/admin");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAllStudents = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/admin/students");
+        setStudents(res.data.students);
+      } catch (error) {
+        console.log("Failed to fetch student data:", error);
+        router.push("/dashboard/admin");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAllStudents();
-  }, []);
+  }, [router]);
 
   const updateStatus = async (
     studentId: string,
@@ -95,7 +70,6 @@ const DisplayStudentsPage = () => {
       );
 
       toast.success(`Student status update to ${newStatus}`);
-    
     } catch (error) {
       console.log("Error updating status: ", error);
       toast.error("Failed to update status");

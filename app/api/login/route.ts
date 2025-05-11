@@ -96,6 +96,7 @@ export async function GET() {
     const decoded = verifyToken(token) as DecodedToken;
     return NextResponse.json(decoded);
   } catch (error) {
+    console.error("Error in verifying user: ", error);
     return NextResponse.json(
       {
         message: "Invalid token",

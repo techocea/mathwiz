@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText, Plus, Eye } from "lucide-react";
+import { FileText, Plus, Eye, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -31,22 +31,29 @@ const DisplayPapersPage = () => {
   const [papers, setPapers] = useState<PaperProps[] | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchAllPapers = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/paper");
-      setPapers(res.data.papers);
-    } catch (error) {
-      console.log("Failed to fetch papers: ", error);
-      router.push("/dashboard/admin");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAllPapers = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/paper");
+        setPapers(res.data.papers);
+      } catch (error) {
+        console.log("Failed to fetch papers: ", error);
+        router.push("/dashboard/admin");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAllPapers();
-  }, []);
+  }, [router]);
+
+  if (loading)
+    return (
+      <div className="min-h-lvh flex items-center justify-center w-full">
+        Please Wait <Loader2 className="animate-spin transition-all" />
+      </div>
+    );
 
   return (
     <>

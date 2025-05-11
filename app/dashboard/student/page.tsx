@@ -14,10 +14,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
-import { Clock, FileText } from "lucide-react";
+import { Clock, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface PaperProps {
   _id: string;
@@ -39,43 +38,48 @@ const StudentDashboard = () => {
   const [papers, setPapers] = useState<PaperProps[]>([]);
   const [studentData, setStudentData] = useState<StudentProps>();
 
-  const fetchStudentData = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/login", { withCredentials: true });
-      setStudentData(res.data);
-    } catch (error) {
-      console.error("Failed to fetch Student data: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchStudentData = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/login", { withCredentials: true });
+        setStudentData(res.data);
+      } catch (error) {
+        console.error("Failed to fetch Student data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchStudentData();
   }, []);
 
-  const fetchAllPapers = async () => {
-    setLoading(true);
-    try {
-      const resStudent = await axios.get("/api/login", {
-        withCredentials: true,
-      });
-      const studentYear = resStudent.data.year;
-
-      const resPapers = await axios.get(`/api/paper?year=${studentYear}`);
-      setPapers(resPapers.data.papers);
-    } catch (error) {
-      console.log("Failed to fetch papers: ", error);
-      router.push("/dashboard/student");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAllPapers = async () => {
+      setLoading(true);
+      try {
+        const resStudent = await axios.get("/api/login", {
+          withCredentials: true,
+        });
+        const studentYear = resStudent.data.year;
+
+        const resPapers = await axios.get(`/api/paper?year=${studentYear}`);
+        setPapers(resPapers.data.papers);
+      } catch (error) {
+        console.log("Failed to fetch papers: ", error);
+        router.push("/dashboard/student");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchAllPapers();
-  }, []);
+  }, [router]);
+
+  if (loading)
+    return (
+      <div className="min-h-lvh flex items-center justify-center w-full">
+        Please Wait <Loader2 className="animate-spin transition-all" />
+      </div>
+    );
 
   const handleStartExam = (paperId: string, durationMinutes: number) => {
     if (isRunning && currentExamId !== paperId) {

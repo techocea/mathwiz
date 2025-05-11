@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import BlurGradient from "@/components/BlurGradient";
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Clock, Calendar, Loader2 } from "lucide-react";
+import { FileText, Users, Clock, Loader2 } from "lucide-react";
 import axios from "axios";
 
 interface AdminProps {
@@ -26,7 +26,7 @@ const AdminDashboardPage = () => {
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalPapers, setTotalPapers] = useState(0);
 
-  const fetchAdminData = async () => {
+  const fetchAdminData = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get("/api/admin", { withCredentials: true });
@@ -37,7 +37,7 @@ const AdminDashboardPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
 
   // function to get the students and papers length
   useEffect(() => {
@@ -59,7 +59,7 @@ const AdminDashboardPage = () => {
 
   useEffect(() => {
     fetchAdminData();
-  }, []);
+  }, [fetchAdminData]);
 
   if (loading)
     return (
@@ -79,7 +79,7 @@ const AdminDashboardPage = () => {
               Welcome, {adminData?.email}
             </h1>
             <p className="text-muted-foreground">
-              Here's an overview of your A/L Combined Mathematics class
+              Here&apos;s an overview of your A/L Combined Mathematics class
             </p>
           </div>
 

@@ -43,8 +43,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
     const savedTimerState = localStorage.getItem("timerState");
     if (savedTimerState) {
       try {
-        const { timeRemaining, isRunning, examId, endTime } =
-          JSON.parse(savedTimerState);
+        const { isRunning, examId, endTime } = JSON.parse(savedTimerState);
 
         if (isRunning && endTime) {
           const now = new Date().getTime();
@@ -108,7 +107,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setIntervalId(id);
     return () => clearInterval(id);
-  }, [isRunning]);
+  }, [isRunning, timeRemaining]);
 
   const startTimer = useCallback(
     (durationInMinutes: number, examId: string) => {

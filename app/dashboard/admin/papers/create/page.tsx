@@ -249,7 +249,14 @@ const CreatePapersPage = () => {
                   </Button>
                   <Button disabled={isUploading} className="cursor-pointer">
                     <Upload className="h-4 w-4 mr-2" />
-                    {isUploading ? "Creating..." : "Create Paper"}
+                    {isUploading ? (
+                      <div className="flex gap-2">
+                        Please Wait{" "}
+                        <Loader2 className="animate-spin transition-all" />
+                      </div>
+                    ) : (
+                      "Create Paper"
+                    )}
                   </Button>
                 </div>
               </CardFooter>

@@ -34,8 +34,6 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [loading, setLoading] = useState(false);
-
   const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
     useTimer();
 
@@ -87,8 +85,8 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
       } else {
         toast.error("Failed to submit paper");
       }
-    } catch (err) {
-      toast.error("Upload failed");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
     } finally {
       setIsUploading(false);
     }
@@ -183,7 +181,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
         {isTimeUp && (
           <div className="bg-destructive/10 border border-destructive rounded-lg p-4 text-center">
             <p className="text-destructive font-medium">
-              Time's up! You can no longer submit your paper.
+              Time&apos;s up! You can no longer submit your paper.
             </p>
           </div>
         )}

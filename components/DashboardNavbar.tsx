@@ -7,7 +7,7 @@ import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { Loader2, LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 
 interface DashboardTypeProps {
   dashboardType: "student" | "admin";
@@ -17,14 +17,6 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
   const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  if (loading)
-    return (
-      <div className="min-h-lvh flex items-center justify-center w-full">
-        Please Wait <Loader2 className="animate-spin transition-all" />
-      </div>
-    );
 
   return (
     <header className="bg-white border-b py-4 px-8 flex items-center justify-between w-full">
