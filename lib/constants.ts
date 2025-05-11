@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   FileText,
   Users,
+  Files,
 } from "lucide-react";
 export type Paper = {
   id: string;
@@ -53,6 +54,11 @@ export const ADMIN_NAV_ITEMS = [
     name: "Students",
     path: "/dashboard/admin/students",
     icon: Users,
+  },
+  {
+    name: "Submissions",
+    path: "/dashboard/admin/submissions",
+    icon: Files,
   },
 ];
 
@@ -124,4 +130,3 @@ export const TIMETABLE = [
     day2Finish: "10:00AM",
   },
 ];
-

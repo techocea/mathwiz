@@ -147,7 +147,7 @@ const DisplayStudentsPage = () => {
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card mb-8">
+        {/* <div className="rounded-lg border bg-card mb-8">
           <div className="p-4">
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
@@ -159,7 +159,7 @@ const DisplayStudentsPage = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <Table>
           <TableHeader>

@@ -29,8 +29,15 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatePaperFormValues, createPaperSchema } from "@/lib/zod";
-import axios from "axios";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import axios from "axios";
 
 const CreatePapersPage = () => {
   const router = useRouter();
@@ -47,6 +54,7 @@ const CreatePapersPage = () => {
     defaultValues: {
       title: "",
       durationMinutes: 60,
+      year: "2025",
       uploadDeadline: undefined,
       paperUrl: undefined,
     },
@@ -61,17 +69,9 @@ const CreatePapersPage = () => {
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("durationMinutes", data.durationMinutes.toString());
+      formData.append("year", data.year);
       formData.append("uploadDeadline", data.uploadDeadline.toISOString());
       formData.append("paperUrl", data.paperUrl);
-
-      console.log("Submitting form with data:", {
-        title: data.title,
-        durationMinutes: data.durationMinutes,
-        uploadDeadline: data.uploadDeadline.toISOString(),
-        paperUrlName: data.paperUrl.name,
-        paperUrlSize: data.paperUrl.size,
-        paperUrlType: data.paperUrl.type,
-      });
 
       const res = await axios.post("/api/paper", formData);
       if (res.status === 200) {
@@ -95,7 +95,7 @@ const CreatePapersPage = () => {
       <DashboardNavbar dashboardType="admin" />
 
       <div className="flex-1 container lg:max-w-6xl mx-auto lg:py-12">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-xl mx-auto">
           <Card>
             <form
               onSubmit={handleSubmit(handleCreatePaper)}
@@ -132,6 +132,7 @@ const CreatePapersPage = () => {
                       {durationMinutes} minutes
                     </span>
                   </div>
+
                   <div className="flex items-center gap-4">
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <Slider
@@ -147,43 +148,67 @@ const CreatePapersPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <Label htmlFor="uploadDeadline">Upload Deadline</Label>
-                  <div className="flex items-center gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !uploadDeadline && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {uploadDeadline
-                            ? format(uploadDeadline, "PPP")
-                            : "Select deadline"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={uploadDeadline}
-                          onSelect={(date) =>
-                            date && setValue("uploadDeadline", date)
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <Label htmlFor="year">Select Batch</Label>
+                    <Select
+                      onValueChange={(value) =>
+                        setValue("year", value as "2025" | "2026" | "2027")
+                      }
+                      defaultValue="2025"
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2025">2025</SelectItem>
+                        <SelectItem value="2026">2026</SelectItem>
+                        <SelectItem value="2027">2027</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.year && (
+                      <p className="text-sm text-red-500">
+                        {errors.year.message}
+                      </p>
+                    )}
                   </div>
-                  {errors.uploadDeadline && (
-                    <p className="text-sm text-red-500">
-                      {errors.uploadDeadline.message}
-                    </p>
-                  )}
+                  <div className="space-y-3">
+                    <Label htmlFor="uploadDeadline">Upload Deadline</Label>
+                    <div className="flex items-center gap-2">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !uploadDeadline && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {uploadDeadline
+                              ? format(uploadDeadline, "PPP")
+                              : "Select deadline"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={uploadDeadline}
+                            onSelect={(date) =>
+                              date && setValue("uploadDeadline", date)
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    {errors.uploadDeadline && (
+                      <p className="text-sm text-red-500">
+                        {errors.uploadDeadline.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
-
                 <div className="space-y-3">
                   <Label htmlFor="paperUrl">Upload Exam Paper</Label>
                   <Input

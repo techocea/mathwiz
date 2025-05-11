@@ -14,7 +14,21 @@ export async function POST(req: NextRequest) {
       year,
       school,
       status,
+      tuitionType,
     } = await req.json();
+
+    if (
+      !tuitionType ||
+      typeof tuitionType !== "object" ||
+      !["theory", "revision", "paper"].every((key) =>
+        Object.prototype.hasOwnProperty.call(tuitionType, key)
+      )
+    ) {
+      return NextResponse.json(
+        { message: "Invalid tuitionType format" },
+        { status: 400 }
+      );
+    }
 
     await connectDB();
 
@@ -32,7 +46,7 @@ export async function POST(req: NextRequest) {
     // const adminPassword = await bcrypt.hash("mathwiz@jangu", salt);
     // console.log(adminPassword);
 
-    await User.create({
+    const newUser = await User.create({
       firstName,
       lastName,
       email,
@@ -40,11 +54,14 @@ export async function POST(req: NextRequest) {
       contact,
       year,
       school,
+      tuitionType,
       status: status || "pending",
     });
 
+    newUser.save();
+
     return NextResponse.json(
-      { message: "User created successfully" },
+      { message: "User created successfully", newUser },
       { status: 200 }
     );
   } catch (error) {

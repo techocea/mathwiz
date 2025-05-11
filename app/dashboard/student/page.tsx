@@ -27,12 +27,17 @@ interface PaperProps {
   uploadDeadline: string;
 }
 
+interface StudentProps {
+  name: string;
+  year: string;
+}
+
 const StudentDashboard = () => {
   const router = useRouter();
   const { isRunning, currentExamId, startTimer } = useTimer();
   const [loading, setLoading] = useState(false);
-  const [papers, setPapers] = useState<PaperProps[] | null>(null);
-  const [studentData, setStudentData] = useState<{ name: string } | null>(null);
+  const [papers, setPapers] = useState<PaperProps[]>([]);
+  const [studentData, setStudentData] = useState<StudentProps>();
 
   const fetchStudentData = async () => {
     setLoading(true);
@@ -53,8 +58,13 @@ const StudentDashboard = () => {
   const fetchAllPapers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/api/paper");
-      setPapers(res.data.papers);
+      const resStudent = await axios.get("/api/login", {
+        withCredentials: true,
+      });
+      const studentYear = resStudent.data.year;
+
+      const resPapers = await axios.get(`/api/paper?year=${studentYear}`);
+      setPapers(resPapers.data.papers);
     } catch (error) {
       console.log("Failed to fetch papers: ", error);
       router.push("/dashboard/student");
@@ -83,14 +93,22 @@ const StudentDashboard = () => {
       <BlurGradient />
       <div className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
         <div className="flex flex-col space-y-4">
-          <div>
-            <h1 className="text-3xl font-bold">
-              {studentData?.name}&apos;s Dashboard
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Browse and start your exams. Remember, once you start, the timer
-              cannot be paused.
-            </p>
+          <div className="flex justify-between w-full">
+            <div>
+              <h1 className="text-3xl font-bold uppercase">
+                {studentData?.name}&apos;s Dashboard
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Browse and start your exams. Remember, once you start, the timer
+                cannot be paused.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="font-bold text-4xl text-black">
+                {studentData?.year}
+              </h2>
+            </div>
           </div>
 
           <Card className="mt-6 rounded-md border bg-white/80 py-2 px-4 backdrop-blur-sm shadow-sm">
@@ -107,7 +125,7 @@ const StudentDashboard = () => {
                   papers.map((paper) => (
                     <TableRow
                       key={paper._id}
-                    //   className={isExpired ? "opacity-70" : ""}
+                      //   className={isExpired ? "opacity-70" : ""}
                     >
                       <TableCell className="font-medium flex items-center gap-2">
                         <FileText size={18} className="text-primary" />

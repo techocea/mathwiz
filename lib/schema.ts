@@ -7,9 +7,18 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String },
     contact: { type: String },
-    year: { type: String, enum: ["2026", "2027"] },
+    year: { type: String, enum: ["2025", "2026", "2027"] },
     school: { type: String },
     role: { type: String, enum: ["admin", "user"], default: "user" },
+    tuitionType: {
+      type: {
+        theory: { type: Boolean, default: false },
+        revision: { type: Boolean, default: false },
+        paper: { type: Boolean, default: false },
+      },
+      _id: false,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected", "banned"],
@@ -23,6 +32,7 @@ const paperSchema = new mongoose.Schema(
   {
     title: { type: String },
     durationMinutes: { type: Number },
+    year: { type: String, enum: ["2025", "2026", "2027"] },
     uploadDeadline: { type: Date },
     paperUrl: { type: String },
     submissions: [

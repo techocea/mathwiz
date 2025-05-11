@@ -20,10 +20,10 @@ interface PaperProps {
   _id: string;
   title: string;
   durationMinutes: number;
+  year: string;
   paperUrl: string;
   submissions: string[];
   uploadDeadline: string;
-  createdAt: string;
 }
 
 const DisplayPapersPage = () => {
@@ -77,7 +77,8 @@ const DisplayPapersPage = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Paper Title</TableHead>
-                  <TableHead>Created Date</TableHead>
+                  <TableHead>Deadline</TableHead>
+                  <TableHead>Batch</TableHead>
                   <TableHead>Time Limit</TableHead>
                   <TableHead
                     className="flex items-center justify-center"
@@ -99,7 +100,8 @@ const DisplayPapersPage = () => {
                           {paper?.title}
                         </div>
                       </TableCell>
-                      <TableCell>{paper?.createdAt}</TableCell>
+                      <TableCell>{paper?.uploadDeadline}</TableCell>
+                      <TableCell>{paper?.year}</TableCell>
                       <TableCell>{paper?.durationMinutes} mins</TableCell>
                       <TableCell align="center">
                         {paper?.submissions?.length}

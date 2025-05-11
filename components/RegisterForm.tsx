@@ -23,6 +23,8 @@ import Link from "next/link";
 import axios from "axios";
 import { registrationSchema, RegistrationFormValues } from "@/lib/zod";
 import { toast } from "sonner";
+import { Separator } from "./ui/separator";
+import { Checkbox } from "./ui/checkbox";
 
 const RegisterForm = () => {
   const {
@@ -30,12 +32,27 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<RegistrationFormValues>({
+    watch,
+  } = useForm({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      year: "2026",
+      firstName: "",
+      lastName: "",
+      email: "",
+      contact: "",
+      password: "",
+      confirmPassword: "",
+      school: "",
+      year: "2025",
+      tuitionType: {
+        paper: false,
+        revision: false,
+        theory: false,
+      },
     },
   });
+
+  const tuitionType = watch("tuitionType");
 
   const onSubmit = async (data: RegistrationFormValues) => {
     try {
@@ -53,7 +70,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="lg:max-w-lg w-full mx-auto p-4">
+    <div className="lg:max-w-xl w-full mx-auto p-4">
       <Card>
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-primary">
@@ -66,93 +83,190 @@ const RegisterForm = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-4 grid grid-cols-1 gap-2"
           >
-            <div>
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" {...register("firstName")} />
-              {errors.firstName && (
-                <p className="text-sm text-red-500">
-                  {errors.firstName.message}
-                </p>
-              )}
+            {/* Section: Personal Info */}
+            <h1 className="text-2xl font-semibold">Personal Information</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="firstName">
+                  First Name
+                </Label>
+                <Input
+                  id="firstName"
+                  placeholder="John"
+                  {...register("firstName")}
+                />
+                {errors.firstName && (
+                  <p className="text-sm text-red-500">
+                    {errors.firstName.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="lastName">
+                  Last Name
+                </Label>
+                <Input
+                  id="lastName"
+                  placeholder="Doe"
+                  {...register("lastName")}
+                />
+                {errors.lastName && (
+                  <p className="text-sm text-red-500">
+                    {errors.lastName.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="contact">
+                  Contact Number
+                </Label>
+                <Input
+                  id="contact"
+                  placeholder="+94 712 345 678"
+                  {...register("contact")}
+                />
+                {errors.contact && (
+                  <p className="text-sm text-red-500">
+                    {errors.contact.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="email">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="password">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  {...register("password")}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="confirmPassword">
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  {...register("confirmPassword")}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" {...register("lastName")} />
-              {errors.lastName && (
-                <p className="text-sm text-red-500">
-                  {errors.lastName.message}
-                </p>
-              )}
+            <Separator />
+
+            {/* Section: Academic Info */}
+            <h1 className="text-2xl font-semibold">Academic Information</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="school">
+                  School
+                </Label>
+                <Input
+                  id="school"
+                  placeholder="Loyola College"
+                  {...register("school")}
+                />
+                {errors.school && (
+                  <p className="text-sm text-red-500">
+                    {errors.school.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-normal" htmlFor="year">
+                  Year
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("year", value as "2025" | "2026" | "2027")
+                  }
+                  defaultValue="2025"
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2025">2025</SelectItem>
+                    <SelectItem value="2026">2026</SelectItem>
+                    <SelectItem value="2027">2027</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.year && (
+                  <p className="text-sm text-red-500">{errors.year.message}</p>
+                )}
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="contact">Contact Number</Label>
-              <Input id="contact" {...register("contact")} />
-              {errors.contact && (
-                <p className="text-sm text-red-500">{errors.contact.message}</p>
-              )}
-            </div>
+            <Separator />
 
+            {/* Section: Tuition Info */}
             <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...register("email")} />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
+              <h1 className="text-2xl font-semibold">Tuition Information</h1>
+              <p className="text-sm text-muted-foreground">
+                Select Tuition Type
+              </p>
             </div>
-
-            <div>
-              <Label htmlFor="password">Create Password</Label>
-              <Input id="password" type="password" {...register("password")} />
-              {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                {...register("confirmPassword")}
-              />
-              {errors.confirmPassword && (
-                <p className="text-sm text-red-500">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="school">School</Label>
-              <Input id="school" {...register("school")} />
-              {errors.school && (
-                <p className="text-sm text-red-500">{errors.school.message}</p>
-              )}
-            </div>
-
-            <div className="w-full">
-              <Label htmlFor="year">Year</Label>
-              <Select
-                onValueChange={(value) =>
-                  setValue("year", value as "2026" | "2027")
-                }
-                defaultValue="2026"
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select year" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2026">2026</SelectItem>
-                  <SelectItem value="2027">2027</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.year && (
-                <p className="text-sm text-red-500">{errors.year.message}</p>
-              )}
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-3">
+                <div>
+                  <div className="flex flex-col items-start gap-4">
+                    {["theory", "revision", "paper"].map((type) => (
+                      <Label
+                        key={type}
+                        className="flex font-normal items-center gap-2 capitalize"
+                      >
+                        <Checkbox
+                          checked={
+                            tuitionType[type as keyof typeof tuitionType]
+                          }
+                          onCheckedChange={(checked: boolean) =>
+                            setValue(`tuitionType.${type}` as any, checked)
+                          }
+                        />
+                        {type}
+                      </Label>
+                    ))}
+                  </div>
+                </div>
+                {errors.tuitionType && (
+                  <p className="text-sm text-red-500">
+                    {errors.tuitionType.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="w-full flex flex-col items-center justify-center gap-2">
@@ -164,7 +278,12 @@ const RegisterForm = () => {
                 asChild
                 className="w-fit text-center cursor-pointer"
               >
-                <Link href="/login">Already a member? Login</Link>
+                <Link
+                  href="/login"
+                  className="text-muted-foreground font-normal"
+                >
+                  Already a member? Login
+                </Link>
               </Button>
             </div>
           </form>

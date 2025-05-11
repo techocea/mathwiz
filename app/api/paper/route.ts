@@ -15,12 +15,14 @@ export async function POST(req: NextRequest) {
     const durationMinutes = Number.parseInt(
       formData.get("durationMinutes") as string
     );
+    const year = formData.get("year") as string;
     const uploadDeadline = new Date(formData.get("uploadDeadline") as string);
     const paperUrl = formData.get("paperUrl") as File;
 
     const schema = z.object({
       title: z.string().min(3),
       durationMinutes: z.number().min(15).max(180),
+      year: z.string().max(4),
       uploadDeadline: z.date(),
       paperUrl: z
         .instanceof(File)
@@ -38,6 +40,7 @@ export async function POST(req: NextRequest) {
       schema.parse({
         title,
         durationMinutes,
+        year,
         uploadDeadline,
         paperUrl,
       });
@@ -70,6 +73,7 @@ export async function POST(req: NextRequest) {
     await Paper.create({
       title,
       durationMinutes,
+      year,
       uploadDeadline,
       paperUrl: `/uploads/${filename}`,
     });
@@ -87,11 +91,16 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connectDB();
 
-    const papers = await Paper.find()
+    const { searchParams } = new URL(req.url);
+    const year = searchParams.get("year");
+
+    const query = year ? { year } : {};
+
+    const papers = await Paper.find(query)
       .populate({
         path: "submissions",
         populate: { path: "studentId", select: "email fname contact" },
