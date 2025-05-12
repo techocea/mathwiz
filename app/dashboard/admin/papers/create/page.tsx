@@ -197,7 +197,6 @@ const CreatePapersPage = () => {
                             onSelect={(date) =>
                               date && setValue("uploadDeadline", date)
                             }
-                            initialFocus
                           />
                         </PopoverContent>
                       </Popover>
