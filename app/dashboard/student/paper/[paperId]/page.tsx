@@ -5,11 +5,13 @@ import { Paper } from "@/lib/schema";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: Awaited<{ paperId: string }>;
+  params: Promise<{
+    paperId: string;
+  }>;
 }
 
-export default async function Page({ params }: PageProps) {
-  const { paperId } = params;
+const Page = async ({ params }: PageProps) => {
+  const { paperId } = await params;
 
   if (!paperId) {
     notFound();
@@ -35,4 +37,6 @@ export default async function Page({ params }: PageProps) {
       </main>
     </div>
   );
-}
+};
+
+export default Page;
