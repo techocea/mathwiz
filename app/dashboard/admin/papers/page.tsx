@@ -39,7 +39,7 @@ const DisplayPapersPage = () => {
         setPapers(res.data.papers);
       } catch (error) {
         console.log("Failed to fetch papers: ", error);
-        router.push("/dashboard/admin");
+        // router.push("/dashboard/admin");
       } finally {
         setLoading(false);
       }

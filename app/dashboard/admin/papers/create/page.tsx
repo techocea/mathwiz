@@ -56,7 +56,6 @@ const CreatePapersPage = () => {
       durationMinutes: 60,
       year: "2025",
       uploadDeadline: undefined,
-      paperUrl: undefined,
     },
   });
 
@@ -73,7 +72,12 @@ const CreatePapersPage = () => {
       formData.append("uploadDeadline", data.uploadDeadline.toISOString());
       formData.append("paperUrl", data.paperUrl);
 
-      const res = await axios.post("/api/paper", formData);
+      const res = await axios.post("/api/paper", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       if (res.status === 200) {
         toast.success("Paper created successfully");
         router.push("/dashboard/admin/papers");
@@ -100,6 +104,7 @@ const CreatePapersPage = () => {
             <form
               onSubmit={handleSubmit(handleCreatePaper)}
               className="space-y-6"
+              encType="multipart/form-data"
             >
               <CardHeader>
                 <CardTitle className="text-2xl">Paper Details</CardTitle>
