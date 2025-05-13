@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import { writeFile } from "fs/promises";
 import connectDB from "@/lib/db";
 import { Paper, Submission } from "@/lib/schema";
 import { getUserFromToken } from "@/lib/jwt";

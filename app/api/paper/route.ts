@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import connectDB from '@/lib/db';
 import {Paper} from '@/lib/schema';
 import cloudinary from '@/lib/cloudinary';
+import connectDB from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
