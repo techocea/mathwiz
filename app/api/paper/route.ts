@@ -54,35 +54,19 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
-    // Upload to Cloudinary using buffer upload
-    const cloudinaryUploadResponse = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "auto",
-          folder: "papers",
-          public_id: `${title.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}`,
-          format: "pdf",
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      
-      // Convert buffer to stream for upload
-      const Readable = require('stream').Readable;
-      const readableInstanceStream = new Readable({
-        read() {
-          this.push(buffer);
-          this.push(null);
-        }
-      });
-      
-      readableInstanceStream.pipe(uploadStream);
+    // Convert buffer to base64 for Cloudinary's upload API
+    const base64File = buffer.toString('base64');
+    const fileStr = `data:${file.type};base64,${base64File}`;
+    
+    // Upload to Cloudinary using base64 data URI
+    const cloudinaryUploadResponse = await cloudinary.uploader.upload(fileStr, {
+      resource_type: "auto",
+      folder: "papers",
+      public_id: `${title.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}`,
     });
     
     // Extract the secure URL from Cloudinary response
-    const paperUrl = (cloudinaryUploadResponse as any).secure_url;
+    const paperUrl = cloudinaryUploadResponse.secure_url;
 
     await connectDB();
 

@@ -5,6 +5,7 @@ import connectDB from "@/lib/db";
 import { Paper, Submission } from "@/lib/schema";
 import { getUserFromToken } from "@/lib/jwt";
 import { cookies } from "next/headers";
+import cloudinary from "@/lib/cloudinary";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,19 +27,32 @@ export async function POST(req: NextRequest) {
     const paperId = formData.get("paperId")?.toString();
     // const studentId = formData.get("studentId") as string;
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const fileName = `${timeStamp}-MATHWIZ.pdf`;
+    // Convert file to buffer then to base64 for Cloudinary upload
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const base64File = buffer.toString("base64");
+    const fileStr = `data:${file.type};base64,${base64File}`;
 
-    const filePath = path.join(process.cwd(), "public/uploads", fileName);
-    await writeFile(filePath, buffer);
+    // Generate a unique filename for Cloudinary
+    const timestamp = new Date().getTime();
+    const fileName = `student-${user._id}-paper-${paperId}-${timestamp}`;
+
+    // Upload to Cloudinary
+    const cloudinaryUploadResponse = await cloudinary.uploader.upload(fileStr, {
+      resource_type: "auto",
+      folder: "submissions",
+      public_id: fileName,
+      format: "pdf",
+    });
 
     await connectDB();
 
+    // Create submission record with Cloudinary URL
     const submission = await Submission.create({
-      file: `/uploads/${fileName}`,
+      file: cloudinaryUploadResponse.secure_url,
       studentId: user._id,
       paperId: paperId,
+      uploadedAt: new Date(),
     });
 
     await Paper.findByIdAndUpdate(paperId, {

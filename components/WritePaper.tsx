@@ -75,15 +75,17 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
 
     try {
       const res = await axios.post("/api/submissions", formData, {
-        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status === 200) {
-        toast.success("Paper submitted successfully!");
+        toast.success("Answer Sheet submitted successfully!");
         router.push("/dashboard/student");
         setFile(null);
       } else {
-        toast.error("Failed to submit paper");
+        toast.error("Failed to submit answer sheet");
       }
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
