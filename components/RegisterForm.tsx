@@ -45,9 +45,9 @@ const RegisterForm = () => {
       school: "",
       year: "2025",
       tuitionType: {
-        paper: false,
-        revision: false,
         theory: false,
+        revision: false,
+        paper: false,
       },
     },
   });
@@ -253,7 +253,10 @@ const RegisterForm = () => {
                             tuitionType[type as keyof typeof tuitionType]
                           }
                           onCheckedChange={(checked: boolean) =>
-                            setValue(`tuitionType.${type}` as any, checked)
+                            setValue("tuitionType", {
+                              ...tuitionType,
+                              [type]: checked,
+                            })
                           }
                         />
                         {type}

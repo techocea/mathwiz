@@ -17,6 +17,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+interface TuitionTypeProps {
+  theory: boolean;
+  revision: boolean;
+  paper: boolean;
+}
+
 interface StudentProps {
   _id: string;
   firstName: string;
@@ -25,7 +31,7 @@ interface StudentProps {
   email: string;
   year: string;
   contact: number;
-  createdAt: string;
+  tuitionType: TuitionTypeProps;
   status: "pending" | "approved" | "rejected" | "banned";
 }
 
@@ -143,7 +149,7 @@ const DisplayStudentsPage = () => {
               <TableHead>Contact</TableHead>
               <TableHead>Year</TableHead>
               <TableHead>School</TableHead>
-              <TableHead>Join Date</TableHead>
+              <TableHead>Tuition Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -159,7 +165,17 @@ const DisplayStudentsPage = () => {
                   <TableCell>{student?.contact}</TableCell>
                   <TableCell>{student?.year}</TableCell>
                   <TableCell>{student?.school}</TableCell>
-                  <TableCell>{student?.createdAt}</TableCell>
+                  <TableCell>
+                    {student?.tuitionType
+                      ? [
+                          student.tuitionType.theory ? "Theory" : null,
+                          student.tuitionType.revision ? "Revision" : null,
+                          student.tuitionType.paper ? "Paper" : null,
+                        ]
+                          .filter(Boolean)
+                          .join(", ") || "None"
+                      : "None"}
+                  </TableCell>
                   <TableCell>
                     <span
                       className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(

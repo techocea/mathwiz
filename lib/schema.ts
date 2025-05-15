@@ -11,13 +11,9 @@ const userSchema = new mongoose.Schema(
     school: { type: String },
     role: { type: String, enum: ["admin", "user"], default: "user" },
     tuitionType: {
-      type: {
-        theory: { type: Boolean, default: false },
-        revision: { type: Boolean, default: false },
-        paper: { type: Boolean, default: false },
-      },
-      _id: false,
-      required: true,
+      theory: { type: Boolean, default: false },
+      revision: { type: Boolean, default: false },
+      paper: { type: Boolean, default: false },
     },
     status: {
       type: String,
@@ -35,6 +31,7 @@ const paperSchema = new mongoose.Schema(
     year: { type: String, enum: ["2025", "2026", "2027"] },
     uploadDeadline: { type: Date },
     paperUrl: { type: String },
+    cloudinaryPublicId: { type: String },
     submissions: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -57,7 +54,11 @@ const submissionSchema = new mongoose.Schema(
       ref: "Paper",
       required: true,
     },
-    file: {
+    submissionUrl: {
+      type: String,
+      required: true,
+    },
+    cloudinaryPublicId: {
       type: String,
       required: true,
     },

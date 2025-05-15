@@ -16,7 +16,7 @@ export function verifyToken(token: any) {
 export function getUserFromToken(token: string) {
   try {
     const decoded = jwt.verify(token, SECRET);
-    return decoded as { _id: string; email: string }; // Adjust based on your payload
+    return decoded as { _id: string; email: string }; 
   } catch (err) {
     console.error("get user from token error: ", err)
     return null;

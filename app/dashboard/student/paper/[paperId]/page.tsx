@@ -29,7 +29,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <BlurGradient />
-      <main className="flex-1 container max-w-5xl mx-auto p-6">
+      <main className="flex-1 container max-w-5xl mx-auto py-4 px-4 sm:p-6 lg:pt-16 lg:pb-32">
         <WritePaper
           paperId={serializedPaper._id.toString()}
           paper={serializedPaper}

@@ -11,13 +11,14 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { formatTime } from "@/lib/formatTime";
-import { Clock } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTimer } from "@/components/contexts/TimerContext";
 import { Input } from "./ui/input";
 import axios from "axios";
+import DownloadButton from "./DownloadButton";
 
 interface PaperProps {
   paperId: string;
@@ -27,12 +28,13 @@ interface PaperProps {
     durationMinutes: number;
     uploadDeadline: string;
     paperUrl: string;
+    cloudinaryPublicId: string;
   };
 }
 
 const WritePaper = ({ paperId, paper }: PaperProps) => {
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
+  const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
     useTimer();
@@ -62,11 +64,11 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return toast.error("Please upload a file");
+    if (!submissionUrl) return toast.error("Please upload a file");
 
     setIsUploading(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("submissionUrl", submissionUrl);
     formData.append("paperId", paperId);
 
     if (!paperId) {
@@ -83,7 +85,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
       if (res.status === 200) {
         toast.success("Answer Sheet submitted successfully!");
         router.push("/dashboard/student");
-        setFile(null);
+        setSubmissionUrl(null);
       } else {
         toast.error("Failed to submit answer sheet");
       }
@@ -135,58 +137,59 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
           </ol>
         </CardContent>
         <CardFooter>
-          <Button
+          <DownloadButton
             variant="outline"
-            asChild
-            onClick={() => toast.info("Downloading paper...")}
-            className="w-full sm:w-auto"
-          >
-            <a href={paper.paperUrl} download={paper.title}>
-              Download Exam Paper
-            </a>
-          </Button>
+            publicId={paper.cloudinaryPublicId}
+            fileName={`${paper?.title}`}
+          />
         </CardFooter>
       </Card>
 
       <Separator className="my-8" />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
         <div className="space-y-4">
           <h3 className="text-xl font-semibold">Submit Your Work</h3>
 
-          <div className="rounded-lg p-6">
+          <div className="flex rounded-lg py-6">
             <Input
               type="file"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={(e) => setSubmissionUrl(e.target.files?.[0] || null)}
               accept=".pdf"
+              className="bg-white rounded-none"
               disabled={isTimeUp || isUploading}
-              className="bg-white"
             />
-            {file && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                Selected: {file.name}
-              </p>
-            )}
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="default"
+                className="rounded-none"
+                disabled={!submissionUrl || isTimeUp || isUploading}
+              >
+                {isUploading ? (
+                  <div>
+                    <Loader2 className="animate-spin transition-all" />
+                  </div>
+                ) : (
+                  "Submit Paper"
+                )}
+              </Button>
+              {/* {file && (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Selected: {file.name}
+                </p>
+              )} */}
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={!file || isTimeUp || isUploading}
-            variant="default"
-          >
-            {isUploading ? "Submitting..." : "Submit Paper"}
-          </Button>
-        </div>
-
-        {isTimeUp && (
+        {/* {isTimeUp && (
           <div className="bg-destructive/10 border border-destructive rounded-lg p-4 text-center">
             <p className="text-destructive font-medium">
               Time&apos;s up! You can no longer submit your paper.
             </p>
           </div>
-        )}
+        )} */}
       </form>
     </>
   );

@@ -7,7 +7,8 @@ import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { LogOut, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import LogoutButton from "@/components/LogoutButton";
 
 interface DashboardTypeProps {
   dashboardType: "student" | "admin";
@@ -66,7 +67,7 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
         {dashboardType === "student" ? <p>Student User</p> : <p>Admin User</p>}
 
         <div>
-          <Button variant="outline">Logout</Button>
+          <LogoutButton />
         </div>
       </div>
 
@@ -127,16 +128,7 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
 
                 <div className="flex flex-col gap-4 p-4 pt-8">
                   {dashboardType === "student" ? <p>Student</p> : <p>Admin</p>}
-                  <Link href="/">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="uppercase rounded-none w-full"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </Button>
-                  </Link>
+                  <LogoutButton />
                 </div>
               </motion.nav>
             </>

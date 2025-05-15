@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import connectDB from "@/lib/db";
 import { Paper, Submission } from "@/lib/schema";
 import { getUserFromToken } from "@/lib/jwt";
-import { cookies } from "next/headers";
 import cloudinary from "@/lib/cloudinary";
 
 export async function POST(req: NextRequest) {
@@ -11,7 +11,10 @@ export async function POST(req: NextRequest) {
     const token = cookieStore.get("studentToken")?.value;
 
     if (!token) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Unauthorized: No token" },
+        { status: 401 }
+      );
     }
 
     const user = getUserFromToken(token);
@@ -20,36 +23,42 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-
-    const file = formData.get("file") as File;
+    const submissionUrl = formData.get("submissionUrl") as File | null;
     const paperId = formData.get("paperId")?.toString();
-    // const studentId = formData.get("studentId") as string;
 
-    // Convert file to buffer then to base64 for Cloudinary upload
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64File = buffer.toString("base64");
-    const fileStr = `data:${file.type};base64,${base64File}`;
+    if (!submissionUrl || !paperId) {
+      return NextResponse.json(
+        { message: "Missing file or paperId" },
+        { status: 400 }
+      );
+    }
 
-    // Generate a unique filename for Cloudinary
-    const timestamp = new Date().getTime();
-    const fileName = `student-${user._id}-paper-${paperId}-${timestamp}`;
+    // Convert file to base64
+    const buffer = Buffer.from(await submissionUrl.arrayBuffer());
+    const fileStr = `data:${submissionUrl.type};base64,${buffer.toString(
+      "base64"
+    )}`;
+
+    // Generate unique file name
+    const timestamp = Date.now();
+    const publicId = `student-${user._id}-paper-${paperId}-${timestamp}`;
 
     // Upload to Cloudinary
-    const cloudinaryUploadResponse = await cloudinary.uploader.upload(fileStr, {
-      resource_type: "auto",
+    const uploadRes = await cloudinary.uploader.upload(fileStr, {
+      resource_type: "raw",
       folder: "submissions",
-      public_id: fileName,
+      public_id: publicId,
       format: "pdf",
     });
 
+    // Connect to DB and create submission
     await connectDB();
 
-    // Create submission record with Cloudinary URL
     const submission = await Submission.create({
-      file: cloudinaryUploadResponse.secure_url,
+      submissionUrl: uploadRes.secure_url,
+      cloudinaryPublicId: uploadRes.public_id,
       studentId: user._id,
-      paperId: paperId,
+      paperId,
       uploadedAt: new Date(),
     });
 
@@ -59,23 +68,17 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Submission Successfull",
-        file: fileName,
+        message: "Submission successful",
+        submissionUrl: uploadRes.secure_url,
+        cloudinaryPublicId: uploadRes.public_id,
       },
-
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
-  } catch (error) {
-    console.error("Error in submitting the paper: ", error);
+  } catch (error: any) {
+    console.error("Submission error:", error.message || error);
     return NextResponse.json(
-      {
-        message: "Failed to submit exam paper",
-      },
-      {
-        status: 500,
-      }
+      { message: "Failed to submit exam paper" },
+      { status: 500 }
     );
   }
 }
@@ -85,24 +88,15 @@ export async function GET() {
     await connectDB();
 
     const submissions = await Submission.find({})
-      .populate("studentId", "firstName lastName  contact")
+      .populate("studentId", "firstName lastName contact")
       .populate("paperId", "title");
 
+    return NextResponse.json({ submissions }, { status: 200 });
+  } catch (error: any) {
+    console.error("Fetch error:", error.message || error);
     return NextResponse.json(
-      {
-        submissions,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error fetching submissions: ", error);
-    return NextResponse.json(
-      {
-        message: "Internal Server Error",
-      },
-      {
-        status: 500,
-      }
+      { message: "Internal server error" },
+      { status: 500 }
     );
   }
 }

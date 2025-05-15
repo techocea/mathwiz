@@ -12,16 +12,11 @@ export const registrationSchema = z.object({
   confirmPassword: z.string().min(6, "This field is required"),
   school: z.string().min(1, "This field is required"),
   year: z.enum(["2025", "2026", "2027"]),
-  tuitionType: z
-    .object({
-      paper: z.boolean().default(false),
-      revision: z.boolean().default(false),
-      theory: z.boolean().default(false),
-    })
-    .refine((data) => data.paper || data.revision || data.theory, {
-      message: "Select at least one tuition type",
-      path: ["tuitionType"],
-    }),
+  tuitionType: z.object({
+    theory: z.boolean().default(false),
+    revision: z.boolean().default(false),
+    paper: z.boolean().default(false),
+  }),
   status: z.enum(["pending", "approved", "rejected", "banned"]).optional(),
 });
 
