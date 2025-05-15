@@ -11,11 +11,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(
-        "/api/logout",
-        {},
-        { withCredentials: true }
-      );
+      await axios.post("/api/logout", {}, { withCredentials: true });
       router.push("/login");
     } catch (error) {
       console.log("Error in logging out session: ", error);

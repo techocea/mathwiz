@@ -4,7 +4,7 @@ import cloudinary from "@/lib/cloudinary";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const publicId = searchParams.get("public_id");
-  const filename = searchParams.get("filename") || "file";
+  // const filename = searchParams.get("filename") || "file";
 
   if (!publicId) {
     return NextResponse.json(

@@ -14,7 +14,6 @@ import { FileText, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DownloadButton from "@/components/DownloadButton";
-import { Button } from "@/components/ui/button";
 
 interface Submission {
   _id: string;
