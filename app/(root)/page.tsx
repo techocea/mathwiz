@@ -10,7 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, ChevronLeft, Mail, MapPin, PhoneCall } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  Loader2,
+  Mail,
+  MapPin,
+  PhoneCall,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { HIGHLIGHTS, TIMETABLE } from "@/lib/constants";
@@ -19,14 +26,15 @@ import ScrollTriggered from "@/components/ScrollTriggered";
 import ContactItem from "@/components/Contact-Item";
 import clsx from "clsx";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { toast } from "sonner";
+import axios from "axios";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [contact, setContact] = useState("");
   const [message, setMessage] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState("");
 
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -36,15 +44,33 @@ export default function Home() {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    console.log("Form submitted", { name, email, phone, message });
-    alert("Form Submitted");
-    setName("");
-    setEmail("");
-    setPhone("");
-    setMessage("");
+    try {
+      const res = await axios.post("/api/contact", {
+        name,
+        email,
+        contact,
+        message,
+      });
+
+      if (res.status === 200) {
+        toast.success("Form submitted successfully");
+        setName("");
+        setEmail("");
+        setContact("");
+        setMessage("");
+      } else {
+        toast.error("Failed to submit the form");
+      }
+    } catch (error) {
+      console.log("Error in submitting the form: ", error);
+      toast.error("Failed to submit the form");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -411,7 +437,7 @@ export default function Home() {
                 <h3 className="text-blue-500 text-sm uppercase font-semibold mb-8">
                   Get in Touch &gt;&gt;
                 </h3>
-                <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+                <form className="flex flex-col gap-6" onSubmit={onSubmit}>
                   <input
                     type="text"
                     name="name"
@@ -434,8 +460,8 @@ export default function Home() {
                     type="tel"
                     name="phone"
                     placeholder="Phone Number *"
-                    onChange={(e) => setPhone(e.target.value)}
-                    value={phone}
+                    onChange={(e) => setContact(e.target.value)}
+                    value={contact}
                     aria-label="Phone"
                     className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"
                   />
@@ -449,10 +475,19 @@ export default function Home() {
                     className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary resize-none"
                   />
                   <Button
-                    className="w-fit rounded-none hover:bg-primary/90 transition"
                     size="lg"
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-fit rounded-none cursor-pointer   hover:bg-primary/90 transition"
                   >
-                    Send Message
+                    {isLoading ? (
+                      <div className="flex gap-2 ">
+                        Please wait
+                        <Loader2 className="animate-spin transition-all" />
+                      </div>
+                    ) : (
+                      <p>Send Message</p>
+                    )}
                   </Button>
                 </form>
               </div>

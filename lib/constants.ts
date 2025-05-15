@@ -6,7 +6,9 @@ import {
   FileText,
   Users,
   Files,
+  SquareCheckBig,
 } from "lucide-react";
+
 export type Paper = {
   id: string;
   title: string;
@@ -59,6 +61,11 @@ export const ADMIN_NAV_ITEMS = [
     name: "Submissions",
     path: "/dashboard/admin/submissions",
     icon: Files,
+  },
+  {
+    name: "Inquiries",
+    path: "/dashboard/admin/inquiries",
+    icon: SquareCheckBig,
   },
 ];
 

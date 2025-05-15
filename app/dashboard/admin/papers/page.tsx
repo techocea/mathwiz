@@ -15,6 +15,7 @@ import { FileText, Plus, Eye, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { format } from "date-fns";
 
 interface PaperProps {
   _id: string;
@@ -35,7 +36,7 @@ const DisplayPapersPage = () => {
     const fetchAllPapers = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("/api/paper");
+        const res = await axios.get("/api/admin/paper");
         setPapers(res.data.papers);
       } catch (error) {
         console.log("Failed to fetch papers: ", error);
@@ -93,7 +94,7 @@ const DisplayPapersPage = () => {
                   >
                     Submissions
                   </TableHead>
-                  {/* <TableHead>Status</TableHead> */}
+
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -107,7 +108,9 @@ const DisplayPapersPage = () => {
                           {paper?.title}
                         </div>
                       </TableCell>
-                      <TableCell>{paper?.uploadDeadline}</TableCell>
+                      <TableCell>
+                        {format(new Date(paper?.uploadDeadline), "PPp")}
+                      </TableCell>
                       <TableCell>{paper?.year}</TableCell>
                       <TableCell>{paper?.durationMinutes} mins</TableCell>
                       <TableCell align="center">
@@ -119,7 +122,9 @@ const DisplayPapersPage = () => {
                           size="sm"
                           variant="link"
                           className="cursor-pointer"
-                          // onClick={() =>}
+                          onClick={() =>
+                            router.push("/dashboard/admin/submissions")
+                          }
                         >
                           <Eye className="h-4 w-4" />
                           View

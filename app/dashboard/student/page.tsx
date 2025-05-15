@@ -62,7 +62,7 @@ const StudentDashboard = () => {
         });
         const studentYear = resStudent.data.year;
 
-        const resPapers = await axios.get(`/api/paper?year=${studentYear}`);
+        const resPapers = await axios.get(`/api/admin/paper?year=${studentYear}`);
         setPapers(resPapers.data.papers);
       } catch (error) {
         console.log("Failed to fetch papers: ", error);
@@ -129,7 +129,7 @@ const StudentDashboard = () => {
                   papers.map((paper) => (
                     <TableRow
                       key={paper._id}
-                      //   className={isExpired ? "opacity-70" : ""}
+                    //   className={isExpired ? "opacity-70" : ""}
                     >
                       <TableCell className="font-medium flex items-center gap-2">
                         <FileText size={18} className="text-primary" />

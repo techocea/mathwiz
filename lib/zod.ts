@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const contactSchema = z.object({
+  name: z.string().min(6, "This field is required"),
+  email: z
+    .string()
+    .min(12, "This field is required")
+    .email("Invalid email format"),
+  contact: z.string().min(10, "This field is required"),
+  message: z.string().min(6, "This field is required"),
+});
+
 export const registrationSchema = z.object({
   firstName: z.string().min(1, "This field is required"),
   lastName: z.string().min(1, "This field is required"),
@@ -45,6 +55,7 @@ export const createPaperSchema = z.object({
     ),
 });
 
+export type ContactFormValues = z.infer<typeof contactSchema>;
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type CreatePaperFormValues = z.infer<typeof createPaperSchema>;

@@ -41,18 +41,17 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
           </h1>
         )}
         {dashboardType === "admin" ? (
-          <nav className="hidden lg:flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+          <nav className="hidden lg:flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 lg:ml-6">
             {ADMIN_NAV_ITEMS.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${
-                    item.path === pathname
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${item.path === pathname
                       ? "text-blue-500"
                       : "text-muted-foreground"
-                  }`}
+                    }`}
                 >
                   <Icon size={24} />
                   {item.name}
@@ -112,11 +111,10 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
                       <Link
                         key={item.path}
                         href={item.path}
-                        className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${
-                          item.path === pathname
+                        className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${item.path === pathname
                             ? "text-blue-500"
                             : "text-muted-foreground"
-                        }`}
+                          }`}
                       >
                         <Icon size={24} />
                         {item.name}

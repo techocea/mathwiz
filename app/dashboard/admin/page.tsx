@@ -12,7 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, Clock, Loader2 } from "lucide-react";
+import {
+  FileText,
+  Users,
+  Clock,
+  Loader2,
+  Files,
+  SquareCheckBig,
+} from "lucide-react";
 import axios from "axios";
 
 interface AdminProps {
@@ -25,6 +32,8 @@ const AdminDashboardPage = () => {
   const [adminData, setAdminData] = useState<AdminProps | null>(null);
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalPapers, setTotalPapers] = useState(0);
+  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [totalInquiries, setTotalInquiries] = useState(0);
 
   const fetchAdminData = useCallback(async () => {
     setLoading(true);
@@ -38,17 +47,21 @@ const AdminDashboardPage = () => {
       setLoading(false);
     }
   }, [router]);
-
-  // function to get the students and papers length
+  // function to get the students, papers, submissions and inquiries length
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const [studentsRes, papersRes] = await Promise.all([
-          axios.get("/api/admin/students"),
-          axios.get("/api/paper"),
-        ]);
+        const [studentsRes, papersRes, submissionsRes, inquiriesRes] =
+          await Promise.all([
+            axios.get("/api/admin/students"),
+            axios.get("/api/admin/paper"),
+            axios.get("/api/submissions"),
+            axios.get("/api/contact"),
+          ]);
         setTotalStudents(studentsRes.data.students.length);
         setTotalPapers(papersRes.data.papers.length);
+        setTotalSubmissions(submissionsRes.data.submissions.length);
+        setTotalInquiries(inquiriesRes.data.inquiries.length);
       } catch (error) {
         console.error("Failed to fetch counts:", error);
       }
@@ -83,7 +96,7 @@ const AdminDashboardPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -111,6 +124,34 @@ const AdminDashboardPage = () => {
                 <p className="text-xs text-muted-foreground pt-1">
                   Papers created
                 </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Submissions
+                </CardTitle>
+                <Files className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{totalSubmissions}</div>
+                <p className="text-xs text-muted-foreground pt-1">
+                  Papers submitted
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Inquiries
+                </CardTitle>
+                <SquareCheckBig className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{totalInquiries}</div>
+                <p className="text-xs text-muted-foreground pt-1">Inquiries</p>
               </CardContent>
             </Card>
           </div>

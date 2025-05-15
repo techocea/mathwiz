@@ -70,8 +70,20 @@ const submissionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const inquirySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    contact: { type: String, required: true },
+    message: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
 export const Paper =
   mongoose.models.Paper || mongoose.model("Paper", paperSchema);
 export const Submission =
   mongoose.models.Submission || mongoose.model("Submission", submissionSchema);
+export const Inquiries =
+  mongoose.models.Inquiries || mongoose.model("Inquiries", inquirySchema);
