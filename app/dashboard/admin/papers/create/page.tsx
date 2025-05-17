@@ -72,7 +72,7 @@ const CreatePapersPage = () => {
       formData.append("uploadDeadline", data.uploadDeadline.toISOString());
       formData.append("paperUrl", data.paperUrl);
 
-      const res = await axios.post("/api/paper", formData, {
+      const res = await axios.post("/api/admin/paper", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
