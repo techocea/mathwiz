@@ -7,9 +7,6 @@ import {
   Users,
   Files,
   SquareCheckBig,
-  MapPin,
-  Mail,
-  PhoneCall,
 } from "lucide-react";
 
 // export type Paper = {
