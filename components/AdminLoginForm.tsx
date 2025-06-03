@@ -17,9 +17,12 @@ import axios from "axios";
 import { loginSchema, LoginFormValues } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const AdminLoginForm = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -29,6 +32,7 @@ const AdminLoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
+    setLoading(true);
     try {
       const res = await axios.post("/api/admin", data);
 
@@ -41,6 +45,8 @@ const AdminLoginForm = () => {
     } catch (error: any) {
       console.error("Error in admin login", error);
       toast.error(error?.response?.data?.message || "Error in admin login");
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -59,19 +65,25 @@ const AdminLoginForm = () => {
             className="space-y-4 grid grid-cols-1 gap-2"
           >
             <div className="flex flex-col space-y-4 gap-2">
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" {...register("email")} />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Admin Email"
+                  {...register("email")}
+                />
                 {errors.email && (
                   <p className="text-sm text-red-500">{errors.email.message}</p>
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
+                  placeholder="Admin Password"
                   {...register("password")}
                 />
                 {errors.password && (
@@ -83,8 +95,14 @@ const AdminLoginForm = () => {
             </div>
 
             <div className="w-full flex flex-col items-center justify-center gap-2">
-              <Button type="submit" className="w-full">
-                Login as Admin
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? (
+                  <div className="flex items-center gap-2.5">
+                    <Loader2 className="animate-spin transition-all" />
+                  </div>
+                ) : (
+                  <p>Login as admin</p>
+                )}
               </Button>
             </div>
           </form>

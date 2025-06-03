@@ -7,16 +7,19 @@ import {
   Users,
   Files,
   SquareCheckBig,
+  MapPin,
+  Mail,
+  PhoneCall,
 } from "lucide-react";
 
-export type Paper = {
-  id: string;
-  title: string;
-  subject: string;
-  durationMinutes: number;
-  fileUrl: string;
-  uploadDeadline: string;
-};
+// export type Paper = {
+//   id: string;
+//   title: string;
+//   subject: string;
+//   durationMinutes: number;
+//   fileUrl: string;
+//   uploadDeadline: string;
+// };
 
 export const NAV_ITEMS = [
   {
@@ -137,3 +140,5 @@ export const TIMETABLE = [
     day2Finish: "10:00AM",
   },
 ];
+
+

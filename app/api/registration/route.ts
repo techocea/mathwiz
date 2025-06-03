@@ -13,9 +13,25 @@ export async function POST(req: NextRequest) {
       contact,
       year,
       school,
+      medium,
       status,
       tuitionType,
     } = await req.json();
+
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !contact ||
+      !year ||
+      !school ||
+      !medium
+    )
+      return NextResponse.json(
+        { message: "All fields required" },
+        { status: 401 }
+      );
 
     if (
       !tuitionType ||
@@ -54,6 +70,7 @@ export async function POST(req: NextRequest) {
       contact,
       year,
       school,
+      medium,
       tuitionType,
       status: status || "pending",
     });

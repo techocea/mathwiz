@@ -30,6 +30,7 @@ interface StudentProps {
   school: string;
   email: string;
   year: string;
+  medium: string;
   contact: number;
   tuitionType: TuitionTypeProps;
   status: "pending" | "approved" | "rejected" | "banned";
@@ -149,6 +150,7 @@ const DisplayStudentsPage = () => {
               <TableHead>Contact</TableHead>
               <TableHead>Year</TableHead>
               <TableHead>School</TableHead>
+              <TableHead>Medium</TableHead>
               <TableHead>Tuition Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -159,21 +161,22 @@ const DisplayStudentsPage = () => {
               students.map((student) => (
                 <TableRow key={student?._id}>
                   <TableCell className="font-medium">
-                    {student?.firstName}
+                    {student?.firstName} {student?.lastName}
                   </TableCell>
                   <TableCell>{student?.email}</TableCell>
                   <TableCell>{student?.contact}</TableCell>
                   <TableCell>{student?.year}</TableCell>
                   <TableCell>{student?.school}</TableCell>
+                  <TableCell className="capitalize">{student?.medium}</TableCell>
                   <TableCell>
                     {student?.tuitionType
                       ? [
-                          student.tuitionType.theory ? "Theory" : null,
-                          student.tuitionType.revision ? "Revision" : null,
-                          student.tuitionType.paper ? "Paper" : null,
-                        ]
-                          .filter(Boolean)
-                          .join(", ") || "None"
+                        student.tuitionType.theory ? "Theory" : null,
+                        student.tuitionType.revision ? "Revision" : null,
+                        student.tuitionType.paper ? "Paper" : null,
+                      ]
+                        .filter(Boolean)
+                        .join(", ") || "None"
                       : "None"}
                   </TableCell>
                   <TableCell>

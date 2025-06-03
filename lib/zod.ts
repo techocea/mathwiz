@@ -22,6 +22,7 @@ export const registrationSchema = z.object({
   confirmPassword: z.string().min(6, "This field is required"),
   school: z.string().min(1, "This field is required"),
   year: z.enum(["2025", "2026", "2027"]),
+  medium: z.enum(["sinhala", "english"]),
   tuitionType: z.object({
     theory: z.boolean().default(false),
     revision: z.boolean().default(false),

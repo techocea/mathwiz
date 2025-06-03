@@ -94,7 +94,7 @@ const InquiryPage = () => {
                         className="flex items-center justify-center"
                         align="justify"
                       >
-                        {format(new Date(inquiry.createdAt), "PPP")}
+                        {format(new Date(inquiry.createdAt), "dd MM,yyyy")}
                       </TableCell>
                     </TableRow>
                   ))

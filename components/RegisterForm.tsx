@@ -25,8 +25,11 @@ import { registrationSchema, RegistrationFormValues } from "@/lib/zod";
 import { toast } from "sonner";
 import { Separator } from "./ui/separator";
 import { Checkbox } from "./ui/checkbox";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const RegisterForm = () => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -44,6 +47,7 @@ const RegisterForm = () => {
       confirmPassword: "",
       school: "",
       year: "2025",
+      medium: "sinhala",
       tuitionType: {
         theory: false,
         revision: false,
@@ -55,17 +59,21 @@ const RegisterForm = () => {
   const tuitionType = watch("tuitionType");
 
   const onSubmit = async (data: RegistrationFormValues) => {
+    setLoading(true);
     try {
       const res = await axios.post("/api/registration", data);
       if (res.status === 200) {
-        toast.success("Registered Successfully");
-        console.log(data);
+        toast.success(
+          "Registered Successfully, Please wait for account approval"
+        );
       } else {
         toast.error("Error in registration");
       }
     } catch (error: any) {
       console.error("Error in registration", error);
       toast.error(error?.response?.data?.message || "Error in registration");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,9 +92,15 @@ const RegisterForm = () => {
             className="space-y-4 grid grid-cols-1 gap-2"
           >
             {/* Section: Personal Info */}
-            <h1 className="text-2xl font-semibold">Personal Information</h1>
+            <div>
+              <h1 className="text-2xl font-semibold">Personal Information</h1>
+              <p className="text-sm text-muted-foreground">
+                Enter personal information
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="firstName">
                   First Name
                 </Label>
@@ -102,7 +116,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="lastName">
                   Last Name
                 </Label>
@@ -118,7 +132,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="contact">
                   Contact Number
                 </Label>
@@ -134,14 +148,14 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="email">
                   Email
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder="john.doe@example.com"
                   {...register("email")}
                 />
                 {errors.email && (
@@ -149,7 +163,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="password">
                   Password
                 </Label>
@@ -166,7 +180,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="confirmPassword">
                   Confirm Password
                 </Label>
@@ -187,9 +201,15 @@ const RegisterForm = () => {
             <Separator />
 
             {/* Section: Academic Info */}
-            <h1 className="text-2xl font-semibold">Academic Information</h1>
+            <div>
+              <h1 className="text-2xl font-semibold">Academic Information</h1>
+              <p className="text-sm text-muted-foreground">
+                Enter academic information
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="school">
                   School
                 </Label>
@@ -205,7 +225,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <Label className="font-normal" htmlFor="year">
                   Year
                 </Label>
@@ -224,9 +244,6 @@ const RegisterForm = () => {
                     <SelectItem value="2027">2027</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.year && (
-                  <p className="text-sm text-red-500">{errors.year.message}</p>
-                )}
               </div>
             </div>
 
@@ -236,18 +253,37 @@ const RegisterForm = () => {
             <div>
               <h1 className="text-2xl font-semibold">Tuition Information</h1>
               <p className="text-sm text-muted-foreground">
-                Select Tuition Type
+                Select tuition type
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-3">
-                <div>
-                  <div className="flex flex-col items-start gap-4">
-                    {["theory", "revision", "paper"].map((type) => (
-                      <Label
-                        key={type}
-                        className="flex font-normal items-center gap-2 capitalize"
-                      >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-2.5 md:col-span-1">
+                <Label className="font-normal" htmlFor="medium">
+                  Medium
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setValue("medium", value as "sinhala" | "english")
+                  }
+                  defaultValue="sinhala"
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select medium" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sinhala">Sinhala</SelectItem>
+                    <SelectItem value="english">English</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2.5 md:col-span-2">
+                <div className="flex flex-col items-start gap-4">
+                  <Label className="flex font-normal items-center gap-2 capitalize">
+                    Select Tuition Mode
+                  </Label>
+                  <div className="grid grid-cols-3 gap-4">
+                    {["Theory", "Revision", "Paper"].map((type, index) => (
+                      <div key={index} className="flex items-center gap-2.5">
                         <Checkbox
                           checked={
                             tuitionType[type as keyof typeof tuitionType]
@@ -260,7 +296,7 @@ const RegisterForm = () => {
                           }
                         />
                         {type}
-                      </Label>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -273,12 +309,23 @@ const RegisterForm = () => {
             </div>
 
             <div className="w-full flex flex-col items-center justify-center gap-2">
-              <Button type="submit" className="w-full">
-                Register
+              <Button
+                size="lg"
+                type="submit"
+                className="w-full"
+                disabled={loading}
+              >
+                {loading ? (
+                  <div className="flex items-center gap-2.5">
+                    <Loader2 className="animate-spin transition-all" />
+                  </div>
+                ) : (
+                  <p>Register</p>
+                )}
               </Button>
               <Button
-                variant="link"
                 asChild
+                variant="link"
                 className="w-fit text-center cursor-pointer"
               >
                 <Link

@@ -8,8 +8,8 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     contact: { type: String },
     year: { type: String, enum: ["2025", "2026", "2027"] },
+    medium: { type: String, enum: ["sinhala", "english"] },
     school: { type: String },
-    role: { type: String, enum: ["admin", "user"], default: "user" },
     tuitionType: {
       theory: { type: Boolean, default: false },
       revision: { type: Boolean, default: false },
@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected", "banned"],
       default: "pending",
     },
+    role: { type: String, enum: ["admin", "user"], default: "user" },
   },
   { timestamps: true }
 );
