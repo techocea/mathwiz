@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const submissionUrl = formData.get("submissionUrl") as File | null;
     const paperId = formData.get("paperId")?.toString();
+    const startTime = formData.get("startTime")?.toString();
 
     if (!submissionUrl || !paperId) {
       return NextResponse.json(
@@ -54,14 +55,25 @@ export async function POST(req: NextRequest) {
     // Connect to DB and create submission
     await connectDB();
 
+    let paperStartTime: Date | undefined;
+    if (startTime) {
+      paperStartTime = new Date(startTime); // Convert the string to a Date object
+    } else {
+      console.warn(
+        "startTime not provided in submission. Storing as null/undefined."
+      );
+    }
+
     const submission = await Submission.create({
       submissionUrl: uploadRes.secure_url,
       cloudinaryPublicId: uploadRes.public_id,
       studentId: user._id,
       paperId,
+      startTime: paperStartTime,
       uploadedAt: new Date(),
     });
 
+    console.log(submission);
     await Paper.findByIdAndUpdate(paperId, {
       $push: { submissions: submission._id },
     });

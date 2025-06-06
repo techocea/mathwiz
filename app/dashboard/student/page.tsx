@@ -13,7 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { INSTRUCTIONS } from "@/lib/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import { Clock, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -33,9 +35,9 @@ interface StudentProps {
 
 const StudentDashboard = () => {
   const router = useRouter();
-  const { isRunning, currentExamId, startTimer } = useTimer();
   const [loading, setLoading] = useState(false);
   const [papers, setPapers] = useState<PaperProps[]>([]);
+  const { isRunning, currentExamId, startTimer } = useTimer();
   const [studentData, setStudentData] = useState<StudentProps>();
 
   useEffect(() => {
@@ -62,7 +64,9 @@ const StudentDashboard = () => {
         });
         const studentYear = resStudent.data.year;
 
-        const resPapers = await axios.get(`/api/admin/paper?year=${studentYear}`);
+        const resPapers = await axios.get(
+          `/api/admin/paper?year=${studentYear}`
+        );
         setPapers(resPapers.data.papers);
       } catch (error) {
         console.log("Failed to fetch papers: ", error);
@@ -84,13 +88,21 @@ const StudentDashboard = () => {
   const handleStartExam = (paperId: string, durationMinutes: number) => {
     if (isRunning && currentExamId !== paperId) {
       // toast.error("You already have a paper going on!");
+
       router.push(`/dashboard/student/paper/${paperId}`);
       return;
     }
 
+    const examStartTime = new Date().toISOString();
+    localStorage.setItem(`examStartTime_${paperId}`, examStartTime);
     startTimer(durationMinutes, paperId);
     router.push(`/dashboard/student/paper/${paperId}`);
   };
+
+  const isExpired = (uploadDeadline: string) => {
+    return new Date(uploadDeadline) < new Date();
+  };
+
   return (
     <>
       <DashboardNavbar dashboardType="student" />
@@ -99,13 +111,17 @@ const StudentDashboard = () => {
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between w-full">
             <div>
-              <h1 className="text-3xl font-bold uppercase">
-                {studentData?.name}&apos;s Dashboard
+              <h1 className="text-xl font-bold uppercase pb-2.5">
+                Exam Instructions
               </h1>
-              <p className="text-sm text-muted-foreground">
-                Browse and start your exams. Remember, once you start, the timer
-                cannot be paused.
-              </p>
+              {INSTRUCTIONS.map((ins, idx) => (
+                <p
+                  key={idx}
+                  className="text-sm leading-6.5 text-muted-foreground"
+                >
+                  {ins}
+                </p>
+              ))}
             </div>
 
             <div>
@@ -121,40 +137,51 @@ const StudentDashboard = () => {
                 <TableRow>
                   <TableHead>Paper</TableHead>
                   <TableHead>Duration</TableHead>
+                  <TableHead>Submit Deadline</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {papers && papers.length > 0 ? (
-                  papers.map((paper) => (
-                    <TableRow
-                      key={paper._id}
-                    //   className={isExpired ? "opacity-70" : ""}
-                    >
-                      <TableCell className="font-medium flex items-center gap-2">
-                        <FileText size={18} className="text-primary" />
-                        {paper.title}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Clock size={16} className="text-muted-foreground" />
-                          {paper.durationMinutes} minutes
-                        </div>
-                      </TableCell>
-
-                      <TableCell className="text-right">
-                        <Button
-                          onClick={() =>
-                            handleStartExam(paper._id, paper.durationMinutes)
-                          }
-                          // onClick={() => toast.success(paper?.title)}
-                          size="sm"
-                        >
-                          Start Exam
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  papers.map((paper) => {
+                    const expired = isExpired(paper.uploadDeadline);
+                    return (
+                      <TableRow
+                        key={paper._id}
+                        className={expired ? "opacity-70" : ""}
+                      >
+                        <TableCell className="font-medium flex items-center gap-2">
+                          <FileText size={18} className="text-primary" />
+                          {paper.title}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Clock
+                              size={16}
+                              className="text-muted-foreground"
+                            />
+                            {Math.floor(paper.durationMinutes / 60) > 0 &&
+                              `${Math.floor(paper.durationMinutes / 60)}h `}
+                            {paper.durationMinutes % 60}m
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {format(new Date(paper.uploadDeadline), "PP")}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            disabled={isRunning}
+                            onClick={() =>
+                              handleStartExam(paper._id, paper.durationMinutes)
+                            }
+                            size="sm"
+                          >
+                            Start Exam
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-6">

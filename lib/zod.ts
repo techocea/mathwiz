@@ -36,11 +36,12 @@ export const loginSchema = z.object({
   password: z.string().min(6, "This field is required"),
 });
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB
 const ACCEPTED_FILE_TYPES = ["application/pdf"];
 
 export const createPaperSchema = z.object({
   title: z.string().min(6, "This field is required"),
+  medium: z.enum(["sinhala", "english"]),
   durationMinutes: z.number().min(1, "This field is required"),
   uploadDeadline: z.date({ required_error: "Please select a deadline date" }),
   year: z.enum(["2025", "2026", "2027"]),
@@ -48,7 +49,7 @@ export const createPaperSchema = z.object({
     .instanceof(File)
     .refine(
       (file) => file.size <= MAX_FILE_SIZE,
-      "File size must be less than 5MB"
+      "File size must be less than 30MB"
     )
     .refine(
       (file) => ACCEPTED_FILE_TYPES.includes(file.type),

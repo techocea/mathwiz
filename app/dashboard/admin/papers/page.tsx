@@ -22,6 +22,7 @@ interface PaperProps {
   title: string;
   durationMinutes: number;
   year: string;
+  medium: string;
   paperUrl: string;
   submissions: string[];
   uploadDeadline: string;
@@ -87,6 +88,7 @@ const DisplayPapersPage = () => {
                   <TableHead>Paper Title</TableHead>
                   <TableHead>Deadline</TableHead>
                   <TableHead>Batch</TableHead>
+                  <TableHead>Medium</TableHead>
                   <TableHead>Time Limit</TableHead>
                   <TableHead
                     className="flex items-center justify-center"
@@ -112,7 +114,12 @@ const DisplayPapersPage = () => {
                         {format(new Date(paper?.uploadDeadline), "PPp")}
                       </TableCell>
                       <TableCell>{paper?.year}</TableCell>
-                      <TableCell>{paper?.durationMinutes} mins</TableCell>
+                      <TableCell>{paper?.medium}</TableCell>
+                      <TableCell>
+                        {Math.floor(paper.durationMinutes / 60) > 0 &&
+                          `${Math.floor(paper.durationMinutes / 60)}h `}
+                        {paper.durationMinutes % 60}m
+                      </TableCell>
                       <TableCell align="center">
                         {paper?.submissions?.length}
                       </TableCell>

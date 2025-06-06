@@ -18,6 +18,7 @@ import DownloadButton from "@/components/DownloadButton";
 interface Submission {
   _id: string;
   cloudinaryPublicId: string;
+  startTime: string;
   submittedAt: string;
   studentId: {
     firstName: string;
@@ -79,8 +80,9 @@ const DisplaySubmissionsPage = () => {
                   <TableHead>Student Name</TableHead>
                   <TableHead>Contact Number</TableHead>
                   <TableHead>Paper Title</TableHead>
+                  <TableHead>Started Time</TableHead>
+                  <TableHead>Submitted Time</TableHead>
                   <TableHead>View Paper</TableHead>
-                  <TableHead className="text-right">Submission Time</TableHead>
                   {/* <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead> */}
                 </TableRow>
@@ -99,14 +101,17 @@ const DisplaySubmissionsPage = () => {
                       <TableCell>{submission?.studentId?.contact}</TableCell>
                       <TableCell>{submission?.paperId?.title}</TableCell>
                       <TableCell>
+                        {new Date(submission?.startTime).toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(submission?.submittedAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell>
                         <DownloadButton
                           variant="ghost"
                           publicId={submission.cloudinaryPublicId}
                           fileName={`submission-${submission?.studentId?.firstName}-${submission?.paperId?.title}`}
                         />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {new Date(submission?.submittedAt).toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))

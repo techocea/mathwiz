@@ -49,8 +49,8 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
   //dangerous level
   const getDangerLevel = (): string => {
     if (isTimeUp) return "text-destructive";
-    if (timeRemaining < 3000) return "text-red-500";
-    if (timeRemaining < 6000) return "text-orange-500";
+    if (timeRemaining < 30000) return "text-red-500";
+    if (timeRemaining < 60000) return "text-orange-500";
     return "text-green-500";
   };
 
@@ -75,6 +75,13 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
       return toast.error("Missing paper ID");
     }
 
+    const examStartTime = localStorage.getItem(`examStartTime_${paperId}`);
+    if (examStartTime) {
+      formData.append("startTime", examStartTime);
+    } else {
+      toast.error("Exam start time not found in localStorage.");
+    }
+
     try {
       const res = await axios.post("/api/submissions", formData, {
         headers: {
@@ -85,6 +92,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
       if (res.status === 200) {
         toast.success("Answer Sheet submitted successfully!");
         router.push("/dashboard/student");
+        localStorage.removeItem(`examStartTime_${paperId}`);
         setSubmissionUrl(null);
       } else {
         toast.error("Failed to submit answer sheet");

@@ -192,7 +192,7 @@ export default function Home() {
 
               {/* Image */}
               <div className="mt-10 lg:mt-0 flex-1 flex items-center justify-center w-full">
-                <div className="relative w-[280px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
+                <div className="relative w-[360px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
                   <Image
                     src="/banner.png"
                     width={150}
@@ -268,7 +268,7 @@ export default function Home() {
         </ScrollTriggered>
 
         {/* TOP RESULTS SECTION */}
-        <section
+        {/* <section
           id="top-rankers"
           className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24 h-full"
         >
@@ -298,17 +298,17 @@ export default function Home() {
               </div>
             </div>
           </ScrollTriggered>
-        </section>
+        </section> */}
 
         {/* ONLINE PAPER CLASS */}
         <section
           id="online"
-          className="w-full py-24 px-4 sm:px-8 md:px-16 lg:py-80 lg:px-24"
+          className="w-full py-24 px-4 sm:px-8 md:px-16 lg:py-32 lg:px-24"
         >
           <ScrollTriggered>
             <div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-12">
               <div className="flex-1 flex items-center justify-center mt-10 lg:mt-0">
-                <div className="relative w-[280px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
+                <div className="relative w-[360px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
                   <Image
                     src="/banner.png"
                     width={150}
@@ -395,7 +395,7 @@ export default function Home() {
                     className="flex flex-col text-center w-full py-0 rounded-none shadow-lg"
                   >
                     <CardHeader className="bg-gradient-to-r from-[#000000] to-[#2563EB]">
-                      <CardTitle className="flex gap-2 py-2 items-center text-white uppercase justify-center w-full">
+                      <CardTitle className="flex gap-2 py-2.5 items-center text-white uppercase justify-center w-full">
                         {timetable.city}
                       </CardTitle>
                     </CardHeader>

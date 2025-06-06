@@ -53,6 +53,7 @@ const CreatePapersPage = () => {
     resolver: zodResolver(createPaperSchema),
     defaultValues: {
       title: "",
+      medium: "sinhala",
       durationMinutes: 60,
       year: "2025",
       uploadDeadline: undefined,
@@ -67,6 +68,7 @@ const CreatePapersPage = () => {
     try {
       const formData = new FormData();
       formData.append("title", data.title);
+      formData.append("medium", data.medium);
       formData.append("durationMinutes", data.durationMinutes.toString());
       formData.append("year", data.year);
       formData.append("uploadDeadline", data.uploadDeadline.toISOString());
@@ -98,7 +100,7 @@ const CreatePapersPage = () => {
       <BlurGradient />
       <DashboardNavbar dashboardType="admin" />
 
-      <div className="flex-1 container lg:max-w-6xl mx-auto lg:py-12">
+      <div className="flex-1 container lg:max-w-6xl mx-auto py-8 px-4 lg:py-12">
         <div className="max-w-xl mx-auto">
           <Card>
             <form
@@ -113,21 +115,40 @@ const CreatePapersPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <Label htmlFor="title">Paper Title</Label>
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="title"
-                      {...register("title")}
-                      placeholder="e.g. Pure Mathematics Paper 1"
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <Label htmlFor="title">Paper Title</Label>
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="title"
+                        {...register("title")}
+                        placeholder="e.g. Pure Mathematics Paper 1"
+                      />
+                    </div>
+                    {errors.title && (
+                      <p className="text-sm text-red-500">
+                        {errors.title.message}
+                      </p>
+                    )}
                   </div>
-                  {errors.title && (
-                    <p className="text-sm text-red-500">
-                      {errors.title.message}
-                    </p>
-                  )}
+                  <div className="space-y-3">
+                    <Label htmlFor="medium">Select Medium</Label>
+                    <Select
+                      onValueChange={(value) =>
+                        setValue("medium", value as "sinhala" | "english")
+                      }
+                      defaultValue="sinhala"
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select medium" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sinhala">Sinhala</SelectItem>
+                        <SelectItem value="english">English</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 <div className="space-y-3">

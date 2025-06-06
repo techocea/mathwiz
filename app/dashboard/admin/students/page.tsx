@@ -229,7 +229,7 @@ const DisplayStudentsPage = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">
+                <TableCell colSpan={9} className="text-center py-6">
                   No students found
                 </TableCell>
               </TableRow>

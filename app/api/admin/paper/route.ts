@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const title = formData.get("title") as string;
+    const medium = formData.get("medium") as string;
     const durationMinutes = Number.parseInt(
       formData.get("durationMinutes") as string
     );
@@ -16,14 +17,22 @@ export async function POST(req: NextRequest) {
     const uploadDeadline = new Date(formData.get("uploadDeadline") as string);
     const file = formData.get("paperUrl") as File;
 
-    if (!file) {
+    if (
+      !year ||
+      !file ||
+      !title ||
+      !medium ||
+      !durationMinutes ||
+      !uploadDeadline
+    ) {
       return NextResponse.json(
-        { message: "Paper file is required" },
+        { message: "All fields are required" },
         { status: 400 }
       );
     }
     const inputSchema = z.object({
       title: z.string().min(3),
+      medium: z.string().min(4),
       durationMinutes: z.number().min(15).max(180),
       year: z.string().max(4),
       uploadDeadline: z.date(),
@@ -32,8 +41,9 @@ export async function POST(req: NextRequest) {
     try {
       inputSchema.parse({
         title,
-        durationMinutes,
+        medium,
         year,
+        durationMinutes,
         uploadDeadline,
       });
     } catch (error) {
@@ -65,10 +75,11 @@ export async function POST(req: NextRequest) {
 
     await Paper.create({
       title,
-      durationMinutes,
       year,
-      uploadDeadline,
+      medium,
       paperUrl,
+      uploadDeadline,
+      durationMinutes,
       cloudinaryPublicId,
     });
 

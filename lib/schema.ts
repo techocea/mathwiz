@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema(
 const paperSchema = new mongoose.Schema(
   {
     title: { type: String },
+    medium: { type: String, enum: ["sinhala", "english"] },
     durationMinutes: { type: Number },
     year: { type: String, enum: ["2025", "2026", "2027"] },
     uploadDeadline: { type: Date },
@@ -63,6 +64,7 @@ const submissionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    startTime: { type: Date },
     submittedAt: {
       type: Date,
       default: Date.now,
