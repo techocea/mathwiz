@@ -163,7 +163,7 @@ const CreatePapersPage = () => {
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <Slider
                       id="durationMinutes"
-                      min={15}
+                      min={5}
                       max={180}
                       step={5}
                       onValueChange={(value) =>

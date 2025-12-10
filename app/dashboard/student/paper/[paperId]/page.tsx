@@ -1,8 +1,8 @@
-import BlurGradient from "@/components/BlurGradient";
-import WritePaper from "@/components/WritePaper";
 import connectDB from "@/lib/db";
 import { Paper } from "@/lib/schema";
 import { notFound } from "next/navigation";
+import WritePaper from "@/components/WritePaper";
+import BlurGradient from "@/components/BlurGradient";
 
 interface PageProps {
   params: Promise<{
@@ -27,14 +27,14 @@ const Page = async ({ params }: PageProps) => {
   const serializedPaper = JSON.parse(JSON.stringify(paper));
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col border-2">
       <BlurGradient />
-      <main className="flex-1 container max-w-5xl mx-auto py-4 px-4 sm:p-6 lg:pt-16 lg:pb-32">
+      <div className="px-4 py-6 lg:py-16">
         <WritePaper
           paperId={serializedPaper._id.toString()}
           paper={serializedPaper}
         />
-      </main>
+      </div>
     </div>
   );
 };

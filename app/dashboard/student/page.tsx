@@ -107,7 +107,7 @@ const StudentDashboard = () => {
     <>
       <DashboardNavbar dashboardType="student" />
       <BlurGradient />
-      <div className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
+      <div className="min-h-screen flex-1 lg:max-w-6xl w-full mx-auto p-6">
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between w-full">
             <div>
@@ -170,7 +170,7 @@ const StudentDashboard = () => {
                         </TableCell>
                         <TableCell className="text-right">
                           <Button
-                            disabled={isRunning}
+                            disabled={isRunning || isExpired(paper.uploadDeadline)}
                             onClick={() =>
                               handleStartExam(paper._id, paper.durationMinutes)
                             }

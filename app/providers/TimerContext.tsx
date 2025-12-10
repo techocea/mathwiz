@@ -60,6 +60,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsRunning(false);
             setIsTimeUp(true);
             setCurrentExamId(examId);
+            localStorage.setItem(`examFinished_${examId}`, 'true');
             localStorage.removeItem("timerState");
           }
         }
@@ -97,7 +98,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
           clearInterval(id);
           setIsRunning(false);
           setIsTimeUp(true);
-          toast.error("Time's up! You can no longer submit your paper.");
+          toast.error("Time's up! You can no longer complete your paper.");
           localStorage.removeItem("timerState");
           return 0;
         }
@@ -116,8 +117,15 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      const durationInMs = durationInMinutes * 60 * 1000;
-      setTimeRemaining(durationInMs);
+      // 2. ⚠️ NEW CHECK: Check if THIS specific exam is marked as finished
+      const isFinished = localStorage.getItem(`examFinished_${examId}`) === 'true';
+      if (isFinished) {
+        toast.error("This exam has already been completed or the time has expired.");
+        return;
+      }
+
+      const durationInMilliSeconds = durationInMinutes * 60 * 1000;
+      setTimeRemaining(durationInMilliSeconds);
       setIsRunning(true);
       setIsTimeUp(false);
       setCurrentExamId(examId);
