@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { formatTime } from "@/lib/formatTime";
+import { formatTime } from "@/helpers/formatTime";
 import { Clock, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useTimer } from "@/components/contexts/TimerContext";
+import { useTimer } from "@/app/providers/TimerContext";
 import { Input } from "./ui/input";
 import axios from "axios";
 import DownloadButton from "./DownloadButton";

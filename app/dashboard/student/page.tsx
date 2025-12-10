@@ -1,7 +1,7 @@
 "use client";
 
 import BlurGradient from "@/components/BlurGradient";
-import { useTimer } from "@/components/contexts/TimerContext";
+import { useTimer } from "@/app/providers/TimerContext";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

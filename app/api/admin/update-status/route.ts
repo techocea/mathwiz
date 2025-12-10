@@ -1,6 +1,6 @@
 import connectDB from "@/lib/db";
 import { User } from "@/lib/schema";
-import sendMail from "@/lib/sendMail";
+import sendMail from "@/services/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {

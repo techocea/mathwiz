@@ -1,253 +1,259 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import BlurGradient from "@/components/BlurGradient";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
-  FileText,
-  Users,
-  Clock,
-  Loader2,
-  Files,
-  SquareCheckBig,
+    FileText,
+    Users,
+    Clock,
+    Files,
+    SquareCheckBig, Loader2,
 } from "lucide-react";
-import axios from "axios";
-
-interface AdminProps {
-  email: string;
-}
+import {useQuery} from "@tanstack/react-query";
+import {
+    getAdminData,
+    getStudentCount,
+    getSubmissionsCount,
+    getPaperCount,
+    getInquiriesCount
+} from "@/services/dashboard.data";
 
 const AdminDashboardPage = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [adminData, setAdminData] = useState<AdminProps | null>(null);
-  const [totalStudents, setTotalStudents] = useState(0);
-  const [totalPapers, setTotalPapers] = useState(0);
-  const [totalSubmissions, setTotalSubmissions] = useState(0);
-  const [totalInquiries, setTotalInquiries] = useState(0);
+    const router = useRouter();
 
-  const fetchAdminData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/admin", { withCredentials: true });
-      setAdminData(res.data);
-    } catch (error) {
-      console.error("Failed to fetch admin data:", error);
-      router.push("/admin");
-    } finally {
-      setLoading(false);
+    const {
+        data: adminData,
+        isLoading: isAdminLoading,
+        isError: isAuthError,
+    } = useQuery({
+        queryKey: ["admin-auth"],
+        queryFn: getAdminData,
+        throwOnError: true,
+        retry: 0,
+    });
+
+    const {
+        data: totalStudents,
+        isLoading: isStudentsLoading,
+    } = useQuery({
+        queryKey: ["dashboard-counts", "students"],
+        queryFn: getStudentCount,
+    });
+
+    const {
+        data: totalPapers,
+        isLoading: isPapersLoading,
+    } = useQuery({
+        queryKey: ["dashboard-counts", "papers"],
+        queryFn: getPaperCount,
+    });
+
+    const {
+        data: totalSubmissions,
+        isLoading: isSubmissionsLoading,
+    } = useQuery({
+        queryKey: ["dashboard-counts", "submissions"],
+        queryFn: getSubmissionsCount,
+    });
+
+    const {
+        data: totalInquiries,
+        isLoading: isInquiriesLoading,
+    } = useQuery({
+        queryKey: ["dashboard-counts", "inquiries"],
+        queryFn: getInquiriesCount,
+    });
+
+    const isLoading = isAdminLoading || isStudentsLoading || isPapersLoading || isSubmissionsLoading || isInquiriesLoading;
+
+    if (isLoading) {
+        return (
+            <div className="min-h-lvh flex items-center justify-center w-full">
+                Please Wait <Loader2 className="animate-spin transition-all"/>
+            </div>
+        )
     }
-  }, [router]);
-  // function to get the students, papers, submissions and inquiries length
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const [studentsRes, papersRes, submissionsRes, inquiriesRes] =
-          await Promise.all([
-            axios.get("/api/admin/students"),
-            axios.get("/api/admin/paper"),
-            axios.get("/api/submissions"),
-            axios.get("/api/contact"),
-          ]);
-        setTotalStudents(studentsRes.data.students.length);
-        setTotalPapers(papersRes.data.papers.length);
-        setTotalSubmissions(submissionsRes.data.submissions.length);
-        setTotalInquiries(inquiriesRes.data.inquiries.length);
-      } catch (error) {
-        console.error("Failed to fetch counts:", error);
-      }
-    };
 
-    fetchCounts();
-  }, []);
 
-  useEffect(() => {
-    fetchAdminData();
-  }, [fetchAdminData]);
-
-  if (loading)
     return (
-      <div className="min-h-lvh flex items-center justify-center w-full">
-        Please Wait <Loader2 className="animate-spin transition-all" />
-      </div>
+        <>
+            <BlurGradient/>
+            <DashboardNavbar dashboardType="admin"/>
+            <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
+                <div>
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold mb-2">
+                            Welcome, {adminData?.email}
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Here&apos;s an overview of your A/L Combined Mathematics class
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <CardTitle className="text-sm font-medium">
+                                    Total Students
+                                </CardTitle>
+                                <Users className="h-4 w-4 text-muted-foreground"/>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-3xl font-bold">{totalStudents ?? 0}</div>
+                                <p className="text-xs text-muted-foreground pt-1">
+                                    Active student accounts
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <CardTitle className="text-sm font-medium">
+                                    Total Papers
+                                </CardTitle>
+                                <FileText className="h-4 w-4 text-muted-foreground"/>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-3xl font-bold">{totalPapers ?? 0}</div>
+                                <p className="text-xs text-muted-foreground pt-1">
+                                    Papers created
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <CardTitle className="text-sm font-medium">
+                                    Total Submissions
+                                </CardTitle>
+                                <Files className="h-4 w-4 text-muted-foreground"/>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-3xl font-bold">{totalSubmissions ?? 0}</div>
+                                <p className="text-xs text-muted-foreground pt-1">
+                                    Papers submitted
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <CardTitle className="text-sm font-medium">
+                                    Total Inquiries
+                                </CardTitle>
+                                <SquareCheckBig className="h-4 w-4 text-muted-foreground"/>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-3xl font-bold">{totalInquiries ?? 0}</div>
+                                <p className="text-xs text-muted-foreground pt-1">Inquiries</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Recent Activity</CardTitle>
+                                <CardDescription>
+                                    Recent activity from your class
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between border-b pb-2">
+                                        <div>
+                                            <p className="font-medium">
+                                                Dasun Silva submitted Paper 03
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                2 hours ago
+                                            </p>
+                                        </div>
+                                        <Button variant="ghost"
+                                                size="sm">
+                                            View
+                                        </Button>
+                                    </div>
+                                    <div className="flex items-center justify-between border-b pb-2">
+                                        <div>
+                                            <p className="font-medium">
+                                                Paper 04 deadline approaching
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                6 hours remaining
+                                            </p>
+                                        </div>
+                                        <Button variant="ghost"
+                                                size="sm">
+                                            View
+                                        </Button>
+                                    </div>
+                                    <div className="flex items-center justify-between border-b pb-2">
+                                        <div>
+                                            <p className="font-medium">
+                                                Malini Perera started Paper 05
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                30 minutes ago
+                                            </p>
+                                        </div>
+                                        <Button variant="ghost"
+                                                size="sm">
+                                            View
+                                        </Button>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Quick Actions</CardTitle>
+                                <CardDescription>Frequently used admin actions</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex flex-col gap-4">
+                                    <Button
+                                        size="lg"
+                                        onClick={() => router.push("/dashboard/admin/papers")}
+                                        className="w-full justify-start cursor-pointer"
+                                    >
+                                        <FileText className="mr-2 h-4 w-4"/>
+                                        Manage Papers
+                                    </Button>
+                                    <Button
+                                        size="lg"
+                                        onClick={() => router.push("/dashboard/admin/students")}
+                                        className="w-full justify-start cursor-pointer"
+                                    >
+                                        <Users className="mr-2 h-4 w-4"/>
+                                        Manage Students
+                                    </Button>
+                                    <Button
+                                        disabled
+                                        variant="outline"
+                                        className="w-full justify-start"
+                                    >
+                                        <Clock className="mr-2 h-4 w-4"/>
+                                        Upload Marksheet (coming soon)
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </main>
+        </>
     );
-
-  return (
-    <>
-      <BlurGradient />
-      <DashboardNavbar dashboardType="admin" />
-      <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
-        <div>
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">
-              Welcome, {adminData?.email}
-            </h1>
-            <p className="text-muted-foreground">
-              Here&apos;s an overview of your A/L Combined Mathematics class
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Students
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{totalStudents}</div>
-                <p className="text-xs text-muted-foreground pt-1">
-                  Active student accounts
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Papers
-                </CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{totalPapers}</div>
-                <p className="text-xs text-muted-foreground pt-1">
-                  Papers created
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Submissions
-                </CardTitle>
-                <Files className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{totalSubmissions}</div>
-                <p className="text-xs text-muted-foreground pt-1">
-                  Papers submitted
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Inquiries
-                </CardTitle>
-                <SquareCheckBig className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{totalInquiries}</div>
-                <p className="text-xs text-muted-foreground pt-1">Inquiries</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>
-                  Recent activity from your class
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <div>
-                      <p className="font-medium">
-                        Dasun Silva submitted Paper 03
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        2 hours ago
-                      </p>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <div>
-                      <p className="font-medium">
-                        Paper 04 deadline approaching
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        6 hours remaining
-                      </p>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between border-b pb-2">
-                    <div>
-                      <p className="font-medium">
-                        Malini Perera started Paper 05
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        30 minutes ago
-                      </p>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Frequently used admin actions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-4">
-                  <Button
-                    size="lg"
-                    onClick={() => router.push("/dashboard/admin/papers")}
-                    className="w-full justify-start cursor-pointer"
-                  >
-                    <FileText className="mr-2 h-4 w-4" />
-                    Manage Papers
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={() => router.push("/dashboard/admin/students")}
-                    className="w-full justify-start cursor-pointer"
-                  >
-                    <Users className="mr-2 h-4 w-4" />
-                    Manage Students
-                  </Button>
-                  <Button
-                    disabled
-                    variant="outline"
-                    className="w-full justify-start"
-                  >
-                    <Clock className="mr-2 h-4 w-4" />
-                    Upload Marksheet (coming soon)
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </main>
-    </>
-  );
 };
 
 export default AdminDashboardPage;
