@@ -336,10 +336,10 @@ export default function Home() {
                     enhance your paper writing skills with mathwiz.lk
                   </h3>
                   <div className="border-l-[4px] border-blue-500 pl-4 mt-4 text-muted">
-                    <p className="text-[16px] lg:text-lg">
+                    <p className="text-sm sm:text-base">
                       Our website provides:
                     </p>
-                    <ul className="text-[16px] lg:text-lg pl-6">
+                    <ul className="text-sm sm:text-base pl-6">
                       <li className="list-disc">
                         The ability to write papers online.
                       </li>
@@ -457,10 +457,17 @@ export default function Home() {
                     className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"
                   />
                   <input
-                    type="tel"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     name="phone"
                     placeholder="Phone Number *"
-                    onChange={(e) => setContact(e.target.value)}
+                    onChange={(e) => {
+                      if (/^\d*$/.test(e.target.value)) {
+                        // Accept only if value is digits
+                        setContact(e.target.value);
+                      }
+                    }}
                     value={contact}
                     aria-label="Phone"
                     className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"

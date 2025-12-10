@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
       isUserExists.password
     );
 
+    // const salt = await bcrypt.genSalt(10);
+    // const testUser = await bcrypt.hash("12345678", salt);
+    // console.log(testUser);
+    // 12345678 brightly@email.com
     if (!isValidPassword) {
       return NextResponse.json(
         { message: "Invalid Password" },
@@ -40,7 +44,7 @@ export async function POST(req: NextRequest) {
       _id: isUserExists._id,
       email: isUserExists.email,
       name: isUserExists.firstName,
-      year:isUserExists.year,
+      year: isUserExists.year,
       role: isUserExists.role,
     });
 
@@ -76,7 +80,7 @@ interface DecodedToken {
   email: string;
   role: string;
   name: string;
-  year:string;
+  year: string;
 }
 
 export async function GET() {

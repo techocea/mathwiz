@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   // Check if the path is admin-related
   const isAdminPath = req.nextUrl.pathname.startsWith('/dashboard/admin');
   

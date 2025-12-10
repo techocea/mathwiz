@@ -28,12 +28,12 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-       const url = `/api/download?public_id=${encodeURIComponent(
+      const url = `/api/download?public_id=${encodeURIComponent(
         publicId
       )}&filename=${encodeURIComponent(fileName)}`;
 
       window.open(url, "_blank");
-      console.log("fileUrl passed to download:", url);  
+      console.log("fileUrl passed to download:", url);
     } catch (error) {
       console.error("Download error:", error);
       toast.error("Failed to download file. Please try again.");
