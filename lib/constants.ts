@@ -9,15 +9,6 @@ import {
   SquareCheckBig,
 } from "lucide-react";
 
-// export type Paper = {
-//   id: string;
-//   title: string;
-//   subject: string;
-//   durationMinutes: number;
-//   fileUrl: string;
-//   uploadDeadline: string;
-// };
-
 export const NAV_ITEMS = [
   {
     id: 1,
@@ -43,29 +34,24 @@ export const NAV_ITEMS = [
 
 export const ADMIN_NAV_ITEMS = [
   {
-    name: "Dashboard",
-    path: "/dashboard/admin",
-    icon: LayoutDashboard,
+    name: "Worksheets",
+    path: "/dashboard/admin/activities/worksheet",
   },
   {
-    name: "Papers",
-    path: "/dashboard/admin/papers",
-    icon: FileText,
+    name: "Homework",
+    path: "/dashboard/admin/activities/homework",
   },
   {
-    name: "Students",
-    path: "/dashboard/admin/students",
-    icon: Users,
+    name: "Mini Exam",
+    path: "/dashboard/admin/activities/mini-exam",
   },
   {
-    name: "Submissions",
-    path: "/dashboard/admin/submissions",
-    icon: Files,
+    name: "Speed Paper",
+    path: "/dashboard/admin/activities/speed-paper",
   },
   {
-    name: "Inquiries",
-    path: "/dashboard/admin/inquiries",
-    icon: SquareCheckBig,
+    name: "Paper Class",
+    path: "/dashboard/admin/activities/paper",
   },
 ];
 

@@ -28,7 +28,7 @@ interface PaperProps {
   uploadDeadline: string;
 }
 
-const DisplayPapersPage = () => {
+const Papers = () => {
   const router = useRouter();
   const [papers, setPapers] = useState<PaperProps[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ const DisplayPapersPage = () => {
 
             <Button
               size="lg"
-              onClick={() => router.push("/dashboard/admin/papers/create")}
+              onClick={() => router.push("/dashboard/admin/activities/paper/create")}
               className="cursor-pointer"
             >
               <Plus className="mr-2 h-4 w-4" />
@@ -111,7 +111,7 @@ const DisplayPapersPage = () => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {format(new Date(paper?.uploadDeadline), "PPp")}
+                        {format(new Date(paper?.uploadDeadline), "PP")}
                       </TableCell>
                       <TableCell>{paper?.year}</TableCell>
                       <TableCell>{paper?.medium}</TableCell>
@@ -155,4 +155,4 @@ const DisplayPapersPage = () => {
   );
 };
 
-export default DisplayPapersPage;
+export default Papers;

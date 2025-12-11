@@ -1,5 +1,3 @@
-//helper function for JWT
-
 import jwt from "jsonwebtoken";
 
 const SECRET = process.env.JWT_SECRET!;

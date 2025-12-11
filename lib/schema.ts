@@ -25,21 +25,26 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const paperSchema = new mongoose.Schema(
+const resourceSchema = new mongoose.Schema(
   {
-    title: { type: String },
-    medium: { type: String, enum: ["sinhala", "english"] },
+    title: { type: String, required: true },
+    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
     durationMinutes: { type: Number },
-    year: { type: String, enum: ["2025", "2026", "2027"] },
-    uploadDeadline: { type: Date },
-    paperUrl: { type: String },
-    cloudinaryPublicId: { type: String },
+    uploadDeadline: { type: Date, required: true },
+    paperUrl: { type: String, required: true },
+    cloudinaryPublicId: { type: String, required: true },
     submissions: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Submission",
       },
     ],
+    type: {
+      type: String,
+      required: true,
+      enum: ["paper", "speed-paper", "mini-exam", "worksheet", "homework"],
+    },
   },
   { timestamps: true }
 );
@@ -53,7 +58,7 @@ const submissionSchema = new mongoose.Schema(
     },
     paperId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Paper",
+      ref: "Resource",
       required: true,
     },
     submissionUrl: {
@@ -84,8 +89,8 @@ const inquirySchema = new mongoose.Schema(
 );
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
-export const Paper =
-  mongoose.models.Paper || mongoose.model("Paper", paperSchema);
+export const Resource =
+  mongoose.models.Resource || mongoose.model("Resource", resourceSchema);
 export const Submission =
   mongoose.models.Submission || mongoose.model("Submission", submissionSchema);
 export const Inquiries =

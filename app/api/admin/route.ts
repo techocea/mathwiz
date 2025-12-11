@@ -1,5 +1,5 @@
 import connectDB from "@/lib/db";
-import { signToken, verifyToken } from "@/lib/jwt";
+import { signToken, verifyToken } from "@/helpers/jwt";
 import { User } from "@/lib/schema";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";

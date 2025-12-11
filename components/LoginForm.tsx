@@ -15,7 +15,7 @@ import {
 
 import Link from "next/link";
 import axios from "axios";
-import { loginSchema, LoginFormValues } from "@/lib/zod";
+import { loginSchema, LoginFormValues } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";

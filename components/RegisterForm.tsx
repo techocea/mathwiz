@@ -1,10 +1,10 @@
 "use client";
 
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {Button} from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -21,12 +21,12 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import axios from "axios";
-import {registrationSchema, RegistrationFormValues} from "@/lib/zod";
-import {toast} from "sonner";
-import {Separator} from "./ui/separator";
-import {Checkbox} from "./ui/checkbox";
-import {useState} from "react";
-import {Loader2} from "lucide-react";
+import { registrationSchema, RegistrationFormValues } from "@/lib/validation";
+import { toast } from "sonner";
+import { Separator } from "./ui/separator";
+import { Checkbox } from "./ui/checkbox";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const TUITION_KEYS = ["theory", "revision", "paper"] as const;
 const TUITION_LABELS: Record<(typeof TUITION_KEYS)[number], string> = {
@@ -40,7 +40,7 @@ const RegisterForm = () => {
     const {
         register,
         handleSubmit,
-        formState: {errors,isDirty},
+        formState: { errors, isDirty },
         setValue,
         watch,
         control,
@@ -110,7 +110,7 @@ const RegisterForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="firstName">
+                                    htmlFor="firstName">
                                     First Name
                                 </Label>
                                 <Input
@@ -127,7 +127,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="lastName">
+                                    htmlFor="lastName">
                                     Last Name
                                 </Label>
                                 <Input
@@ -144,7 +144,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="contact">
+                                    htmlFor="contact">
                                     Contact Number
                                 </Label>
                                 <Input
@@ -161,7 +161,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="email">
+                                    htmlFor="email">
                                     Email
                                 </Label>
                                 <Input
@@ -177,7 +177,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="password">
+                                    htmlFor="password">
                                     Password
                                 </Label>
                                 <Input
@@ -195,7 +195,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="confirmPassword">
+                                    htmlFor="confirmPassword">
                                     Confirm Password
                                 </Label>
                                 <Input
@@ -212,7 +212,7 @@ const RegisterForm = () => {
                             </div>
                         </div>
 
-                        <Separator/>
+                        <Separator />
 
                         {/* Section: Academic Info */}
                         <div>
@@ -225,7 +225,7 @@ const RegisterForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="school">
+                                    htmlFor="school">
                                     School
                                 </Label>
                                 <Input
@@ -242,7 +242,7 @@ const RegisterForm = () => {
 
                             <div className="space-y-2.5">
                                 <Label className="font-normal"
-                                       htmlFor="year">
+                                    htmlFor="year">
                                     Year
                                 </Label>
                                 <Controller
@@ -267,7 +267,7 @@ const RegisterForm = () => {
                             )}
                         </div>
 
-                        <Separator/>
+                        <Separator />
 
                         {/* Section: Tuition Info */}
                         <div>
@@ -279,7 +279,7 @@ const RegisterForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="space-y-2.5 md:col-span-1">
                                 <Label className="font-normal"
-                                       htmlFor="medium">
+                                    htmlFor="medium">
                                     Medium
                                 </Label>
                                 <Controller
@@ -309,7 +309,7 @@ const RegisterForm = () => {
                                     <div className="grid grid-cols-3 gap-4">
                                         {TUITION_KEYS.map((key) => ( // <--- Iterate over correct keys
                                             <div key={key} // <--- Use the key for better stability
-                                                 className="flex items-center gap-2.5">
+                                                className="flex items-center gap-2.5">
                                                 <Checkbox
                                                     checked={tuitionType[key]} // <--- Type-safe access
                                                     onCheckedChange={(checked: boolean) =>
@@ -345,7 +345,7 @@ const RegisterForm = () => {
                             >
                                 {loading ? (
                                     <div className="flex items-center gap-2.5">
-                                        <Loader2 className="animate-spin transition-all"/>
+                                        <Loader2 className="animate-spin transition-all" />
                                     </div>
                                 ) : (
                                     <p>Register</p>
