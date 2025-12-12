@@ -1,7 +1,5 @@
 "use client";
 
-import DashboardNavbar from "@/components/DashboardNavbar";
-import BlurGradient from "@/components/BlurGradient";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -104,31 +102,28 @@ const DisplayStudentsPage = () => {
     );
 
   return (
-    <>
-      <BlurGradient />
-      <DashboardNavbar dashboardType="admin" />
-      <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
-        <div>
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Student Management</h1>
-              <p className="text-muted-foreground">
-                Manage students in your A/L Combined Mathematics class
-              </p>
-            </div>
-
-            <Button
-              size="lg"
-              onClick={() => router.push("/dashboard/admin/students/create")}
-              className="cursor-pointer"
-            >
-              <UserPlus className="mr-1 h-4 w-4" />
-              Add Student
-            </Button>
+    <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
+      <div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Student Management</h1>
+            <p className="text-muted-foreground">
+              Manage students in your A/L Combined Mathematics class
+            </p>
           </div>
-        </div>
 
-        {/* <div className="rounded-lg border bg-card mb-8">
+          <Button
+            size="lg"
+            onClick={() => router.push("/dashboard/admin/students/create")}
+            className="cursor-pointer"
+          >
+            <UserPlus className="mr-1 h-4 w-4" />
+            Add Student
+          </Button>
+        </div>
+      </div>
+
+      {/* <div className="rounded-lg border bg-card mb-8">
           <div className="p-4">
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
@@ -142,102 +137,97 @@ const DisplayStudentsPage = () => {
           </div>
         </div> */}
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Student Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Year</TableHead>
-              <TableHead>School</TableHead>
-              <TableHead>Medium</TableHead>
-              <TableHead>Tuition Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {students && students.length > 0 ? (
-              students.map((student) => (
-                <TableRow key={student?._id}>
-                  <TableCell className="font-medium">
-                    {student?.firstName} {student?.lastName}
-                  </TableCell>
-                  <TableCell>{student?.email}</TableCell>
-                  <TableCell>{student?.contact}</TableCell>
-                  <TableCell>{student?.year}</TableCell>
-                  <TableCell>{student?.school}</TableCell>
-                  <TableCell className="capitalize">{student?.medium}</TableCell>
-                  <TableCell>
-                    {student?.tuitionType
-                      ? [
-                        student.tuitionType.theory ? "Theory" : null,
-                        student.tuitionType.revision ? "Revision" : null,
-                        student.tuitionType.paper ? "Paper" : null,
-                      ]
-                        .filter(Boolean)
-                        .join(", ") || "None"
-                      : "None"}
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(
-                        student.status
-                      )}`}
-                    >
-                      {student.status}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      {student.status === "pending" ? (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled={loading}
-                            onClick={() =>
-                              updateStatus(student._id, "approved")
-                            }
-                          >
-                            <Check className="text-green-600 h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled={loading}
-                            onClick={() =>
-                              updateStatus(student._id, "rejected")
-                            }
-                          >
-                            <X className="text-destructive h-4 w-4" />
-                          </Button>
-                        </>
-                      ) : (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Contact</TableHead>
+            <TableHead>Year</TableHead>
+            <TableHead>School</TableHead>
+            <TableHead>Medium</TableHead>
+            <TableHead>Tuition Type</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {students && students.length > 0 ? (
+            students.map((student) => (
+              <TableRow key={student?._id}>
+                <TableCell className="font-medium">
+                  {student?.firstName} {student?.lastName}
+                </TableCell>
+                <TableCell>{student?.email}</TableCell>
+                <TableCell>{student?.contact}</TableCell>
+                <TableCell>{student?.year}</TableCell>
+                <TableCell>{student?.school}</TableCell>
+                <TableCell className="capitalize">{student?.medium}</TableCell>
+                <TableCell>
+                  {student?.tuitionType
+                    ? [
+                      student.tuitionType.theory ? "Theory" : null,
+                      student.tuitionType.revision ? "Revision" : null,
+                      student.tuitionType.paper ? "Paper" : null,
+                    ]
+                      .filter(Boolean)
+                      .join(", ") || "None"
+                    : "None"}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                      student.status
+                    )}`}
+                  >
+                    {student.status}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    {student.status === "pending" ? (
+                      <>
                         <Button
                           variant="ghost"
                           size="sm"
                           disabled={loading}
-                          onClick={() => updateStatus(student._id, "banned")}
+                          onClick={() => updateStatus(student._id, "approved")}
                         >
-                          <Ban className="h-4 w-4" />
+                          <Check className="text-green-600 h-4 w-4" />
                         </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={9} className="text-center py-6">
-                  No students found
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={loading}
+                          onClick={() => updateStatus(student._id, "rejected")}
+                        >
+                          <X className="text-destructive h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={loading}
+                        onClick={() => updateStatus(student._id, "banned")}
+                      >
+                        <Ban className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </main>
-    </>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-6">
+                No students found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </main>
   );
 };
 

@@ -19,11 +19,13 @@ import LogoutButton from "@/components/LogoutButton";
 const DashboardNavbar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleClickDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
 
   return (
     <header className="bg-white border-b py-4 px-8 flex items-center justify-between w-full">

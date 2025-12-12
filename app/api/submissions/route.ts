@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import connectDB from "@/lib/db";
-import { Resource, Submission } from "@/lib/schema";
-import { getUserFromToken } from "@/helpers/jwt";
+import { cookies } from "next/headers";
 import cloudinary from "@/services/cloudinary";
+import { getUserFromToken } from "@/helpers/jwt";
+import { Resource, Submission } from "@/lib/schema";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,17 +34,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Convert file to base64
     const buffer = Buffer.from(await submissionUrl.arrayBuffer());
     const fileStr = `data:${submissionUrl.type};base64,${buffer.toString(
       "base64"
     )}`;
-
-    // Generate unique file name
     const timestamp = Date.now();
     const publicId = `student-${user._id}-paper-${paperId}-${timestamp}`;
 
-    // Upload to Cloudinary
     const uploadRes = await cloudinary.uploader.upload(fileStr, {
       resource_type: "raw",
       folder: "submissions",
@@ -52,7 +48,6 @@ export async function POST(req: NextRequest) {
       format: "pdf",
     });
 
-    // Connect to DB and create submission
     await connectDB();
 
     let paperStartTime: Date | undefined;
@@ -73,7 +68,6 @@ export async function POST(req: NextRequest) {
       uploadedAt: new Date(),
     });
 
-    console.log(submission);
     await Resource.findByIdAndUpdate(paperId, {
       $push: { submissions: submission._id },
     });
@@ -81,15 +75,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "Submission successful",
-        submissionUrl: uploadRes.secure_url,
-        cloudinaryPublicId: uploadRes.public_id,
       },
       { status: 200 }
     );
-  } catch (error: any) {
-    console.error("Submission error:", error.message || error);
+  } catch (error) {
+    console.error("Submission error:", error);
     return NextResponse.json(
-      { message: "Failed to submit exam paper" },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }

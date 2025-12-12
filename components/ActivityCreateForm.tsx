@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
     Select,
     SelectContent,
@@ -8,12 +7,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import { Clock, Upload, CalendarIcon, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import {
     Card,
     CardContent,
@@ -22,19 +15,26 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import axios from "axios";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/sonner";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createResourceSchema } from "@/lib/validation";
-import { toast } from "@/components/ui/sonner";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import { Clock, Upload, CalendarIcon, Loader2 } from "lucide-react";
 
 interface ActivityCreateFormProps {
     title: string;

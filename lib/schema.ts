@@ -78,6 +78,28 @@ const submissionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const markingSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
+    markingSchemeUrl: {
+      type: String,
+      required: true,
+    },
+    cloudinaryPublicId: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+      enum: ["paper", "speed-paper", "mini-exam", "worksheet", "homework"],
+    },
+  },
+  { timestamps: true }
+);
+
 const inquirySchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -93,5 +115,7 @@ export const Resource =
   mongoose.models.Resource || mongoose.model("Resource", resourceSchema);
 export const Submission =
   mongoose.models.Submission || mongoose.model("Submission", submissionSchema);
+export const Marking =
+  mongoose.models.Marking || mongoose.model("Marking", markingSchema);
 export const Inquiries =
   mongoose.models.Inquiries || mongoose.model("Inquiries", inquirySchema);

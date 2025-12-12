@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const MAX_FILE_SIZE = 30 * 1024 * 1024;
+const ACCEPTED_FILE_TYPES = ["application/pdf"];
+
 export const contactSchema = z.object({
   name: z.string().min(6, "This field is required"),
   email: z.email("Invalid email format").min(12, "This field is required"),
@@ -47,6 +50,20 @@ export const loginSchema = z.object({
   password: z.string().min(6, "This field is required"),
 });
 
+export const markingSchema = z.object({
+  title: z.string().min(3),
+  medium: z.enum(["sinhala", "english"]),
+  year: z.enum(["2025", "2026", "2027"]),
+  type: z.enum(["paper", "mini-exam", "worksheet", "homework", "speed-paper"]),
+  markingSchemeUrl: z
+    .custom<File>((val) => val instanceof File, "PDF file is required")
+    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+      "Only PDF allowed"
+    ),
+});
+
 const baseSchema = z.object({
   title: z.string().min(3),
   medium: z.enum(["sinhala", "english"]),
@@ -56,10 +73,6 @@ const baseSchema = z.object({
   }, z.date()),
 });
 
-const MAX_FILE_SIZE = 30 * 1024 * 1024;
-const ACCEPTED_FILE_TYPES = ["application/pdf"];
-
-// Define variants by extending the base schema
 const paperVariant = baseSchema.extend({
   type: z.literal("paper"),
   paperUrl: z
@@ -114,7 +127,7 @@ export const createResourceSchema = z.discriminatedUnion("type", [
   homeworkVariant,
 ]);
 
-export type ContactFormValues = z.infer<typeof contactSchema>;
-export type RegistrationFormValues = z.infer<typeof registrationSchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
-// export type createResourceFormValues = z.infer<typeof createResourceSchema>;
+export type ContactFormValues = z.infer<typeof contactSchema>;
+export type MarkingSchemaFormValues = z.infer<typeof markingSchema>;
+export type RegistrationFormValues = z.infer<typeof registrationSchema>;
