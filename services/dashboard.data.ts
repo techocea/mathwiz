@@ -13,8 +13,8 @@ export const getStudentCount = async () => {
 };
 
 export const getPaperCount = async () => {
-  const paperRes = await axios.get("/api/admin/resources");
-  return paperRes.data.papers.length;
+  const paperRes = await axios.get("/api/admin/resources?type=paper");
+  return paperRes.data.resources.length;
 };
 
 export const getSubmissionsCount = async () => {

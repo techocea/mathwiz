@@ -150,8 +150,8 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                                     <SelectValue placeholder="Select medium" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="sinhala">Sinhala</SelectItem>
-                                    <SelectItem value="english">English</SelectItem>
+                                    <SelectItem value="sinhala">sinhala</SelectItem>
+                                    <SelectItem value="english">english</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
