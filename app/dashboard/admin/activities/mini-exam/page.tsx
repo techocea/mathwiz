@@ -43,7 +43,6 @@ const MiniExams = () => {
     return (
         <>
             <BlurGradient />
-            <DashboardNavbar dashboardType="admin" />
             <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
                 <div>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">

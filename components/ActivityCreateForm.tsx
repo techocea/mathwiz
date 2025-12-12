@@ -98,7 +98,7 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
 
             if (res.status === 200) {
                 toast.success(`${title} created successfully`);
-                router.push(`/dashboard/admin/activities/${title}`);
+                router.push(`/dashboard/admin/activities/${type}`);
             } else {
                 toast.error("Something went wrong");
             }

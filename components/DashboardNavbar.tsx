@@ -16,11 +16,7 @@ import {
 } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
 
-interface DashboardTypeProps {
-  dashboardType: "student" | "admin";
-}
-
-const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
+const DashboardNavbar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -32,7 +28,7 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
   return (
     <header className="bg-white border-b py-4 px-8 flex items-center justify-between w-full">
       <div className="flex items-center gap-4">
-        {dashboardType === "student" ? (
+        {pathname.startsWith("/dashboard/admin") && (
           <div className="flex items-center gap-2">
             <Image
               src="/mathwiz.png"
@@ -46,97 +42,141 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
               mathwiz.lk
             </h1>
           </div>
-        ) : (
-          <h1 className="font-bold text-xl uppercase bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text">
-            Admin Panel
-          </h1>
         )}
-        {dashboardType === "admin" ? (
-          <nav className="hidden lg:flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 lg:ml-6">
-            <Link
-              href="/dashboard/admin"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin"
+        <nav className="hidden lg:flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 lg:ml-6">
+          {pathname.startsWith("/dashboard/admin") ? (
+            <>
+              <Link
+                href="/dashboard/admin"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin"
                   ? "text-blue-500"
                   : "text-muted-foreground"
-                }`}
-            >
-              <LayoutDashboard size={24} />
-              Dashboard
-            </Link>
-            <div className="relative">
-              <div
-                onClick={handleClickDropdown}
-                className="cursor-pointer flex items-center justify-center gap-2 text-muted-foreground"
+                  }`}
               >
                 <LayoutDashboard size={24} />
-                Others
-              </div>
-
-              {isDropdownOpen && (
+                Dashboard
+              </Link>
+              <div className="relative">
                 <div
-                  onMouseLeave={() => setIsDropdownOpen(false)}
-                  className="absolute z-10 top-10 left-0 right-0 h-auto w-48 rounded-md transition-all bg-white border border-slate-200 shadow-lg"
+                  onClick={handleClickDropdown}
+                  className="cursor-pointer flex items-center justify-center gap-2 text-muted-foreground"
                 >
-                  <div className="flex flex-col rounded-md">
-                    {ADMIN_NAV_ITEMS.map((item, idx, array) => {
-                      const lastIndex = array.length - 1;
+                  <LayoutDashboard size={24} />
+                  Others
+                </div>
 
-                      return (
-                        <Link
-                          key={idx}
-                          href={item.path}
-                          className={`flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground ${idx === 0
+                {isDropdownOpen && (
+                  <div
+                    onMouseLeave={() => setIsDropdownOpen(false)}
+                    className="absolute z-10 top-10 left-0 right-0 h-auto w-48 rounded-md transition-all bg-white border border-slate-200 shadow-lg"
+                  >
+                    <div className="flex flex-col rounded-md">
+                      {ADMIN_NAV_ITEMS.map((item, idx, array) => {
+                        const lastIndex = array.length - 1;
+
+                        return (
+                          <Link
+                            key={idx}
+                            href={item.path}
+                            className={`flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground ${idx === 0
                               ? " rounded-tl-md rounded-tr-md"
                               : idx === lastIndex
                                 ? "rounded-bl-md rounded-br-md"
                                 : ""
-                            } hover:bg-blue-500 hover:text-white`}
-                        >
-                          {item.name}
-                        </Link>
-                      );
-                    })}
+                              } hover:bg-blue-500 hover:text-white`}
+                          >
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+              <Link
+                href="/dashboard/admin/students"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/students"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
+                  }`}
+              >
+                <Users size={24} />
+                Students
+              </Link>
+              <Link
+                href="/dashboard/admin/submissions"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/submissions"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
+                  }`}
+              >
+                <Files size={24} />
+                Submissions
+              </Link>
+              <Link
+                href="/dashboard/admin/inquiries"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/inquiries"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
+                  }`}
+              >
+                <SquareCheckBig size={24} />
+                Inquiries
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/dashboard/student/paper"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/paper"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
+                  }`}
+              >
+                Papers
+              </Link>
 
-            <Link
-              href="/dashboard/admin/students"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/students"
+              <Link
+                href="/dashboard/student/mini-exam"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/mini-exam"
                   ? "text-blue-500"
                   : "text-muted-foreground"
-                }`}
-            >
-              <Users size={24} />
-              Students
-            </Link>
-            <Link
-              href="/dashboard/admin/submissions"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/submissions"
+                  }`}
+              >
+                Mini Exam
+              </Link>
+              <Link
+                href="/dashboard/student/worksheet"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/worksheet"
                   ? "text-blue-500"
                   : "text-muted-foreground"
-                }`}
-            >
-              <Files size={24} />
-              Submissions
-            </Link>
-            <Link
-              href="/dashboard/admin/inquiries"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/inquiries"
+                  }`}
+              >
+                Worksheets
+              </Link>
+              <Link
+                href="/dashboard/student/speed-paper"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/speed-paper"
                   ? "text-blue-500"
                   : "text-muted-foreground"
-                }`}
-            >
-              <SquareCheckBig size={24} />
-              Inquiries
-            </Link>
-          </nav>
-        ) : null}
+                  }`}
+              >
+                Speed Papers
+              </Link>
+              <Link
+                href="/dashboard/student/homework"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/homework"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
+                  }`}
+              >
+                Homework
+              </Link>
+            </>
+          )}
+        </nav>
       </div>
       <div className="hidden lg:flex gap-4 items-center">
-        {dashboardType === "student" ? <p>Student User</p> : <p>Admin User</p>}
-
         <div>
           <LogoutButton />
         </div>
@@ -197,7 +237,6 @@ const DashboardNavbar = ({ dashboardType }: DashboardTypeProps) => {
                 </ul>
 
                 <div className="flex flex-col gap-4 p-4 pt-8">
-                  {dashboardType === "student" ? <p>Student</p> : <p>Admin</p>}
                   <LogoutButton />
                 </div>
               </motion.nav>

@@ -1,66 +1,20 @@
 import axios from "axios";
 
-export const getPaperResources = async ({
+export const getResources = async ({
+  type,
   year,
   medium,
 }: {
-  year: string;
-  medium: string;
+  type: string;
+  year?: string;
+  medium?: string;
 }) => {
-  const result = await axios.get(
-    `/api/admin/resources?type=paper&year=${year}&medium=${medium}`
-  );
-  return result.data.resources;
-};
+  const params = new URLSearchParams();
 
-export const getSpeedPaperResources = async ({
-  year,
-  medium,
-}: {
-  year: string;
-  medium: string;
-}) => {
-  const result = await axios.get(
-    `/api/admin/resources?type=speed-paper&year=${year}&medium=${medium}`
-  );
-  return result.data.resources;
-};
+  if (type) params.append("type", type);
+  if (year) params.append("year", year);
+  if (medium) params.append("medium", medium);
 
-export const getMiniExamResources = async ({
-  year,
-  medium,
-}: {
-  year: string;
-  medium: string;
-}) => {
-  const result = await axios.get(
-    `/api/admin/resources?type=mini-exam&year=${year}&medium=${medium}`
-  );
-  return result.data.resources;
-};
-
-export const getHomeworkResources = async ({
-  year,
-  medium,
-}: {
-  year: string;
-  medium: string;
-}) => {
-  const result = await axios.get(
-    `/api/admin/resources?type=homework&year=${year}&medium=${medium}`
-  );
-  return result.data.resources;
-};
-
-export const getWorksheetResources = async ({
-  year,
-  medium,
-}: {
-  year: string;
-  medium: string;
-}) => {
-  const result = await axios.get(
-    `/api/admin/resources?type=worksheet&year=${year}&medium=${medium}`
-  );
-  return result.data.resources;
+  const res = await axios.get(`/api/admin/resources?${params.toString()}`);
+  return res.data.resources;
 };

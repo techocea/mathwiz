@@ -1,11 +1,14 @@
-import type {Metadata} from "next";
-import {Poppins} from "next/font/google";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+//@ts-ignore
 import "@/app/globals.css";
-import {TimerProvider} from "@/app/providers/TimerContext";
+import { TimerProvider } from "@/app/providers/TimerContext";
 
-import {Toaster as Sonner} from "@/components/ui/sonner";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import React from "react";
 import QueryProvider from "../providers/QueryProvider";
+import DashboardNavbar from "@/components/DashboardNavbar";
+import BlurGradient from "@/components/BlurGradient";
 
 const poppins = Poppins({
     variable: "--font-poppins",
@@ -24,18 +27,20 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardLayout({
-                                            children,
-                                        }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
         <QueryProvider>
             <TimerProvider>
                 <html lang="en">
-                <body className={`${poppins.className} antialiased`}>
-                <Sonner position="top-right"/>
-                {children}
-                </body>
+                    <body className={`${poppins.className} antialiased`}>
+                        <Sonner position="top-right" />
+                        <BlurGradient />
+                        <DashboardNavbar />
+                        {children}
+                    </body>
                 </html>
             </TimerProvider>
         </QueryProvider>

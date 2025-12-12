@@ -15,9 +15,9 @@ export interface ResourceProps {
   resources: {
     _id: string;
     title: string;
-    durationMinutes: number;
-    year: string;
-    medium: string;
+    durationMinutes?: number;
+    year?: string;
+    medium?: string;
     paperUrl: string;
     submissions: string[];
     uploadDeadline: string;

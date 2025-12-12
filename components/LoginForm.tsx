@@ -1,25 +1,25 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardTitle,
+  CardHeader,
   CardContent,
   CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-
-import Link from "next/link";
 import axios from "axios";
-import { loginSchema, LoginFormValues } from "@/lib/validation";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginFormValues } from "@/lib/validation";
+
 
 const LoginForm = () => {
   const router = useRouter();
@@ -39,7 +39,7 @@ const LoginForm = () => {
 
       if (res.status === 200) {
         toast.success("logged in successfully");
-        router.push("/dashboard/student");
+        router.push("/dashboard/student/paper");
       } else {
         toast.error("Error in login");
       }

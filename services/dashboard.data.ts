@@ -7,6 +7,11 @@ export const getAdminData = async () => {
   return res.data;
 };
 
+export const getCurrentStudent = async () => {
+  const res = await axios.get("/api/login", { withCredentials: true });
+  return res.data;
+};
+
 export const getStudentCount = async () => {
   const studentRes = await axios.get("/api/admin/students");
   return studentRes.data.students.length;

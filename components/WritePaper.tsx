@@ -1,24 +1,23 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
-import {Progress} from "@/components/ui/progress";
-import {Separator} from "@/components/ui/separator";
-import {formatTime} from "@/helpers/formatTime";
-import {Clock, Loader2} from "lucide-react";
-import {useRouter} from "next/navigation";
-import React, {useEffect, useState} from "react";
-import {toast} from "sonner";
-import {useTimer} from "@/app/providers/TimerContext";
-import {Input} from "./ui/input";
 import axios from "axios";
+import { toast } from "sonner";
+import { Input } from "./ui/input";
+import { useRouter } from "next/navigation";
+import { Clock, Loader2 } from "lucide-react";
 import DownloadButton from "./DownloadButton";
+import { Button } from "@/components/ui/button";
+import { formatTime } from "@/helpers/formatTime";
+import React, { useEffect, useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { useTimer } from "@/app/providers/TimerContext";
 
 interface PaperProps {
     paperId: string;
@@ -32,11 +31,11 @@ interface PaperProps {
     };
 }
 
-const WritePaper = ({paperId, paper}: PaperProps) => {
+const WritePaper = ({ paperId, paper }: PaperProps) => {
     const router = useRouter();
     const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const {timeRemaining, isRunning, isTimeUp, currentExamId, startTimer} =
+    const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
         useTimer();
 
     // Start the timer if not already running and if the paper exists
@@ -92,8 +91,8 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
 
             if (res.status === 200) {
                 toast.success("Answer Sheet submitted successfully!");
-                router.push("/dashboard/student");
-                localStorage.removeItem(`examStartTime_${paperId}`);
+                router.push("/dashboard/student/paper");
+                // localStorage.removeItem(`examStartTime_${paperId}`);
                 setSubmissionUrl(null);
             } else {
                 toast.error("Failed to submit answer sheet");
@@ -109,16 +108,15 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
         <div className="lg:max-w-2xl w-full mx-auto">
             <div className="fixed bottom-4 right-4 z-10">
                 <div
-                    className={`flex items-center space-x-2 min-w-24 lg:p-6 p-4 bg-white/90 backdrop-blur-sm shadow-lg rounded-full border ${
-                        isTimeUp ? "border-red-500" : "border-primary/20"
-                    }`}
+                    className={`flex items-center space-x-2 min-w-24 lg:p-6 p-4 bg-white/90 backdrop-blur-sm shadow-lg rounded-full border ${isTimeUp ? "border-red-500" : "border-primary/20"
+                        }`}
                 >
                     <Clock size={20}
-                           className={getDangerLevel()}/>
+                        className={getDangerLevel()} />
 
                     <span className={`text-2xl font-bold ${getDangerLevel()}`}>
-            {formatTime(timeRemaining)}
-          </span>
+                        {formatTime(timeRemaining)}
+                    </span>
                 </div>
             </div>
 
@@ -130,7 +128,7 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
 
                 <div className="mt-4">
                     <Progress value={progress}
-                              className="h-2"/>
+                        className="h-2" />
                 </div>
             </div>
 
@@ -150,7 +148,7 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
                 <CardFooter className="mt-2 w-full">
                     {isTimeUp ? (
                         <form onSubmit={handleSubmit}
-                              className="w-full">
+                            className="w-full">
                             <div className="space-y-2">
                                 <h3 className="text-xl font-semibold">Submit Your Work</h3>
                                 <div className="flex rounded-lg">
@@ -170,13 +168,13 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
                                         >
                                             {isUploading ? (
                                                 <div>
-                                                    <Loader2 className="animate-spin transition-all"/>
+                                                    <Loader2 className="animate-spin transition-all" />
                                                 </div>
                                             ) : (
                                                 "Submit Paper"
                                             )}
                                         </Button>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -198,7 +196,7 @@ const WritePaper = ({paperId, paper}: PaperProps) => {
                     )}
                 </CardFooter>
             </Card>
-            <Separator className="my-8"/>
+            <Separator className="my-8" />
         </div>
     );
 };

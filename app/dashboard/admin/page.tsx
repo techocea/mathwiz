@@ -1,6 +1,6 @@
 "use client";
 
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import BlurGradient from "@/components/BlurGradient";
 import {
@@ -10,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     FileText,
     Users,
@@ -18,7 +18,7 @@ import {
     Files,
     SquareCheckBig, Loader2,
 } from "lucide-react";
-import {useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
     getAdminData,
     getStudentCount,
@@ -78,7 +78,7 @@ const AdminDashboardPage = () => {
     if (isLoading) {
         return (
             <div className="min-h-lvh flex items-center justify-center w-full">
-                Please Wait <Loader2 className="animate-spin transition-all"/>
+                Please Wait <Loader2 className="animate-spin transition-all" />
             </div>
         )
     }
@@ -86,8 +86,7 @@ const AdminDashboardPage = () => {
 
     return (
         <>
-            <BlurGradient/>
-            <DashboardNavbar dashboardType="admin"/>
+            <BlurGradient />
             <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
                 <div>
                     <div className="mb-8">
@@ -105,7 +104,7 @@ const AdminDashboardPage = () => {
                                 <CardTitle className="text-sm font-medium">
                                     Total Students
                                 </CardTitle>
-                                <Users className="h-4 w-4 text-muted-foreground"/>
+                                <Users className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold">{totalStudents ?? 0}</div>
@@ -120,7 +119,7 @@ const AdminDashboardPage = () => {
                                 <CardTitle className="text-sm font-medium">
                                     Total Papers
                                 </CardTitle>
-                                <FileText className="h-4 w-4 text-muted-foreground"/>
+                                <FileText className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold">{totalPapers ?? 0}</div>
@@ -135,7 +134,7 @@ const AdminDashboardPage = () => {
                                 <CardTitle className="text-sm font-medium">
                                     Total Submissions
                                 </CardTitle>
-                                <Files className="h-4 w-4 text-muted-foreground"/>
+                                <Files className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold">{totalSubmissions ?? 0}</div>
@@ -150,7 +149,7 @@ const AdminDashboardPage = () => {
                                 <CardTitle className="text-sm font-medium">
                                     Total Inquiries
                                 </CardTitle>
-                                <SquareCheckBig className="h-4 w-4 text-muted-foreground"/>
+                                <SquareCheckBig className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold">{totalInquiries ?? 0}</div>
@@ -179,7 +178,7 @@ const AdminDashboardPage = () => {
                                             </p>
                                         </div>
                                         <Button variant="ghost"
-                                                size="sm">
+                                            size="sm">
                                             View
                                         </Button>
                                     </div>
@@ -193,7 +192,7 @@ const AdminDashboardPage = () => {
                                             </p>
                                         </div>
                                         <Button variant="ghost"
-                                                size="sm">
+                                            size="sm">
                                             View
                                         </Button>
                                     </div>
@@ -207,7 +206,7 @@ const AdminDashboardPage = () => {
                                             </p>
                                         </div>
                                         <Button variant="ghost"
-                                                size="sm">
+                                            size="sm">
                                             View
                                         </Button>
                                     </div>
@@ -227,7 +226,7 @@ const AdminDashboardPage = () => {
                                         onClick={() => router.push("/dashboard/admin/papers")}
                                         className="w-full justify-start cursor-pointer"
                                     >
-                                        <FileText className="mr-2 h-4 w-4"/>
+                                        <FileText className="mr-2 h-4 w-4" />
                                         Manage Papers
                                     </Button>
                                     <Button
@@ -235,7 +234,7 @@ const AdminDashboardPage = () => {
                                         onClick={() => router.push("/dashboard/admin/students")}
                                         className="w-full justify-start cursor-pointer"
                                     >
-                                        <Users className="mr-2 h-4 w-4"/>
+                                        <Users className="mr-2 h-4 w-4" />
                                         Manage Students
                                     </Button>
                                     <Button
@@ -243,7 +242,7 @@ const AdminDashboardPage = () => {
                                         variant="outline"
                                         className="w-full justify-start"
                                     >
-                                        <Clock className="mr-2 h-4 w-4"/>
+                                        <Clock className="mr-2 h-4 w-4" />
                                         Upload Marksheet (coming soon)
                                     </Button>
                                 </div>

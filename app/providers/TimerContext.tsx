@@ -16,6 +16,8 @@ type TimerContextType = {
   timeRemaining: number;
   isRunning: boolean;
   isTimeUp: boolean;
+  isFinished: boolean;
+  hasSubmitted: (examId: string) => boolean;
   currentExamId: string | null;
 };
 
@@ -60,7 +62,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsRunning(false);
             setIsTimeUp(true);
             setCurrentExamId(examId);
-            localStorage.setItem(`examFinished_${examId}`, 'true');
+            localStorage.setItem(`examFinished_${examId}`, "true");
             localStorage.removeItem("timerState");
           }
         }
@@ -117,13 +119,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      // 2. ⚠️ NEW CHECK: Check if THIS specific exam is marked as finished
-      const isFinished = localStorage.getItem(`examFinished_${examId}`) === 'true';
-      if (isFinished) {
-        toast.error("This exam has already been completed or the time has expired.");
-        return;
-      }
-
       const durationInMilliSeconds = durationInMinutes * 60 * 1000;
       setTimeRemaining(durationInMilliSeconds);
       setIsRunning(true);
@@ -133,6 +128,13 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [isRunning]
   );
+
+  const isFinished =
+    currentExamId !== null &&
+    localStorage.getItem(`examFinished_${currentExamId}`) === "true";
+
+  const hasSubmitted = (examId: string) =>
+    localStorage.getItem(`examFinished_${examId}`) === "true";
 
   const stopTimer = useCallback(() => {
     if (intervalId) {
@@ -158,6 +160,8 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
         timeRemaining,
         isRunning,
         isTimeUp,
+        isFinished,
+        hasSubmitted,
         currentExamId,
       }}
     >
