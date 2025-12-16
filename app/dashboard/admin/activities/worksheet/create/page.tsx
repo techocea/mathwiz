@@ -1,7 +1,7 @@
-import DashboardNavbar from "@/components/DashboardNavbar";
-import BlurGradient from "@/components/BlurGradient";
+import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import BlurGradient from "@/components/shared/BlurGradient";
 
-import ActivityCreateForm from "@/components/ActivityCreateForm";
+import ActivityCreateForm from "@/components/dashboard/ActivityCreateForm";
 
 const CreateWorksheet = () => {
   return (

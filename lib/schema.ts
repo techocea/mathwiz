@@ -27,10 +27,10 @@ const userSchema = new mongoose.Schema(
 
 const resourceSchema = new mongoose.Schema(
   {
+    durationMinutes: { type: Number },
     title: { type: String, required: true },
     medium: { type: String, enum: ["sinhala", "english"], required: true },
     year: { type: String, enum: ["2025", "2026", "2027"], required: true },
-    durationMinutes: { type: Number },
     uploadDeadline: { type: Date, required: true },
     paperUrl: { type: String, required: true },
     cloudinaryPublicId: { type: String, required: true },
@@ -65,10 +65,16 @@ const submissionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    cloudinaryPublicId: {
+    submissionPublicId: {
       type: String,
-      required: true,
     },
+    markedPdfUrl: {
+      type: String,
+    },
+    remark: {
+      type: String,
+    },
+    markedPublicId: { type: String },
     startTime: { type: Date },
     submittedAt: {
       type: Date,

@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-    const submissionUrl = formData.get("submissionUrl") as File | null;
     const paperId = formData.get("paperId")?.toString();
     const startTime = formData.get("startTime")?.toString();
+    const submissionUrl = formData.get("submissionUrl") as File | null;
 
     if (!submissionUrl || !paperId) {
       return NextResponse.json(
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     const uploadRes = await cloudinary.uploader.upload(fileStr, {
       resource_type: "raw",
-      folder: "submissions",
+      folder: "submissions/answers",
       public_id: publicId,
       format: "pdf",
     });
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
     const submission = await Submission.create({
       submissionUrl: uploadRes.secure_url,
-      cloudinaryPublicId: uploadRes.public_id,
+      submissionPublicId: uploadRes.public_id,
       studentId: user._id,
       paperId,
       startTime: paperStartTime,
@@ -87,13 +87,58 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("studentToken")?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "Unauthorized: No token" },
+        { status: 401 }
+      );
+    }
+
+    const user = getUserFromToken(token);
+
+    if (!user?._id) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    }
+
     await connectDB();
 
-    const submissions = await Submission.find({})
+    const { searchParams } = new URL(req.url);
+
+    const year = searchParams.get("year");
+    const type = searchParams.get("type");
+    const medium = searchParams.get("medium");
+
+    const resourceQuery: Record<string, any> = {};
+
+    if (year) resourceQuery.year = year;
+    if (medium) resourceQuery.medium = medium;
+    if (type) resourceQuery.type = type;
+
+    const resources = await Resource.find(resourceQuery).select("_id");
+    const resourceIds = resources.map((r) => r._id);
+
+    const submissionQuery: Record<string, any> = {
+      studentId: user?._id,
+      markedPdfUrl: { $exists: true, $ne: null },
+      paperId: { $in: resourceIds },
+    };
+
+    const submissions = await Submission.find(submissionQuery)
       .populate("studentId", "firstName lastName contact")
-      .populate("paperId", "title");
+      .populate("paperId", "title year medium type")
+      .sort({ createdAt: -1 });
+
+    if (!submissions || submissions.length === 0) {
+      return NextResponse.json(
+        { submissions, message: "No submissions found" },
+        { status: 200 }
+      );
+    }
 
     return NextResponse.json(
       {

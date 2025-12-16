@@ -6,10 +6,10 @@ import { ResourceType } from "@/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useResources } from "@/hooks/useResource";
-import BlurGradient from "@/components/BlurGradient";
-import ResourceTable from "@/components/ResourceTable";
-import DashboardNavbar from "@/components/DashboardNavbar";
-import FilterComponent from "@/components/FilterComponent";
+import ResourceTable from "@/components/shared/ResourceTable";
+import FilterComponent from "@/components/dashboard/FilterComponent";
+import { PageHeader } from "@/components/shared/PageHeader";
+import Loader from "@/components/layout/Loader";
 
 const Papers = () => {
   const router = useRouter();
@@ -28,11 +28,10 @@ const Papers = () => {
     year,
   });
 
-
   const showNoResults = resources && resources.length === 0;
 
   if (isLoading) {
-    return <div>Loading filters and data...</div>;
+    return <Loader />
   }
 
   if (isError) {
@@ -40,51 +39,49 @@ const Papers = () => {
   }
 
   return (
-    <>
-      <BlurGradient />
-      <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto py-6">
-        <div>
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Paper Management</h1>
-              <p className="text-muted-foreground">
-                Create and manage A/L Combined Mathematics papers
-              </p>
-            </div>
-
-            <Button
-              size="lg"
-              onClick={() =>
-                router.push("/dashboard/admin/activities/paper/create")
-              }
-              className="cursor-pointer"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Paper
-            </Button>
-          </div>
-
+    <main className="min-h-screen flex-1 w-full">
+      <div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
           <div>
-            <FilterComponent
-              year={year}
-              medium={medium}
-              onYearChange={setYear}
-              onMediumChange={setMedium}
+            <PageHeader
+              title="Paper Management"
+              description="Create and manage A/L Combined Mathematics papers"
             />
           </div>
 
-          {showNoResults ? (
-            <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-              <p className="text-gray-600">
-                No results found matching the selected year and medium.
-              </p>
-            </div>
-          ) : (
-            <ResourceTable resources={resources} />
-          )}
+          <Button
+            size="lg"
+            onClick={() =>
+              router.push("/dashboard/admin/activities/paper/create")
+            }
+            className="cursor-pointer"
+          >
+            <Plus className="h-4 w-4" />
+            Create Paper
+          </Button>
         </div>
-      </main>
-    </>
+
+        <div>
+          <FilterComponent
+            year={year}
+            medium={medium}
+            mode="resources"
+            onYearChange={setYear}
+            onMediumChange={setMedium}
+          />
+        </div>
+
+        {showNoResults ? (
+          <div className="mt-8 p-4 bg-gray-50 border rounded-md">
+            <p className="text-gray-600">
+              No results found matching the selected year and medium.
+            </p>
+          </div>
+        ) : (
+          <ResourceTable type={resourceType} resources={resources} />
+        )}
+      </div>
+    </main>
   );
 };
 

@@ -1,13 +1,4 @@
-import {
-  Award,
-  Layers,
-  UsersRound,
-  LayoutDashboard,
-  FileText,
-  Users,
-  Files,
-  SquareCheckBig,
-} from "lucide-react";
+import { Award, Layers, UsersRound } from "lucide-react";
 
 export const NAV_ITEMS = [
   {
@@ -52,6 +43,10 @@ export const ADMIN_NAV_ITEMS = [
   {
     name: "Paper Class",
     path: "/dashboard/admin/activities/paper",
+  },
+  {
+    name: "Marking Schemes",
+    path: "/dashboard/admin/marking",
   },
 ];
 
@@ -138,4 +133,12 @@ export const INSTRUCTIONS = [
   "The timer starts off right away once you start the exam",
   "You have 2h 40min to complete the paper and 15 min to upload the answer sheet(you have to upload a PDF file)",
   "If you face any issues when uploading the answer sheet you can send it through WhatsApp",
+];
+
+export const ASSESSMENT_TYPES = [
+  { value: "paper", label: "Papers", icon: "📄" },
+  { value: "mini-exam", label: "Mini Exams", icon: "📝" },
+  { value: "worksheet", label: "Worksheets", icon: "📋" },
+  { value: "homework", label: "Homework", icon: "📚" },
+  { value: "speed-paper", label: "Speed Papers", icon: "⚡" },
 ];

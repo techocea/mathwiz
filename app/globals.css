@@ -152,3 +152,14 @@
   left: -100px;
   background: rgba(78, 152, 237, 0.15);
 }
+
+html body[data-scroll-locked] {
+  overflow: visible !important;
+  margin-right: 0px !important;
+  padding-right: 0px !important;
+  pointer-events: auto !important;
+}
+
+html {
+  overflow-x: hidden;
+}

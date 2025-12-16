@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("adminToken")?.value;
@@ -87,7 +87,19 @@ export async function GET() {
 
     await connectDB();
 
-    const markings = await Marking.find();
+    const { searchParams } = new URL(req.url);
+
+    const year = searchParams.get("year");
+    const type = searchParams.get("type");
+    const medium = searchParams.get("medium");
+
+    const query: Record<string, any> = {};
+
+    if (year) query.year = year;
+    if (medium) query.medium = medium;
+    if (type) query.type = type;
+
+    const markings = await Marking.find(query).lean();
 
     if (!markings || markings.length === 0) {
       return NextResponse.json(

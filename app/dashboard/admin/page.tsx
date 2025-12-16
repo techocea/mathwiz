@@ -1,23 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
     Card,
-    CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
+    CardContent,
+    CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-    FileText,
-    Users,
-    Clock,
-    Files,
-    SquareCheckBig,
-    Loader2,
-} from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { FileText, Users, Files, SquareCheckBig } from "lucide-react";
 import {
     getAdminData,
     getStudentCount,
@@ -25,13 +15,15 @@ import {
     getPaperCount,
     getInquiriesCount,
 } from "@/services/dashboard.data";
-import Loader from "@/components/Loader";
 import { useState } from "react";
-import MarkingSchemeModal from "@/components/MarkingSchemeModal";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/layout/Loader";
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import MarkingSchemeModal from "@/components/dashboard/MarkingSchemeModal";
 
 const AdminDashboardPage = () => {
     const router = useRouter();
-    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
     const { data: adminData, isLoading: isAdminLoading } = useQuery({
         queryKey: ["admin-auth"],
@@ -60,9 +52,7 @@ const AdminDashboardPage = () => {
         queryFn: getInquiriesCount,
     });
 
-    const handleMarkingSchemaModal = () => {
-        setIsUploadModalOpen((prev) => !prev);
-    };
+
 
     const isLoading =
         isAdminLoading ||
@@ -76,7 +66,7 @@ const AdminDashboardPage = () => {
     }
 
     return (
-        <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
+        <main className="min-h-full flex-1 w-full">
             <div>
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mb-2">
@@ -203,6 +193,7 @@ const AdminDashboardPage = () => {
                             <div className="flex flex-col gap-4">
                                 <Button
                                     size="lg"
+                                    variant="secondary"
                                     onClick={() => router.push("/dashboard/admin/papers")}
                                     className="w-full justify-start cursor-pointer"
                                 >
@@ -211,6 +202,7 @@ const AdminDashboardPage = () => {
                                 </Button>
                                 <Button
                                     size="lg"
+                                    variant="secondary"
                                     onClick={() => router.push("/dashboard/admin/students")}
                                     className="w-full justify-start cursor-pointer"
                                 >

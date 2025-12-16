@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import { FileText, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 import { useTimer } from "@/app/providers/TimerContext";
+import { JSX } from "react";
 
 interface WriteResourceProps {
     resources: any;
@@ -23,12 +24,17 @@ interface WriteResourceProps {
 
 const WriteResource = ({ resources, type }: WriteResourceProps) => {
     const router = useRouter();
-    const { isRunning, currentExamId, startTimer, hasSubmitted } = useTimer();
-
+    const { isRunning, currentExamId, startTimer } = useTimer();
 
     const handleStartExam = (paperId: string, durationMinutes: number) => {
+        let isThisExamSubmitted =
+            localStorage.getItem(`examSubmitted_${paperId}`) === "true";
         if (isRunning && currentExamId !== paperId) {
-            router.push(`/dashboard/student/paper/${paperId}`);
+            router.push(`/dashboard/student/${type}/${currentExamId}`);
+            return;
+        }
+
+        if (isThisExamSubmitted) {
             return;
         }
 
@@ -36,26 +42,22 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
         localStorage.setItem(`examStartTime_${paperId}`, examStartTime);
         startTimer(durationMinutes, paperId);
         router.push(`/dashboard/student/${type}/${paperId}`);
-        const blocked = hasSubmitted(paperId);
-        return blocked;
     };
 
     const isExpired = (uploadDeadline: string) => {
         return new Date(uploadDeadline) < new Date();
     };
 
-
-
     return (
-        <Card className="mt-6 rounded-md border bg-white/80 py-2 px-4 backdrop-blur-sm shadow-sm">
+        <Card className="w-full rounded-md border bg-white/80 py-2 px-4 backdrop-blur-sm shadow-sm">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Paper</TableHead>
+                        <TableHead>Title</TableHead>
                         {(type === "paper" ||
                             type === "speed-paper" ||
                             type === "mini-exam") && <TableHead>Duration</TableHead>}
-                        <TableHead>Submit Deadline</TableHead>
+                        <TableHead>Deadline</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -65,14 +67,15 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
                             const expired = isExpired(r.uploadDeadline);
                             return (
                                 <TableRow key={r._id} className={expired ? "opacity-70" : ""}>
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        <FileText size={18} className="text-primary" />
-                                        {r.title}
+                                    <TableCell>
+                                        <div className="font-medium flex items-center capitalize gap-2">
+                                            {r.title}
+                                        </div>
                                     </TableCell>
                                     {r.durationMinutes && (
                                         <TableCell>
-                                            <div className="flex items-center gap-1">
-                                                <Clock size={16} className="text-muted-foreground" />
+                                            <div className="flex items-center gap-2">
+                                                <Clock size={16} className="text-blue-500 mb-0.5" />
                                                 {Math.floor(r.durationMinutes / 60) > 0 &&
                                                     `${Math.floor(r.durationMinutes / 60)}h `}
                                                 {r.durationMinutes % 60}m
@@ -83,17 +86,37 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
                                         {format(new Date(r.uploadDeadline), "PP")}
                                     </TableCell>
                                     <TableCell className="text-right">
-
                                         {r.durationMinutes ? (
-                                            <Button
-                                                size="sm"
-                                                disabled={isRunning || isExpired(r.uploadDeadline)}
-                                                onClick={() =>
-                                                    handleStartExam(r._id, r.durationMinutes)
-                                                }
-                                            >
-                                                Start
-                                            </Button>
+                                            ((): JSX.Element => {
+                                                const isThisExamSubmitted =
+                                                    localStorage.getItem(`examSubmitted_${r._id}`) ===
+                                                    "true";
+
+                                                // Determine button text based on status
+                                                const buttonText =
+                                                    isRunning && currentExamId === r._id
+                                                        ? "Continue Exam"
+                                                        : isThisExamSubmitted
+                                                            ? "Submitted"
+                                                            : "Start Exam";
+
+                                                const isDisabled =
+                                                    (isRunning && currentExamId !== r._id) ||
+                                                    isExpired(r.uploadDeadline) ||
+                                                    isThisExamSubmitted;
+
+                                                return (
+                                                    <Button
+                                                        size="default"
+                                                        disabled={isDisabled}
+                                                        onClick={() =>
+                                                            handleStartExam(r._id, r.durationMinutes)
+                                                        }
+                                                    >
+                                                        {buttonText}
+                                                    </Button>
+                                                );
+                                            })()
                                         ) : (
                                             <Link href={`/dashboard/student/${type}/${r._id}`}>
                                                 <Button>View</Button>
@@ -106,10 +129,11 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
                     ) : (
                         <TableRow>
                             <TableCell
-                                colSpan={4}
-                                className="text-center text-2xl tracking-widest text-muted-foreground py-6"
+                                align="center"
+                                className="capitalize py-4 font-medium text-muted-foreground text-center"
+                                colSpan={3}
                             >
-                                Currently Unavailable
+                                no {type.replace("-", " ")}s yet
                             </TableCell>
                         </TableRow>
                     )}

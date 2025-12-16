@@ -7,8 +7,8 @@ import { TimerProvider } from "@/app/providers/TimerContext";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import React from "react";
 import QueryProvider from "../providers/QueryProvider";
-import DashboardNavbar from "@/components/DashboardNavbar";
-import BlurGradient from "@/components/BlurGradient";
+import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import BlurGradient from "@/components/shared/BlurGradient";
 
 const poppins = Poppins({
     variable: "--font-poppins",
@@ -35,7 +35,7 @@ export default function DashboardLayout({
         <QueryProvider>
             <TimerProvider>
                 <html lang="en">
-                    <body className={`${poppins.className} antialiased`}>
+                    <body className={`${poppins.className} antialiased mt-28 mb-16 container lg:max-w-6xl mx-auto p-6`}>
                         <Sonner position="top-right" />
                         <BlurGradient />
                         <DashboardNavbar />

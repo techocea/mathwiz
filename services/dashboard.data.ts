@@ -23,7 +23,7 @@ export const getPaperCount = async () => {
 };
 
 export const getSubmissionsCount = async () => {
-  const submissionsRes = await axios.get("/api/submissions");
+  const submissionsRes = await axios.get("/api/admin/submissions");
   return submissionsRes.data.submissions.length;
 };
 

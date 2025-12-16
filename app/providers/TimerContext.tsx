@@ -13,11 +13,11 @@ type TimerContextType = {
   startTimer: (durationInMinutes: number, examId: string) => void;
   stopTimer: () => void;
   resetTimer: () => void;
+  setExamSubmitted: (examId: string) => void;
   timeRemaining: number;
   isRunning: boolean;
   isTimeUp: boolean;
-  isFinished: boolean;
-  hasSubmitted: (examId: string) => boolean;
+  hasSubmitted: boolean;
   currentExamId: string | null;
 };
 
@@ -37,6 +37,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isTimeUp, setIsTimeUp] = useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [currentExamId, setCurrentExamId] = useState<string | null>(null);
   const [intervalId, setIntervalId] = useState<number | null>(null);
 
@@ -47,7 +48,10 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const { isRunning, examId, endTime } = JSON.parse(savedTimerState);
 
-        if (isRunning && endTime) {
+        const isSubmitted = localStorage.getItem(`examSubmitted_${examId}`) === "true";
+        setHasSubmitted(isSubmitted);
+
+        if (isRunning && endTime && !isSubmitted) {
           const now = new Date().getTime();
           const remaining = Math.max(0, endTime - now);
 
@@ -62,7 +66,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsRunning(false);
             setIsTimeUp(true);
             setCurrentExamId(examId);
-            localStorage.setItem(`examFinished_${examId}`, "true");
             localStorage.removeItem("timerState");
           }
         }
@@ -73,6 +76,15 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (currentExamId) {
+      const isSubmitted = localStorage.getItem(`examSubmitted_${currentExamId}`) === "true";
+      setHasSubmitted(isSubmitted);
+    } else {
+      setHasSubmitted(false);
+    }
+  }, [currentExamId]);
+
   // Save timer state to localStorage whenever it changes
   useEffect(() => {
     if (isRunning && currentExamId) {
@@ -80,19 +92,23 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem(
         "timerState",
         JSON.stringify({
-          timeRemaining,
           isRunning,
           examId: currentExamId,
           endTime,
         })
       );
     }
-  }, [timeRemaining, isRunning, currentExamId]);
+  }, [timeRemaining, isRunning, currentExamId, hasSubmitted]);
 
   // Timer tick function
   useEffect(() => {
-    if (!isRunning || timeRemaining <= 0) return;
-
+    if (!isRunning) {
+      if (intervalId) {
+        clearInterval(intervalId);
+        setIntervalId(null);
+      }
+      return;
+    }
     const id = window.setInterval(() => {
       setTimeRemaining((prev) => {
         const newTime = prev - 1000;
@@ -114,8 +130,18 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const startTimer = useCallback(
     (durationInMinutes: number, examId: string) => {
-      if (isRunning) {
+      if (isRunning && currentExamId !== examId) {
         toast.warning("You already have an exam in progress!");
+        return;
+      }
+
+      // Check if this exam is already submitted
+      if (localStorage.getItem(`examSubmitted_${examId}`) === "true") {
+        toast.error("This paper has already been submitted.");
+        return;
+      }
+
+      if (isRunning && currentExamId === examId) {
         return;
       }
 
@@ -123,18 +149,14 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
       setTimeRemaining(durationInMilliSeconds);
       setIsRunning(true);
       setIsTimeUp(false);
+      setHasSubmitted(false);
       setCurrentExamId(examId);
       toast.info(`Timer started for ${durationInMinutes} minutes`);
     },
-    [isRunning]
+    [isRunning, currentExamId]
   );
 
-  const isFinished =
-    currentExamId !== null &&
-    localStorage.getItem(`examFinished_${currentExamId}`) === "true";
 
-  const hasSubmitted = (examId: string) =>
-    localStorage.getItem(`examFinished_${examId}`) === "true";
 
   const stopTimer = useCallback(() => {
     if (intervalId) {
@@ -148,8 +170,23 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
     stopTimer();
     setTimeRemaining(0);
     setIsTimeUp(false);
+    setHasSubmitted(false);
     setCurrentExamId(null);
+    localStorage.removeItem("timerState");
   }, [stopTimer]);
+
+  const setExamSubmitted = useCallback((examId: string) => {
+    localStorage.setItem(`examSubmitted_${examId}`, "true");
+    setHasSubmitted(true);
+    if (currentExamId === examId) {
+      stopTimer(); // Stop the timer if it's the one currently running
+      setTimeRemaining(0);
+      setIsTimeUp(false); // Not time up, but submitted
+      setCurrentExamId(null); // Clear context of the submitted exam
+      localStorage.removeItem(`examStartTime_${examId}`);
+    }
+    toast.success("Paper successfully submitted!");
+  }, [currentExamId, stopTimer]);
 
   return (
     <TimerContext.Provider
@@ -157,10 +194,10 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
         startTimer,
         stopTimer,
         resetTimer,
+        setExamSubmitted,
         timeRemaining,
         isRunning,
         isTimeUp,
-        isFinished,
         hasSubmitted,
         currentExamId,
       }}

@@ -18,12 +18,12 @@ import {
   MapPin,
   PhoneCall,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { HIGHLIGHTS, TIMETABLE } from "@/lib/constants";
-import PageWrapper from "@/components/PageWrapper";
-import ScrollTriggered from "@/components/ScrollTriggered";
-import ContactItem from "@/components/Contact-Item";
+import PageWrapper from "@/components/layout/PageWrapper";
+import ScrollTriggered from "@/components/layout/ScrollTriggered";
+import ContactItem from "@/components/shared/Contact-Item";
 import clsx from "clsx";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { toast } from "sonner";

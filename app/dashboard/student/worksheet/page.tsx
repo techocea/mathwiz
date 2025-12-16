@@ -1,32 +1,69 @@
 "use client";
 
-import Loader from "@/components/Loader";
-import WriteResource from "@/components/WriteResource";
+import Loader from "@/components/layout/Loader";
+import TabSection from "@/components/dashboard/TabSection";
+import { PageHeader } from "@/components/shared/PageHeader";
+import WriteResource from "@/components/shared/WriteResource";
 import { useCurrentStudent } from "@/hooks/useCurrentStudent";
-import { useStudentResources } from "@/hooks/useStudentResources";
+import {
+    useStudentMarkedPapers,
+    useStudentMarkingSchemes,
+    useStudentResources,
+} from "@/hooks/useStudentResources";
+import { useState } from "react";
+import { ActiveTabTypes } from "@/types";
+import MarkedPapersTable from "@/components/shared/MarkedPapersTable";
+import MarkingSchemesTable from "@/components/shared/MarkingSchemesTable";
 
 const Worksheets = () => {
-    const { data: student, isLoading: studentLoading } = useCurrentStudent();
-    const { data: worksheets, isLoading } = useStudentResources(
-        "worksheet",
-        student
-    );
+    const [activeTab, setActiveTab] = useState<ActiveTabTypes>("activities");
 
-    if (studentLoading || isLoading) {
+    const { data: student, isLoading: studentLoading } = useCurrentStudent();
+    const { data: workSheets, isLoading: studentResourcesLoading } =
+        useStudentResources("worksheet", student);
+    const { data: markedPapers, isLoading: studentMarkedPapersLoading } =
+        useStudentMarkedPapers("worksheet", student);
+    const { data: markingSchemes, isLoading: studentMarkingSchemesLoading } =
+        useStudentMarkingSchemes("worksheet", student);
+
+    if (
+        studentLoading ||
+        studentResourcesLoading ||
+        studentMarkingSchemesLoading ||
+        studentMarkedPapersLoading
+    ) {
         return <Loader />;
     }
 
-    return (
-        <div className="min-h-full flex-1 lg:max-w-6xl w-full mx-auto p-6">
-            <div className="flex flex-col space-y-4">
-                <div className="">
-                    <h2 className="font-bold text-4xl text-black">
-                        {student?.year} Worksheets
-                    </h2>
-                </div>
+    const resourceType = "worksheet";
 
-                <WriteResource resources={worksheets} type="worksheet" />
+    const renderContent = () => {
+        switch (activeTab) {
+            case "activities":
+                return <WriteResource resources={workSheets} type={resourceType} />;
+            case "marked-papers":
+                return <MarkedPapersTable resources={markedPapers} />;
+            case "marking-schemes":
+                return <MarkingSchemesTable resources={markingSchemes} />;
+            default:
+                null;
+        }
+    };
+
+    return (
+        <div className="min-h-full flex-1 w-full">
+            <div className="flex flex-col space-y-4">
+                <div className="flex flex-col lg:flex-row justify-between lg:items-center mb-8 w-full">
+                    <PageHeader
+                        title="Worksheets"
+                        description="Complete the worksheets and submit"
+                    />
+
+                    <TabSection activeTab={activeTab} onTabChange={setActiveTab} />
+                </div>
             </div>
+
+            {renderContent()}
         </div>
     );
 };

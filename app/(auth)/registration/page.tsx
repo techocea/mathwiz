@@ -1,5 +1,5 @@
-import BlurGradient from "@/components/BlurGradient";
-import RegisterForm from "@/components/RegisterForm";
+import BlurGradient from "@/components/shared/BlurGradient";
+import RegisterForm from "@/components/shared/RegisterForm";
 
 const RegistrationPage = () => {
   return (

@@ -1,6 +1,6 @@
 
-import BlurGradient from "@/components/BlurGradient";
-import LoginForm from "@/components/LoginForm";
+import BlurGradient from "@/components/shared/BlurGradient";
+import LoginForm from "@/components/shared/LoginForm";
 
 const LoginPage = () => {
   return (

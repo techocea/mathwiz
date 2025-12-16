@@ -1,8 +1,8 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import WritePaper from "@/components/WritePaper";
-import BlurGradient from "@/components/BlurGradient";
+import WritePaper from "@/components/shared/WritePaper";
+import BlurGradient from "@/components/shared/BlurGradient";
 
 interface PageProps {
   params: Promise<{
@@ -11,7 +11,7 @@ interface PageProps {
   }>;
 }
 
-const Page = async ({ params }: PageProps) => {
+const WriteSpeedPaper = async ({ params }: PageProps) => {
   const { paperId } = await params;
 
   if (!paperId) {
@@ -40,4 +40,4 @@ const Page = async ({ params }: PageProps) => {
   );
 };
 
-export default Page;
+export default WriteSpeedPaper;

@@ -6,10 +6,10 @@ import { ResourceType } from "@/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useResources } from "@/hooks/useResource";
-import BlurGradient from "@/components/BlurGradient";
-import ResourceTable from "@/components/ResourceTable";
-import DashboardNavbar from "@/components/DashboardNavbar";
-import FilterComponent from "@/components/FilterComponent";
+import ResourceTable from "@/components/shared/ResourceTable";
+import FilterComponent from "@/components/dashboard/FilterComponent";
+import Loader from "@/components/layout/Loader";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const Worksheets = () => {
     const router = useRouter();
@@ -31,7 +31,7 @@ const Worksheets = () => {
     const showNoResults = resources && resources.length === 0;
 
     if (isLoading) {
-        return <div>Loading filters and data...</div>;
+        return <Loader />;
     }
 
     if (isError) {
@@ -39,51 +39,47 @@ const Worksheets = () => {
     }
 
     return (
-        <>
-            <BlurGradient />
-            <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
-                <div>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-                        <div>
-                            <h1 className="text-2xl font-bold mb-2">Worksheet Management</h1>
-                            <p className="text-muted-foreground">
-                                Create and manage worksheets
-                            </p>
-                        </div>
+        <main className="min-h-screen flex-1 w-full">
+            <div>
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+                    <PageHeader
+                        title="Worksheet Management"
+                        description="Create and manage worksheets"
+                    />
 
-                        <Button
-                            size="lg"
-                            onClick={() =>
-                                router.push("/dashboard/admin/activities/worksheet/create")
-                            }
-                            className="cursor-pointer"
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Create Worksheet
-                        </Button>
-                    </div>
-
-                    <div>
-                        <FilterComponent
-                            year={year}
-                            medium={medium}
-                            onYearChange={setYear}
-                            onMediumChange={setMedium}
-                        />
-                    </div>
-
-                    {showNoResults ? (
-                        <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-                            <p className="text-gray-600">
-                                No results found matching the selected year and medium.
-                            </p>
-                        </div>
-                    ) : (
-                        <ResourceTable resources={resources} />
-                    )}
+                    <Button
+                        size="lg"
+                        onClick={() =>
+                            router.push("/dashboard/admin/activities/worksheet/create")
+                        }
+                        className="cursor-pointer"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Create Worksheet
+                    </Button>
                 </div>
-            </main>
-        </>
+
+                <div>
+                    <FilterComponent
+                        year={year}
+                        medium={medium}
+                        mode="resources"
+                        onYearChange={setYear}
+                        onMediumChange={setMedium}
+                    />
+                </div>
+
+                {showNoResults ? (
+                    <div className="mt-8 p-4 bg-gray-50 border rounded-md">
+                        <p className="text-gray-600">
+                            No results found matching the selected year and medium.
+                        </p>
+                    </div>
+                ) : (
+                    <ResourceTable type={resourceType} resources={resources} />
+                )}
+            </div>
+        </main>
     );
 };
 

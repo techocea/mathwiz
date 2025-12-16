@@ -1,26 +1,27 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardTitle,
+  CardHeader,
   CardContent,
   CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-
 import axios from "axios";
-import { loginSchema, LoginFormValues } from "@/lib/validation";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginFormValues } from "@/lib/validation";
 
-const AdminLoginForm = () => {
+
+const LoginForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const {
@@ -34,28 +35,28 @@ const AdminLoginForm = () => {
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/admin", data);
+      const res = await axios.post("/api/login", data);
 
       if (res.status === 200) {
         toast.success("logged in successfully");
-        router.push("/dashboard/admin");
+        router.push("/dashboard/student");
       } else {
-        toast.error("Error in admin login");
+        toast.error("Error in login");
       }
     } catch (error: any) {
-      console.error("Error in admin login", error);
-      toast.error(error?.response?.data?.message || "Error in admin login");
+      console.error("Error in login", error);
+      toast.error(error?.response?.data?.message || "Error in login");
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="lg:max-w-lg w-full mx-auto p-4">
+    <div className="max-w-lg w-full mx-auto p-4">
       <Card>
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-primary">
-            Mathwiz Admin Login
+            Mathwiz Online Portal
           </CardTitle>
           <CardDescription>Sign in to access your dashboard</CardDescription>
         </CardHeader>
@@ -70,7 +71,8 @@ const AdminLoginForm = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Admin Email"
+                  placeholder="john.doe@example.com"
+                  className=""
                   {...register("email")}
                 />
                 {errors.email && (
@@ -83,7 +85,7 @@ const AdminLoginForm = () => {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Admin Password"
+                  placeholder="password"
                   {...register("password")}
                 />
                 {errors.password && (
@@ -101,8 +103,15 @@ const AdminLoginForm = () => {
                     <Loader2 className="animate-spin transition-all" />
                   </div>
                 ) : (
-                  <p>Login as admin</p>
+                  <p>Login</p>
                 )}
+              </Button>
+              <Button
+                variant="link"
+                asChild
+                className="w-fit text-center cursor-pointer"
+              >
+                <Link href="/registration">New here? Register</Link>
               </Button>
             </div>
           </form>
@@ -112,4 +121,4 @@ const AdminLoginForm = () => {
   );
 };
 
-export default AdminLoginForm;
+export default LoginForm;

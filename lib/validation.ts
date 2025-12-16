@@ -64,6 +64,17 @@ export const markingSchema = z.object({
     ),
 });
 
+export const markedAnswerSchema = z.object({
+  remark: z.string().min(3),
+  markedPdfUrl: z
+    .custom<File>((val) => val instanceof File, "PDF file is required")
+    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+      "Only PDF allowed"
+    ),
+});
+
 const baseSchema = z.object({
   title: z.string().min(3),
   medium: z.enum(["sinhala", "english"]),
@@ -130,4 +141,5 @@ export const createResourceSchema = z.discriminatedUnion("type", [
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type ContactFormValues = z.infer<typeof contactSchema>;
 export type MarkingSchemaFormValues = z.infer<typeof markingSchema>;
+export type MarkedAnswerSchemaFormValues = z.infer<typeof markedAnswerSchema>;
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;

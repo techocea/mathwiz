@@ -23,8 +23,8 @@ import Link from "next/link";
 import axios from "axios";
 import { registrationSchema, RegistrationFormValues } from "@/lib/validation";
 import { toast } from "sonner";
-import { Separator } from "./ui/separator";
-import { Checkbox } from "./ui/checkbox";
+import { Separator } from "../ui/separator";
+import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 

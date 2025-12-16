@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ const LogoutButton = () => {
     }
   };
   return (
-    <Button onClick={handleLogout} className="cursor-pointer" variant="outline">
+    <Button onClick={handleLogout} className="cursor-pointer" variant="ghost">
       Logout <LogOut />
     </Button>
   );

@@ -2,13 +2,12 @@
 
 import {
   Card,
-  CardTitle,
-  CardHeader,
   CardContent,
   CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
-import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -20,8 +19,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormValues } from "@/lib/validation";
 
-
-const LoginForm = () => {
+const AdminLoginForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const {
@@ -35,28 +33,28 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/login", data);
+      const res = await axios.post("/api/admin", data);
 
       if (res.status === 200) {
         toast.success("logged in successfully");
-        router.push("/dashboard/student/paper");
+        router.push("/dashboard/admin");
       } else {
-        toast.error("Error in login");
+        toast.error("Error in admin login");
       }
     } catch (error: any) {
-      console.error("Error in login", error);
-      toast.error(error?.response?.data?.message || "Error in login");
+      console.error("Error in admin login", error);
+      toast.error(error?.response?.data?.message || "Error in admin login");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="lg:max-w-lg w-full mx-auto p-4">
+    <div className="max-w-lg w-full mx-auto p-4">
       <Card>
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-primary">
-            Mathwiz Online Portal
+            Mathwiz Admin Login
           </CardTitle>
           <CardDescription>Sign in to access your dashboard</CardDescription>
         </CardHeader>
@@ -71,8 +69,7 @@ const LoginForm = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="john.doe@example.com"
-                  className=""
+                  placeholder="Admin Email"
                   {...register("email")}
                 />
                 {errors.email && (
@@ -85,7 +82,7 @@ const LoginForm = () => {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="password"
+                  placeholder="Admin Password"
                   {...register("password")}
                 />
                 {errors.password && (
@@ -103,15 +100,8 @@ const LoginForm = () => {
                     <Loader2 className="animate-spin transition-all" />
                   </div>
                 ) : (
-                  <p>Login</p>
+                  <p>Login as admin</p>
                 )}
-              </Button>
-              <Button
-                variant="link"
-                asChild
-                className="w-fit text-center cursor-pointer"
-              >
-                <Link href="/registration">New here? Register</Link>
               </Button>
             </div>
           </form>
@@ -121,4 +111,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default AdminLoginForm;

@@ -1,4 +1,4 @@
-import ActivityCreateForm from "@/components/ActivityCreateForm";
+import ActivityCreateForm from "@/components/dashboard/ActivityCreateForm";
 
 const CreateSpeedPaper = () => {
   return (

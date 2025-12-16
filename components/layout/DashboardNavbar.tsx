@@ -1,20 +1,31 @@
 "use client";
 
-import Image from "next/image";
+import {
+  X,
+  Menu,
+  Users,
+  Files,
+  SquareCheckBig,
+  LayoutDashboard,
+} from "lucide-react";
 import Link from "next/link";
-import { ADMIN_NAV_ITEMS } from "@/lib/constants";
-import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useState } from "react";
 import {
-  Files,
-  LayoutDashboard,
-  Menu,
-  SquareCheckBig,
-  Users,
-  X,
-} from "lucide-react";
-import LogoutButton from "@/components/LogoutButton";
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+import { usePathname } from "next/navigation";
+import { ADMIN_NAV_ITEMS } from "@/lib/constants";
+import { AnimatePresence, motion } from "framer-motion";
+import LogoutButton from "@/components/shared/LogoutButton";
+import TabSection from "../dashboard/TabSection";
 
 const DashboardNavbar = () => {
   const pathname = usePathname();
@@ -26,33 +37,41 @@ const DashboardNavbar = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-
   return (
-    <header className="bg-white border-b py-4 px-8 flex items-center justify-between w-full">
+    <header className="fixed top-0 left-0 z-50 bg-white border-b py-4 px-8 flex items-center justify-between w-full">
       <div className="flex items-center gap-4">
-        {pathname.startsWith("/dashboard/admin") && (
-          <div className="flex items-center gap-2">
-            <Image
-              src="/mathwiz.png"
-              width={95}
-              height={95}
-              priority
-              quality={100}
-              alt="a good maths in negombo"
-            />
-            <h1 className="font-bold text-xl uppercase bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text">
-              mathwiz.lk
-            </h1>
+        {pathname.startsWith("/dashboard") && (
+          <div>
+            <Link
+              href={
+                pathname.includes("admin")
+                  ? "/dashboard/admin"
+                  : "/dashboard/student"
+              }
+              className="flex items-center gap-2"
+            >
+              <Image
+                src="/mathwiz.png"
+                width={95}
+                height={95}
+                priority
+                quality={100}
+                alt="a good maths in negombo"
+              />
+              <h1 className="font-bold text-xl uppercase bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text">
+                mathwiz.lk
+              </h1>
+            </Link>
           </div>
         )}
         <nav className="hidden lg:flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 lg:ml-6">
-          {pathname.startsWith("/dashboard/admin") ? (
+          {pathname.startsWith("/dashboard/admin") && (
             <>
               <Link
                 href="/dashboard/admin"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
+                    ? "text-blue-500"
+                    : "text-muted-foreground"
                   }`}
               >
                 <LayoutDashboard size={24} />
@@ -81,10 +100,10 @@ const DashboardNavbar = () => {
                             key={idx}
                             href={item.path}
                             className={`flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground ${idx === 0
-                              ? " rounded-tl-md rounded-tr-md"
-                              : idx === lastIndex
-                                ? "rounded-bl-md rounded-br-md"
-                                : ""
+                                ? " rounded-tl-md rounded-tr-md"
+                                : idx === lastIndex
+                                  ? "rounded-bl-md rounded-br-md"
+                                  : ""
                               } hover:bg-blue-500 hover:text-white`}
                           >
                             {item.name}
@@ -98,8 +117,8 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/admin/students"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/students"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
+                    ? "text-blue-500"
+                    : "text-muted-foreground"
                   }`}
               >
                 <Users size={24} />
@@ -108,8 +127,8 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/admin/submissions"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/submissions"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
+                    ? "text-blue-500"
+                    : "text-muted-foreground"
                   }`}
               >
                 <Files size={24} />
@@ -118,61 +137,12 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/admin/inquiries"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/inquiries"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
+                    ? "text-blue-500"
+                    : "text-muted-foreground"
                   }`}
               >
                 <SquareCheckBig size={24} />
                 Inquiries
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/dashboard/student/paper"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/paper"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
-                  }`}
-              >
-                Papers
-              </Link>
-
-              <Link
-                href="/dashboard/student/mini-exam"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/mini-exam"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
-                  }`}
-              >
-                Mini Exam
-              </Link>
-              <Link
-                href="/dashboard/student/worksheet"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/worksheet"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
-                  }`}
-              >
-                Worksheets
-              </Link>
-              <Link
-                href="/dashboard/student/speed-paper"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/speed-paper"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
-                  }`}
-              >
-                Speed Papers
-              </Link>
-              <Link
-                href="/dashboard/student/homework"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/student/homework"
-                  ? "text-blue-500"
-                  : "text-muted-foreground"
-                  }`}
-              >
-                Homework
               </Link>
             </>
           )}

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useScroll, motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 export default function Navbar() {
   const { scrollY } = useScroll();
@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header  
+      <motion.header
         initial={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
         animate={{
           backgroundColor: isScrolled
@@ -34,9 +34,8 @@ export default function Navbar() {
             : "rgba(255, 255, 255, 0)",
         }}
         transition={{ duration: 0.3 }}
-        className={`fixed top-0 left-0 right-0 z-50 py-4 px-8 flex items-center justify-between w-full ${
-          isScrolled ? "shadow-md text-black" : " text-white"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 py-4 px-8 flex items-center justify-between w-full ${isScrolled ? "shadow-md text-black" : " text-white"
+          }`}
       >
         <div>
           <Image
@@ -72,9 +71,8 @@ export default function Navbar() {
         <div className="md:hidden z-50 relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`${
-              isScrolled ? "text-primary" : "text-white "
-            } cursor-pointer p-2 focus:outline-none`}
+            className={`${isScrolled ? "text-primary" : "text-white "
+              } cursor-pointer p-2 focus:outline-none`}
             aria-label="Toggle Menu"
           >
             {isOpen ? null : <Menu size={28} />}

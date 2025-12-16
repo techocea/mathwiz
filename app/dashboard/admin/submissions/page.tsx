@@ -1,130 +1,70 @@
 "use client";
 
+import { useState } from "react";
+import Loader from "@/components/layout/Loader";
+import { useSubmissions } from "@/hooks/useSubmissions";
+import FilterComponent from "@/components/dashboard/FilterComponent";
+import ViewSubmissionTable from "@/components/dashboard/ViewSubmissionTable";
+import { PageHeader } from "@/components/shared/PageHeader";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { FileText, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import DownloadButton from "@/components/DownloadButton";
+const Submissions = () => {
+  const [type, setType] = useState("paper");
+  const [year, setYear] = useState("2026");
+  const [medium, setMedium] = useState("english");
 
-interface Submission {
-  _id: string;
-  cloudinaryPublicId: string;
-  startTime: string;
-  submittedAt: string;
-  studentId: {
-    firstName: string;
-    lastName: string;
-    contact: string;
-  };
-  paperId: {
-    title: string;
-  };
-}
+  const {
+    data: submissions,
+    isError,
+    isLoading,
+  } = useSubmissions({
+    type,
+    medium,
+    year,
+  });
 
-const DisplaySubmissionsPage = () => {
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [loading, setLoading] = useState(false);
+  const showNoResults = submissions && submissions.length === 0;
 
-  useEffect(() => {
-    const fetchSubmissions = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("/api/submissions");
-        setSubmissions(res.data.submissions);
-      } catch (error) {
-        console.log("Failed to fetch submissions: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (isLoading) {
+    return <Loader />;
+  }
 
-    fetchSubmissions();
-  }, []);
-
-  if (loading)
-    return (
-      <div className="min-h-lvh flex items-center justify-center w-full">
-        Please Wait <Loader2 className="animate-spin transition-all" />
-      </div>
-    );
+  if (isError) {
+    return <div>Error loading marking schemas.</div>;
+  }
 
   return (
-
-    <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
-      <div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Student Submissions</h1>
-            <p className="text-muted-foreground">
-              View and manage all student examination submissions
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-lg border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Student Name</TableHead>
-                <TableHead>Contact Number</TableHead>
-                <TableHead>Paper Title</TableHead>
-                <TableHead>Started Time</TableHead>
-                <TableHead>Submitted Time</TableHead>
-                <TableHead>View Paper</TableHead>
-                {/* <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead> */}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {submissions.length > 0 ? (
-                submissions.map((submission) => (
-                  <TableRow key={submission?._id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center capitalize gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        {submission?.studentId?.firstName}&nbsp;
-                        {submission?.studentId?.lastName}
-                      </div>
-                    </TableCell>
-                    <TableCell>{submission?.studentId?.contact}</TableCell>
-                    <TableCell>{submission?.paperId?.title}</TableCell>
-                    <TableCell>
-                      {new Date(submission?.startTime).toLocaleString()}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(submission?.submittedAt).toLocaleString()}
-                    </TableCell>
-                    <TableCell>
-                      <DownloadButton
-                        variant="ghost"
-                        publicId={submission.cloudinaryPublicId}
-                        fileName={`submission-${submission?.studentId?.firstName}-${submission?.paperId?.title}`}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-6">
-                    No papers found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+    <main className="min-h-full flex-1 w-full">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+        <div>
+          <PageHeader
+            title="Student Submissions"
+            description="View and manage all student examination submissions"
+          />
         </div>
       </div>
-    </main>
 
+      <div>
+        <FilterComponent
+          mode="submissions"
+          type={type}
+          year={year}
+          medium={medium}
+          onYearChange={setYear}
+          onTypeChange={setType}
+          onMediumChange={setMedium}
+        />
+      </div>
+      {showNoResults ? (
+        <div className="mt-8 p-4 bg-gray-50 border rounded-md">
+          <p className="text-gray-600">
+            No results found matching the selected year and medium.
+          </p>
+        </div>
+      ) : (
+        <ViewSubmissionTable submissions={submissions} />
+      )}
+    </main>
   );
 };
 
-export default DisplaySubmissionsPage;
+export default Submissions;

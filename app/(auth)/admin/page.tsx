@@ -1,5 +1,5 @@
-import BlurGradient from "@/components/BlurGradient";
-import AdminLoginForm from "@/components/AdminLoginForm";
+import BlurGradient from "@/components/shared/BlurGradient";
+import AdminLoginForm from "@/components/dashboard/AdminLoginForm";
 
 const AdminLoginPage = () => {
   return (

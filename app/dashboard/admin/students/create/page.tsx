@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardNavbar from "@/components/DashboardNavbar";
-import BlurGradient from "@/components/BlurGradient";
+import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import BlurGradient from "@/components/shared/BlurGradient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import { toast } from "sonner";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { Clock, Loader2 } from "lucide-react";
 import DownloadButton from "./DownloadButton";
@@ -33,10 +33,16 @@ interface PaperProps {
 
 const WritePaper = ({ paperId, paper }: PaperProps) => {
     const router = useRouter();
-    const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const { timeRemaining, isRunning, isTimeUp, currentExamId, startTimer } =
-        useTimer();
+    const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
+    const {
+        timeRemaining,
+        isRunning,
+        isTimeUp,
+        currentExamId,
+        startTimer,
+        setExamSubmitted,
+    } = useTimer();
 
     // Start the timer if not already running and if the paper exists
     useEffect(() => {
@@ -57,10 +63,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
     const totalDurationMilliSeconds = (paper?.durationMinutes ?? 0) * 60 * 1000;
     const timeElapsed = totalDurationMilliSeconds - timeRemaining;
     const rawProgress = timeElapsed / totalDurationMilliSeconds;
-    const progress = Math.min(
-        100,
-        Math.max(0, rawProgress * 100)
-    );
+    const progress = Math.min(100, Math.max(0, rawProgress * 100));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -91,8 +94,8 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
 
             if (res.status === 200) {
                 toast.success("Answer Sheet submitted successfully!");
+                setExamSubmitted(paperId);
                 router.push("/dashboard/student/paper");
-                // localStorage.removeItem(`examStartTime_${paperId}`);
                 setSubmissionUrl(null);
             } else {
                 toast.error("Failed to submit answer sheet");
@@ -101,6 +104,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
             toast.error(err?.response?.data?.message);
         } finally {
             setIsUploading(false);
+            setExamSubmitted(paperId);
         }
     };
 
@@ -111,8 +115,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
                     className={`flex items-center space-x-2 min-w-24 lg:p-6 p-4 bg-white/90 backdrop-blur-sm shadow-lg rounded-full border ${isTimeUp ? "border-red-500" : "border-primary/20"
                         }`}
                 >
-                    <Clock size={20}
-                        className={getDangerLevel()} />
+                    <Clock size={20} className={getDangerLevel()} />
 
                     <span className={`text-2xl font-bold ${getDangerLevel()}`}>
                         {formatTime(timeRemaining)}
@@ -127,8 +130,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
                 </div>
 
                 <div className="mt-4">
-                    <Progress value={progress}
-                        className="h-2" />
+                    <Progress value={progress} className="h-2" />
                 </div>
             </div>
 
@@ -145,55 +147,54 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
                         <li>Once submitted, you cannot resubmit your work.</li>
                     </ol>
                 </CardContent>
-                <CardFooter className="mt-2 w-full">
-                    {isTimeUp ? (
-                        <form onSubmit={handleSubmit}
-                            className="w-full">
-                            <div className="space-y-2">
-                                <h3 className="text-xl font-semibold">Submit Your Work</h3>
-                                <div className="flex rounded-lg">
-                                    <Input
-                                        type="file"
-                                        onChange={(e) => setSubmissionUrl(e.target.files?.[0] || null)}
-                                        accept=".pdf"
-                                        className="bg-white rounded-none"
-                                        disabled={!isTimeUp || isUploading}
-                                    />
-                                    <div className="flex justify-end">
-                                        <Button
-                                            type="submit"
-                                            variant="default"
-                                            className="rounded-none"
-                                            disabled={isUploading}
-                                        >
-                                            {isUploading ? (
-                                                <div>
-                                                    <Loader2 className="animate-spin transition-all" />
-                                                </div>
-                                            ) : (
-                                                "Submit Paper"
-                                            )}
-                                        </Button>
-                                    </div>
+                <CardFooter className="mt-2 w-full flex flex-col gap-2 items-start">
+                    <DownloadButton
+                        enableIcon={true}
+                        variant="outline"
+                        fileName={`${paper?.title}`}
+                        publicId={paper.cloudinaryPublicId}
+                    />
+                    <form onSubmit={handleSubmit} className="w-full mt-2">
+                        <div className="space-y-2">
+                            <h3 className="text-xl font-semibold">Submit Your Work</h3>
+                            <div className="flex rounded-lg">
+                                <Input
+                                    type="file"
+                                    onChange={(e) =>
+                                        setSubmissionUrl(e.target.files?.[0] || null)
+                                    }
+                                    accept=".pdf"
+                                    className="bg-white rounded-none"
+                                    disabled={isUploading}
+                                />
+                                <div className="flex justify-end">
+                                    <Button
+                                        type="submit"
+                                        variant="default"
+                                        className="rounded-none"
+                                        disabled={isUploading}
+                                    >
+                                        {isUploading ? (
+                                            <div>
+                                                <Loader2 className="animate-spin transition-all" />
+                                            </div>
+                                        ) : (
+                                            "Submit Paper"
+                                        )}
+                                    </Button>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* {isTimeUp && (
+                        {/* {isTimeUp && (
           <div className="bg-destructive/10 border border-destructive rounded-lg p-4 text-center">
             <p className="text-destructive font-medium">
               Time&apos;s up! You can no longer submit your paper.
             </p>
           </div>
         )} */}
-                        </form>
-                    ) : (
-                        <DownloadButton
-                            variant="outline"
-                            publicId={paper.cloudinaryPublicId}
-                            fileName={`${paper?.title}`}
-                        />
+                    </form>
 
-                    )}
                 </CardFooter>
             </Card>
             <Separator className="my-8" />

@@ -3,8 +3,8 @@ import { jwtVerify } from "jose";
 
 export async function proxy(req: NextRequest) {
   // Check if the path is admin-related
-  const isAdminPath = req.nextUrl.pathname.startsWith('/dashboard/admin');
-  
+  const isAdminPath = req.nextUrl.pathname.startsWith("/dashboard/admin");
+
   // Get both tokens
   const adminToken = req.cookies.get("adminToken")?.value;
   const studentToken = req.cookies.get("studentToken")?.value;
@@ -16,7 +16,10 @@ export async function proxy(req: NextRequest) {
     }
 
     try {
-      await jwtVerify(adminToken, new TextEncoder().encode(process.env.JWT_SECRET));
+      await jwtVerify(
+        adminToken,
+        new TextEncoder().encode(process.env.JWT_SECRET)
+      );
       return NextResponse.next();
     } catch (err) {
       return NextResponse.redirect(new URL("/admin", req.url));
@@ -29,7 +32,10 @@ export async function proxy(req: NextRequest) {
   }
 
   try {
-    await jwtVerify(studentToken, new TextEncoder().encode(process.env.JWT_SECRET));
+    await jwtVerify(
+      studentToken,
+      new TextEncoder().encode(process.env.JWT_SECRET)
+    );
     return NextResponse.next();
   } catch (err) {
     return NextResponse.redirect(new URL("/login", req.url));
