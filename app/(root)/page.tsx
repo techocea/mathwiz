@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -18,23 +15,27 @@ import {
   MapPin,
   PhoneCall,
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
+import clsx from "clsx";
+import axios from "axios";
+import Link from "next/link";
+import { toast } from "sonner";
+import Image from "next/image";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import Navbar from "@/components/layout/Navbar";
 import { HIGHLIGHTS, TIMETABLE } from "@/lib/constants";
 import PageWrapper from "@/components/layout/PageWrapper";
-import ScrollTriggered from "@/components/layout/ScrollTriggered";
 import ContactItem from "@/components/shared/Contact-Item";
-import clsx from "clsx";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { toast } from "sonner";
-import axios from "axios";
+import ScrollTriggered from "@/components/layout/ScrollTriggered";
+
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({

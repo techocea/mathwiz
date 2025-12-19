@@ -11,13 +11,13 @@ interface DownloadButtonProps {
   | "ghost"
   | "destructive"
   | null;
-  submissionPublicId: string;
+  publicId: string;
   fileName: string;
   enableIcon: boolean;
 }
 
 const DownloadButton = ({
-  submissionPublicId,
+  publicId,
   fileName,
   variant,
   enableIcon,
@@ -25,7 +25,7 @@ const DownloadButton = ({
   const handleDownload = async () => {
     try {
       const url = `/api/download?public_id=${encodeURIComponent(
-        submissionPublicId
+        publicId
       )}&filename=${encodeURIComponent(fileName)}`;
 
       window.open(url, "_blank");

@@ -194,7 +194,7 @@ const AdminDashboardPage = () => {
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    onClick={() => router.push("/dashboard/admin/papers")}
+                                    onClick={() => router.push("/dashboard/admin/activities/paper")}
                                     className="w-full justify-start cursor-pointer"
                                 >
                                     <FileText className="mr-2 h-4 w-4" />

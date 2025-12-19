@@ -74,6 +74,10 @@ const submissionSchema = new mongoose.Schema(
     remark: {
       type: String,
     },
+    score: {
+      type: Number,
+      min: 0,
+    },
     markedPublicId: { type: String },
     startTime: { type: Date },
     submittedAt: {
@@ -116,6 +120,20 @@ const inquirySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const paymentSchema = new mongoose.Schema(
+  {
+    referenceId: { type: String, required: true },
+    name: { type: String, required: true },
+    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
+    paymentSlipUrl: { type: String, required: true },
+    cloudinaryPublicId: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
 export const Resource =
   mongoose.models.Resource || mongoose.model("Resource", resourceSchema);
@@ -125,3 +143,5 @@ export const Marking =
   mongoose.models.Marking || mongoose.model("Marking", markingSchema);
 export const Inquiries =
   mongoose.models.Inquiries || mongoose.model("Inquiries", inquirySchema);
+export const Payments =
+  mongoose.models.Payments || mongoose.model("Payments", paymentSchema);

@@ -44,11 +44,11 @@ const MarkingSchemesTable = ({ resources }: ResourceProps) => {
                                 </TableCell>
 
                                 <TableCell>{format(new Date(r.updatedAt), "PP")}</TableCell>
-                                <TableCell className="text-right">
+                                <TableCell align="right" className="items-end">
                                     <DownloadButton
                                         variant="ghost"
                                         enableIcon={false}
-                                        submissionPublicId={r.cloudinaryPublicId}
+                                        publicId={r.cloudinaryPublicId}
                                         fileName={`marked-${r._id}-${r.title}`}
                                     />
                                 </TableCell>

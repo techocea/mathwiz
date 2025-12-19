@@ -22,7 +22,7 @@ const MarkingSchemes = () => {
         year,
     });
 
-    const showNoResults = markings && markings.length === 0;
+
 
     if (isLoading) {
         return <Loader />;
@@ -54,15 +54,7 @@ const MarkingSchemes = () => {
                     />
                 </div>
 
-                {showNoResults ? (
-                    <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-                        <p className="text-gray-600">
-                            No results found matching the selected year and medium.
-                        </p>
-                    </div>
-                ) : (
-                    <MarkingSchemaTable markings={markings} />
-                )}
+                <MarkingSchemaTable markings={markings} />
             </div>
         </main>
     );

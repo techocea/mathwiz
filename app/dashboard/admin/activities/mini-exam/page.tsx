@@ -5,12 +5,11 @@ import { Plus } from "lucide-react";
 import { ResourceType } from "@/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/layout/Loader";
 import { useResources } from "@/hooks/useResource";
-import BlurGradient from "@/components/shared/BlurGradient";
+import { PageHeader } from "@/components/shared/PageHeader";
 import ResourceTable from "@/components/shared/ResourceTable";
 import FilterComponent from "@/components/dashboard/FilterComponent";
-import Loader from "@/components/layout/Loader";
-import { PageHeader } from "@/components/shared/PageHeader";
 
 const MiniExams = () => {
     const router = useRouter();
@@ -28,8 +27,6 @@ const MiniExams = () => {
         medium,
         year,
     });
-
-    const showNoResults = resources && resources.length === 0;
 
     if (isLoading) {
         return <Loader />;
@@ -70,15 +67,7 @@ const MiniExams = () => {
                     />
                 </div>
 
-                {showNoResults ? (
-                    <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-                        <p className="text-gray-600">
-                            No results found matching the selected year and medium.
-                        </p>
-                    </div>
-                ) : (
-                    <ResourceTable type={resourceType} resources={resources} />
-                )}
+                <ResourceTable type={resourceType} resources={resources} />
             </div>
         </main>
     );

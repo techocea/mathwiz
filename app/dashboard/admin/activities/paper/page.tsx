@@ -5,16 +5,16 @@ import { Plus } from "lucide-react";
 import { ResourceType } from "@/types";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/layout/Loader";
 import { useResources } from "@/hooks/useResource";
+import { PageHeader } from "@/components/shared/PageHeader";
 import ResourceTable from "@/components/shared/ResourceTable";
 import FilterComponent from "@/components/dashboard/FilterComponent";
-import { PageHeader } from "@/components/shared/PageHeader";
-import Loader from "@/components/layout/Loader";
 
 const Papers = () => {
   const router = useRouter();
-  const [medium, setMedium] = useState("english");
   const [year, setYear] = useState("2026");
+  const [medium, setMedium] = useState("english");
 
   const resourceType: ResourceType = "paper";
 
@@ -27,8 +27,6 @@ const Papers = () => {
     medium,
     year,
   });
-
-  const showNoResults = resources && resources.length === 0;
 
   if (isLoading) {
     return <Loader />
@@ -71,15 +69,7 @@ const Papers = () => {
           />
         </div>
 
-        {showNoResults ? (
-          <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-            <p className="text-gray-600">
-              No results found matching the selected year and medium.
-            </p>
-          </div>
-        ) : (
-          <ResourceTable type={resourceType} resources={resources} />
-        )}
+        <ResourceTable type={resourceType} resources={resources} />
       </div>
     </main>
   );

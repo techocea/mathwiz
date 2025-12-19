@@ -28,7 +28,6 @@ const SpeedPapers = () => {
         year,
     });
 
-    const showNoResults = resources && resources.length === 0;
 
     if (isLoading) {
         return <Loader />;
@@ -69,15 +68,7 @@ const SpeedPapers = () => {
                     />
                 </div>
 
-                {showNoResults ? (
-                    <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-                        <p className="text-gray-600">
-                            No results found matching the selected year and medium.
-                        </p>
-                    </div>
-                ) : (
-                    <ResourceTable type={resourceType} resources={resources} />
-                )}
+                <ResourceTable type={resourceType} resources={resources} />
             </div>
         </main>
     );

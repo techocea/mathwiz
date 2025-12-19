@@ -1,10 +1,5 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -19,20 +14,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import axios from "axios";
-import { registrationSchema, RegistrationFormValues } from "@/lib/validation";
+import Link from "next/link";
 import { toast } from "sonner";
-import { Separator } from "../ui/separator";
-import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
+import { Separator } from "../ui/separator";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registrationSchema, RegistrationFormValues } from "@/lib/validation";
 
 const TUITION_KEYS = ["theory", "revision", "paper"] as const;
 const TUITION_LABELS: Record<(typeof TUITION_KEYS)[number], string> = {
     theory: "Theory",
     revision: "Revision",
-    paper: "Past Paper",
+    paper: "Paper",
 };
 
 const RegisterForm = () => {
@@ -54,8 +54,8 @@ const RegisterForm = () => {
             password: "",
             confirmPassword: "",
             school: "",
-            year: "2025",
-            medium: "sinhala",
+            year: undefined,
+            medium: undefined,
             tuitionType: {
                 theory: false,
                 revision: false,

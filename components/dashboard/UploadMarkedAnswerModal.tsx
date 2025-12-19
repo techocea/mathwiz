@@ -39,6 +39,7 @@ const UploadMarkedAnswerModal = ({
     } = useForm({
         resolver: zodResolver(markedAnswerSchema),
         defaultValues: {
+            score: 0,
             remark: "",
             markedPdfUrl: undefined,
         },
@@ -49,6 +50,7 @@ const UploadMarkedAnswerModal = ({
         try {
             const formData = new FormData();
 
+            formData.append("score", String(data.score));
             formData.append("remark", data.remark);
 
             if (data.markedPdfUrl)
@@ -63,8 +65,6 @@ const UploadMarkedAnswerModal = ({
                     },
                 }
             );
-
-            toast.success(res.data.message || "Created");
 
             if (res.status === 200) {
                 toast.success("Marked answer sheet uploaded successfully");
@@ -81,6 +81,7 @@ const UploadMarkedAnswerModal = ({
             setIsUploading(false);
         }
     };
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -103,6 +104,20 @@ const UploadMarkedAnswerModal = ({
                     encType="multipart/form-data"
                 >
                     <div className="space-y-6">
+                        <div className="space-y-3">
+                            <Label htmlFor="score">Score</Label>
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    id="score"
+                                    type="text"
+                                    {...register("score", { valueAsNumber: true })}
+                                // placeholder="Remark here"
+                                />
+                            </div>
+                            {errors.score && (
+                                <p className="text-sm text-red-500">{errors.score.message}</p>
+                            )}
+                        </div>
                         <div className="space-y-3">
                             <Label htmlFor="remark">Remark</Label>
                             <div className="flex items-center gap-2">

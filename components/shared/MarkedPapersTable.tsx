@@ -20,6 +20,8 @@ interface ResourceProps {
         };
         _id: string;
         title: string;
+        remark: string;
+        score: string;
         updatedAt: string;
         markedPdfUrl: string;
         markedPublicId: string;
@@ -33,6 +35,8 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Title</TableHead>
+                        <TableHead>Score</TableHead>
+                        <TableHead>Remark</TableHead>
                         <TableHead>Uploaded At</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -47,12 +51,14 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                                     </div>
                                 </TableCell>
 
+                                <TableCell><span className="font-medium text-blue-500">{r.score}</span>/100</TableCell>
+                                <TableCell>{r.remark}</TableCell>
                                 <TableCell>{format(new Date(r.updatedAt), "PP")}</TableCell>
                                 <TableCell align="right" className="items-end">
                                     <DownloadButton
                                         variant="ghost"
                                         enableIcon={false}
-                                        submissionPublicId={r.markedPublicId}
+                                        publicId={r.markedPublicId}
                                         fileName={`marked-${r.paperId.firstName}-${r.paperId.title}`}
                                     />
                                 </TableCell>

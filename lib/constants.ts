@@ -21,6 +21,11 @@ export const NAV_ITEMS = [
     label: "Contact",
     href: "#contact",
   },
+  {
+    id: 5,
+    label: "Pay Online",
+    href: "/pay-online",
+  },
 ];
 
 export const ADMIN_NAV_ITEMS = [
@@ -47,6 +52,10 @@ export const ADMIN_NAV_ITEMS = [
   {
     name: "Marking Schemes",
     path: "/dashboard/admin/marking",
+  },
+  {
+    name: "Submissions",
+    path: "/dashboard/admin/submissions",
   },
 ];
 

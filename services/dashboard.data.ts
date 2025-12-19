@@ -31,3 +31,8 @@ export const getInquiriesCount = async () => {
   const inquiriesRes = await axios.get("/api/contact");
   return inquiriesRes.data.inquiries.length;
 };
+
+export const getPaymentSlips = async () => {
+  const res = await axios.get("/api/payment-slip");
+  return res.data.paymentSlips || [];
+};

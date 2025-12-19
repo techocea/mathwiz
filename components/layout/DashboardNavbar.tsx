@@ -11,21 +11,10 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
 import { usePathname } from "next/navigation";
 import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import LogoutButton from "@/components/shared/LogoutButton";
-import TabSection from "../dashboard/TabSection";
 
 const DashboardNavbar = () => {
   const pathname = usePathname();
@@ -70,8 +59,8 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/admin"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
                   }`}
               >
                 <LayoutDashboard size={24} />
@@ -83,7 +72,7 @@ const DashboardNavbar = () => {
                   className="cursor-pointer flex items-center justify-center gap-2 text-muted-foreground"
                 >
                   <LayoutDashboard size={24} />
-                  Others
+                  Resources
                 </div>
 
                 {isDropdownOpen && (
@@ -100,10 +89,10 @@ const DashboardNavbar = () => {
                             key={idx}
                             href={item.path}
                             className={`flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground ${idx === 0
-                                ? " rounded-tl-md rounded-tr-md"
-                                : idx === lastIndex
-                                  ? "rounded-bl-md rounded-br-md"
-                                  : ""
+                              ? " rounded-tl-md rounded-tr-md"
+                              : idx === lastIndex
+                                ? "rounded-bl-md rounded-br-md"
+                                : ""
                               } hover:bg-blue-500 hover:text-white`}
                           >
                             {item.name}
@@ -117,28 +106,28 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/admin/students"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/students"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
                   }`}
               >
                 <Users size={24} />
                 Students
               </Link>
               <Link
-                href="/dashboard/admin/submissions"
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/submissions"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
+                href="/dashboard/admin/payment-slips"
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/payment-slips"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
                   }`}
               >
                 <Files size={24} />
-                Submissions
+                Payment Slips
               </Link>
               <Link
                 href="/dashboard/admin/inquiries"
                 className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500 ${pathname === "/dashboard/admin/inquiries"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
+                  ? "text-blue-500"
+                  : "text-muted-foreground"
                   }`}
               >
                 <SquareCheckBig size={24} />

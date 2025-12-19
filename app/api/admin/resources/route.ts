@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { NextRequest, NextResponse } from "next/server";
+import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import cloudinary from "@/services/cloudinary";
-import connectDB from "@/lib/db";
 import { createResourceSchema } from "@/lib/validation";
+import { NextRequest, NextResponse } from "next/server";
 
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
 
@@ -154,7 +154,7 @@ export async function GET(req: NextRequest) {
     if (!resources || resources.length === 0) {
       return NextResponse.json(
         {
-          resources,
+          resources: [],
           message: "No Resources found",
         },
         {
@@ -165,8 +165,8 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       {
-        resources,
         message: "Resource fetched",
+        resources,
       },
       {
         status: 200,

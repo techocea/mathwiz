@@ -14,6 +14,7 @@ import { Card } from "@/components/ui/card";
 import { MarkingProps } from "@/types";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import DownloadButton from "../shared/DownloadButton";
 
 const MarkingSchemaTable = ({ markings }: MarkingProps) => {
     const router = useRouter();
@@ -31,31 +32,38 @@ const MarkingSchemaTable = ({ markings }: MarkingProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {markings?.map((m) => (
-                        <TableRow key={m._id}>
-                            <TableCell className="font-medium">
-                                <div className="flex items-center capitalize gap-2">
-                                    {m.title}
-                                </div>
-                            </TableCell>
-                            <TableCell>{m.year}</TableCell>
-                            <TableCell className="capitalize">{m.medium}</TableCell>
-                            <TableCell>
-                                {format(new Date(m.createdAt), "PP")}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                <Button
-                                    size="sm"
-                                    variant="link"
-                                    className="cursor-pointer"
-                                    onClick={() => router.push("/dashboard/admin")}
-                                >
-                                    <Eye className="h-4 w-4" />
-                                    View
-                                </Button>
+                    {markings.length > 0 ? (
+                        markings?.map((m) => (
+                            <TableRow key={m._id}>
+                                <TableCell className="font-medium">
+                                    <div className="flex items-center capitalize gap-2">
+                                        {m.title}
+                                    </div>
+                                </TableCell>
+                                <TableCell>{m.year}</TableCell>
+                                <TableCell className="capitalize">{m.medium}</TableCell>
+                                <TableCell>{format(new Date(m.createdAt), "PP")}</TableCell>
+                                <TableCell align="right">
+                                    <DownloadButton
+                                        variant="ghost"
+                                        enableIcon={false}
+                                        publicId={m.cloudinaryPublicId}
+                                        fileName={`marking-schema-${m.title}-${m._id}`}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                align="center"
+                                className="capitalize py-4 font-medium text-muted-foreground text-center"
+                                colSpan={5}
+                            >
+                                no marking schemes uploaded yet
                             </TableCell>
                         </TableRow>
-                    ))}
+                    )}
                 </TableBody>
             </Table>
         </Card>

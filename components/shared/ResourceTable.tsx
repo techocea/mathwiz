@@ -81,7 +81,7 @@ const ResourceTable = ({ resources, type }: ResourceProps) => {
                             <TableCell
                                 align="center"
                                 className="capitalize py-4 font-medium text-muted-foreground text-center"
-                                colSpan={4}
+                                colSpan={7}
                             >
                                 no {type.replace("-", " ")} uploaded yet
                             </TableCell>

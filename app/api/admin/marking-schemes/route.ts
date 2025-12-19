@@ -1,8 +1,8 @@
-import { getUserFromToken } from "@/helpers/jwt";
 import connectDB from "@/lib/db";
 import { Marking } from "@/lib/schema";
-import cloudinary from "@/services/cloudinary";
 import { cookies } from "next/headers";
+import cloudinary from "@/services/cloudinary";
+import { getUserFromToken } from "@/helpers/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

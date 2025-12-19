@@ -1,9 +1,9 @@
-import connectDB from "@/lib/db";
-import { signToken, verifyToken } from "@/helpers/jwt";
-import { User } from "@/lib/schema";
 import bcrypt from "bcryptjs";
-import { NextRequest, NextResponse } from "next/server";
+import connectDB from "@/lib/db";
+import { User } from "@/lib/schema";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+import { signToken, verifyToken } from "@/helpers/jwt";
 
 export async function POST(req: NextRequest) {
   try {

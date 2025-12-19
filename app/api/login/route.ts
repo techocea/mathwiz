@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
       email: isUserExists.email,
       name: isUserExists.firstName,
       year: isUserExists.year,
+      medium: isUserExists.medium,
       role: isUserExists.role,
     });
 
@@ -81,6 +82,7 @@ interface DecodedToken {
   role: string;
   name: string;
   year: string;
+  medium: string;
 }
 
 export async function GET() {

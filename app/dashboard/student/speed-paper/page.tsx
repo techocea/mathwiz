@@ -59,7 +59,7 @@ const SpeedPapers = () => {
                         description="Complete the paper on the given time"
                     />
 
-                    <TabSection activeTab={activeTab} onTabChange={setActiveTab} />
+                    <TabSection resourceType={resourceType} activeTab={activeTab} onTabChange={setActiveTab} />
                 </div>
             </div>
 

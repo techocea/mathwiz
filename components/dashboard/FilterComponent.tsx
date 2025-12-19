@@ -15,7 +15,7 @@ interface FilterComponentProps {
     type?: string;
     year: string;
     medium: string;
-    mode: "marking" | "resources" | "submissions";
+    mode: "marking" | "resources" | "submissions" | "students";
     onTypeChange?: (value: string) => void;
     onYearChange: (value: string) => void;
     onMediumChange: (value: string) => void;

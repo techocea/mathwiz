@@ -6,13 +6,11 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import WriteResource from "@/components/shared/WriteResource";
 import { useCurrentStudent } from "@/hooks/useCurrentStudent";
 import {
-    useStudentMarkedPapers,
     useStudentMarkingSchemes,
     useStudentResources,
 } from "@/hooks/useStudentResources";
 import { useState } from "react";
 import { ActiveTabTypes } from "@/types";
-import MarkedPapersTable from "@/components/shared/MarkedPapersTable";
 import MarkingSchemesTable from "@/components/shared/MarkingSchemesTable";
 
 const Homework = () => {
@@ -21,16 +19,16 @@ const Homework = () => {
     const { data: student, isLoading: studentLoading } = useCurrentStudent();
     const { data: homework, isLoading: studentResourcesLoading } =
         useStudentResources("homework", student);
-    const { data: markedPapers, isLoading: studentMarkedPapersLoading } =
-        useStudentMarkedPapers("homework", student);
+    // const { data: markedPapers, isLoading: studentMarkedPapersLoading } =
+    //     useStudentMarkedPapers("homework", student);
     const { data: markingSchemes, isLoading: studentMarkingSchemesLoading } =
         useStudentMarkingSchemes("homework", student);
 
     if (
         studentLoading ||
         studentResourcesLoading ||
-        studentMarkingSchemesLoading ||
-        studentMarkedPapersLoading
+        studentMarkingSchemesLoading
+        // studentMarkedPapersLoading
     ) {
         return <Loader />;
     }
@@ -41,8 +39,6 @@ const Homework = () => {
         switch (activeTab) {
             case "activities":
                 return <WriteResource resources={homework} type={resourceType} />;
-            case "marked-papers":
-                return <MarkedPapersTable resources={markedPapers} />;
             case "marking-schemes":
                 return <MarkingSchemesTable resources={markingSchemes} />;
             default:
@@ -58,7 +54,7 @@ const Homework = () => {
                         title="Homework"
                         description="Complete the homework and submit"
                     />
-                    <TabSection activeTab={activeTab} onTabChange={setActiveTab} />
+                    <TabSection resourceType={resourceType} activeTab={activeTab} onTabChange={setActiveTab} />
                 </div>
             </div>
 

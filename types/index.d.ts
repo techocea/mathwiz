@@ -7,6 +7,8 @@ export type ResourceType =
 
 export type ActiveTabTypes = "activities" | "marked-papers" | "marking-schemes";
 
+export type StatusTypes = "pending" | "approved" | "rejected" | "banned";
+
 export interface ResourceFilters {
   year: string;
   medium: string;
@@ -35,6 +37,7 @@ export interface MarkingProps {
     medium: string;
     createdAt: string;
     markingSchemeUrl: string;
+    cloudinaryPublicId: string;
   }[];
 }
 
@@ -51,5 +54,38 @@ export interface SubmissionProps {
     paperId: {
       title: string;
     };
+  }[];
+}
+
+export interface TuitionTypeProps {
+  theory: boolean;
+  revision: boolean;
+  paper: boolean;
+}
+
+export interface StudentProps {
+  students: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    school: string;
+    email: string;
+    year: string;
+    medium: string;
+    contact: number;
+    tuitionType: TuitionTypeProps;
+    status: StatusTypes;
+  }[];
+}
+
+export interface PaymentProps {
+  payments: {
+    _id: string;
+    referenceId: string;
+    name: string;
+    year: string;
+    createdAt: string;
+    cloudinaryPublicId: string;
+    paymentSlipUrl: string;
   }[];
 }

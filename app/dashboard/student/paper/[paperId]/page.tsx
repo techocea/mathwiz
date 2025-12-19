@@ -1,7 +1,7 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import WritePaper from "@/components/shared/WritePaper";
+import WritePaper from "@/components/shared/WriteTimedPaper";
 import BlurGradient from "@/components/shared/BlurGradient";
 
 interface PageProps {

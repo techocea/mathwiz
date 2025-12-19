@@ -35,11 +35,15 @@ export default function DashboardLayout({
         <QueryProvider>
             <TimerProvider>
                 <html lang="en">
-                    <body className={`${poppins.className} antialiased mt-28 mb-16 container lg:max-w-6xl mx-auto p-6`}>
-                        <Sonner position="top-right" />
-                        <BlurGradient />
-                        <DashboardNavbar />
-                        {children}
+                    <body>
+                        <div
+                            className={`${poppins.className} antialiased mt-28 mb-16 container lg:max-w-6xl mx-auto p-6`}
+                        >
+                            <Sonner position="top-right" />
+                            <BlurGradient />
+                            <DashboardNavbar />
+                            {children}
+                        </div>
                     </body>
                 </html>
             </TimerProvider>

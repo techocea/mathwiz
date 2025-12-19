@@ -1,8 +1,8 @@
-import { getUserFromToken } from "@/helpers/jwt";
 import connectDB from "@/lib/db";
-import { Resource, Submission } from "@/lib/schema";
-import cloudinary from "@/services/cloudinary";
 import { cookies } from "next/headers";
+import cloudinary from "@/services/cloudinary";
+import { getUserFromToken } from "@/helpers/jwt";
+import { Resource, Submission } from "@/lib/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -18,7 +18,8 @@ export async function POST(
 
     const formData = await req.formData();
 
-    const remark = formData.get("remark") as string;
+    const score = Number(formData.get("score"));
+    const remark = String(formData.get("remark") ?? "");
     const markedPdfUrl = formData.get("markedPdfUrl") as File;
 
     if (!markedPdfUrl || !remark)
@@ -49,9 +50,10 @@ export async function POST(
       format: "pdf",
     });
 
+    submission.score = score;
+    submission.remark = remark;
     submission.markedPdfUrl = uploadRes.secure_url;
     submission.markedPublicId = uploadRes.public_id;
-    submission.remark = remark;
 
     const updatedSubmission = await submission.save();
     return NextResponse.json(

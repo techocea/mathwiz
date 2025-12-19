@@ -12,7 +12,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       await axios.post("/api/logout", {}, { withCredentials: true });
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       console.log("Error in logging out session: ", error);
       toast.error("Failed to logout user");

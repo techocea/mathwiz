@@ -5,10 +5,10 @@ import { Separator } from "../ui/separator";
 
 const Footer = () => {
   return (
-    <footer className="min-h-screen flex items-center w-full justify-center mx-auto bg-secondary lg:py-24 py-10 px-4 lg:px-0">
-      <div className="flex flex-col items-center justify-center">
-        <div className="grid lg:grid-cols-3 gap-24 text-white">
-          <div className="flex flex-col justify-start text-center lg:max-w-3xs items-center gap-4">
+    <footer className="min-h-screen flex lg:items-center w-full bg-secondary lg:py-24 py-10 px-2 lg:px-0">
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-24 text-white">
+          <div className="flex flex-col justify-start text-center items-center gap-4">
             <div className="w-[100px] h-[100px] rounded-full bg-white flex items-center justify-center mx-auto">
               <Image
                 src="/mathwiz.png"
@@ -129,7 +129,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <Separator className="my-10 lg:my-8" />
+        <Separator className="my-10 lg:my-8 w-full" />
 
         <div className="flex">
           <p className="text-sm text-white">Developed &amp; Maintained by</p>

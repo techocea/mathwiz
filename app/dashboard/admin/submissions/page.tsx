@@ -22,8 +22,6 @@ const Submissions = () => {
     year,
   });
 
-  const showNoResults = submissions && submissions.length === 0;
-
   if (isLoading) {
     return <Loader />;
   }
@@ -54,15 +52,8 @@ const Submissions = () => {
           onMediumChange={setMedium}
         />
       </div>
-      {showNoResults ? (
-        <div className="mt-8 p-4 bg-gray-50 border rounded-md">
-          <p className="text-gray-600">
-            No results found matching the selected year and medium.
-          </p>
-        </div>
-      ) : (
-        <ViewSubmissionTable submissions={submissions} />
-      )}
+
+      <ViewSubmissionTable submissions={submissions} />
     </main>
   );
 };

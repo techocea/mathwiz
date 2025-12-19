@@ -55,9 +55,7 @@ export const getStudentMarkingSchemes = async ({
   if (year) params.append("year", year);
   if (medium) params.append("medium", medium);
 
-  const res = await axios.get(
-    `/api/admin/marking-schemes?${params.toString()}`
-  );
+  const res = await axios.get(`/api/get-marking-schemes?${params.toString()}`);
   return res.data.markings || [];
 };
 

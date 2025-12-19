@@ -1,11 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
-import DashboardNavbar from "@/components/layout/DashboardNavbar";
-import BlurGradient from "@/components/shared/BlurGradient";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -13,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axios from "axios";
 import {
   Select,
   SelectContent,
@@ -20,15 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RegistrationFormValues, registrationSchema } from "@/lib/validation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "@/components/ui/separator";
+import { RegistrationFormValues, registrationSchema } from "@/lib/validation";
 
 const CreateStudentsPage = () => {
   const router = useRouter();
@@ -80,9 +78,6 @@ const CreateStudentsPage = () => {
 
   return (
     <main className="min-h-screen">
-      <BlurGradient />
-      <DashboardNavbar dashboardType="admin" />
-
       <div className="flex-1 container lg:max-w-6xl mx-auto lg:py-12">
         <div className="max-w-lg mx-auto">
           <Card>

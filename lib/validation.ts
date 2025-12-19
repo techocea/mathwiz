@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
-const ACCEPTED_FILE_TYPES = ["application/pdf"];
+const ACCEPTED_FILE_TYPES = ["application/pdf", "jpg", "png"];
 
 export const contactSchema = z.object({
   name: z.string().min(6, "This field is required"),
@@ -65,6 +65,7 @@ export const markingSchema = z.object({
 });
 
 export const markedAnswerSchema = z.object({
+  score: z.number().min(0).max(100),
   remark: z.string().min(3),
   markedPdfUrl: z
     .custom<File>((val) => val instanceof File, "PDF file is required")
@@ -73,6 +74,15 @@ export const markedAnswerSchema = z.object({
       (file) => ACCEPTED_FILE_TYPES.includes(file.type),
       "Only PDF allowed"
     ),
+});
+
+export const paymentSchema = z.object({
+  referenceId: z.string().min(3),
+  name: z.string().min(3, "This field is required"),
+  year: z.enum(["2025", "2026", "2027"]),
+  paymentSlip: z
+    .instanceof(File, { message: "Payment slip is required" })
+    .nullable(),
 });
 
 const baseSchema = z.object({
@@ -140,6 +150,7 @@ export const createResourceSchema = z.discriminatedUnion("type", [
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type ContactFormValues = z.infer<typeof contactSchema>;
+export type PaymentFormValues = z.infer<typeof paymentSchema>;
 export type MarkingSchemaFormValues = z.infer<typeof markingSchema>;
-export type MarkedAnswerSchemaFormValues = z.infer<typeof markedAnswerSchema>;
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;
+export type MarkedAnswerSchemaFormValues = z.infer<typeof markedAnswerSchema>;

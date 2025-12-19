@@ -59,7 +59,7 @@ const Worksheets = () => {
                         description="Complete the worksheets and submit"
                     />
 
-                    <TabSection activeTab={activeTab} onTabChange={setActiveTab} />
+                    <TabSection resourceType={resourceType} activeTab={activeTab} onTabChange={setActiveTab} />
                 </div>
             </div>
 

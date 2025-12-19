@@ -268,7 +268,7 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                             type="button"
                             variant="outline"
                             className="cursor-pointer"
-                            onClick={() => router.push("/dashboard/admin/activities/papers")}
+                            onClick={() => router.push(`/dashboard/admin/activities/${type}`)}
                         >
                             Cancel
                         </Button>

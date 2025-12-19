@@ -1,7 +1,7 @@
-import { getUserFromToken } from "@/helpers/jwt";
 import connectDB from "@/lib/db";
-import { Resource, Submission } from "@/lib/schema";
 import { cookies } from "next/headers";
+import { getUserFromToken } from "@/helpers/jwt";
+import { Resource, Submission } from "@/lib/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

@@ -2,24 +2,24 @@ import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
 import WritePaper from "@/components/shared/WriteTimedPaper";
-import BlurGradient from "@/components/shared/BlurGradient";
+import WriteNormalPaper from "@/components/shared/WriteNormalPaper";
 
 interface PageProps {
   params: Promise<{
     type: string;
-    paperId: string;
+    worksheetId: string;
   }>;
 }
 
 const WritePapers = async ({ params }: PageProps) => {
-  const { paperId } = await params;
+  const { worksheetId } = await params;
 
-  if (!paperId) {
+  if (!worksheetId) {
     notFound();
   }
 
   await connectDB();
-  const paper = await Resource.findById(paperId).lean();
+  const paper = await Resource.findById(worksheetId).lean();
 
   if (!paper) {
     notFound();
@@ -28,14 +28,13 @@ const WritePapers = async ({ params }: PageProps) => {
   const serializedPaper = JSON.parse(JSON.stringify(paper));
 
   return (
-    <div className="flex flex-col border-2">
-      <BlurGradient />
-      <div className="px-4 py-6 lg:py-16">
-        <WritePaper
-          paperId={serializedPaper._id.toString()}
-          paper={serializedPaper}
-        />
-      </div>
+    <div className="flex flex-col">
+
+      <WriteNormalPaper
+        resourceId={serializedPaper._id.toString()}
+        resource={serializedPaper}
+      />
+
     </div>
   );
 };

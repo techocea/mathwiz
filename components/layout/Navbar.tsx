@@ -60,15 +60,15 @@ export default function Navbar() {
           <Link href="/registration">
             <Button
               variant={isScrolled ? "default" : "outline"}
-              size="sm"
+              size="lg"
               className="text-sm rounded-none w-full"
             >
-              Login
+              Enroll now
             </Button>
           </Link>
         </nav>
 
-        <div className="md:hidden z-50 relative">
+        <div className="lg:hidden z-50 relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`${isScrolled ? "text-primary" : "text-white "
@@ -122,23 +122,13 @@ export default function Navbar() {
                   </ul>
 
                   <div className="flex flex-col gap-4 p-4 pt-8">
-                    <Link href="/portal">
-                      <Button
-                        variant="default"
-                        size="lg"
-                        className="uppercase rounded-none w-full"
-                      >
-                        student portal
-                        <ArrowRight className="ml-2" />
-                      </Button>
-                    </Link>
-                    <Link href="#top-rankers">
+                    <Link href="/login">
                       <Button
                         variant="secondary"
                         size="lg"
                         className="uppercase rounded-none w-full"
                       >
-                        login
+                        Enroll now
                       </Button>
                     </Link>
                   </div>
