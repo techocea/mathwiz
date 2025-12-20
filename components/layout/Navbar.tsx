@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { Button } from "../ui/button";
 import { NAV_ITEMS } from "@/lib/constants";
 import { useEffect, useState } from "react";
-import { useScroll, motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
-import { Button } from "../ui/button";
+import { useScroll, motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const { scrollY } = useScroll();

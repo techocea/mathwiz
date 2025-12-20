@@ -7,7 +7,6 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
-import { FileText, Users, Files, SquareCheckBig } from "lucide-react";
 import {
     getAdminData,
     getStudentCount,
@@ -15,11 +14,11 @@ import {
     getPaperCount,
     getInquiriesCount,
 } from "@/services/dashboard.data";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/layout/Loader";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
+import { FileText, Users, Files, SquareCheckBig } from "lucide-react";
 import MarkingSchemeModal from "@/components/dashboard/MarkingSchemeModal";
 
 const AdminDashboardPage = () => {
@@ -51,8 +50,6 @@ const AdminDashboardPage = () => {
         queryKey: ["dashboard-counts", "inquiries"],
         queryFn: getInquiriesCount,
     });
-
-
 
     const isLoading =
         isAdminLoading ||
@@ -137,8 +134,8 @@ const AdminDashboardPage = () => {
                     </Card>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
+                <div className="flex flex-col-reverse lg:flex-row gap-6">
+                    <Card className="w-full">
                         <CardHeader>
                             <CardTitle>Recent Activity</CardTitle>
                             <CardDescription>Recent activity from your class</CardDescription>
@@ -184,7 +181,7 @@ const AdminDashboardPage = () => {
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="w-full">
                         <CardHeader>
                             <CardTitle>Quick Actions</CardTitle>
                             <CardDescription>Frequently used admin actions</CardDescription>
@@ -194,7 +191,9 @@ const AdminDashboardPage = () => {
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    onClick={() => router.push("/dashboard/admin/activities/paper")}
+                                    onClick={() =>
+                                        router.push("/dashboard/admin/activities/paper")
+                                    }
                                     className="w-full justify-start cursor-pointer"
                                 >
                                     <FileText className="mr-2 h-4 w-4" />

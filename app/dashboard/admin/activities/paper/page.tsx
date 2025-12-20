@@ -29,7 +29,7 @@ const Papers = () => {
   });
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (isError) {
@@ -39,13 +39,11 @@ const Papers = () => {
   return (
     <main className="min-h-screen flex-1 w-full">
       <div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
-          <div>
-            <PageHeader
-              title="Paper Management"
-              description="Create and manage A/L Combined Mathematics papers"
-            />
-          </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between w-full lg:mb-4 mb-10 gap-0 md:gap-4">
+          <PageHeader
+            title="Paper Management"
+            description="Create and manage A/L Combined Mathematics papers"
+          />
 
           <Button
             size="lg"

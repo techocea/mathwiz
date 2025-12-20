@@ -263,7 +263,7 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <div className="flex justify-end gap-2 w-full">
+                    <div className="flex flex-col-reverse lg:flex-row lg:justify-end gap-2 w-full">
                         <Button
                             type="button"
                             variant="outline"

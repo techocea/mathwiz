@@ -37,7 +37,7 @@ export default function DashboardLayout({
                 <html lang="en">
                     <body>
                         <div
-                            className={`${poppins.className} antialiased mt-28 mb-16 container lg:max-w-6xl mx-auto p-6`}
+                            className={`${poppins.className} antialiased mt-28 mb-12 container lg:max-w-6xl mx-auto p-6`}
                         >
                             <Sonner position="top-right" />
                             <BlurGradient />

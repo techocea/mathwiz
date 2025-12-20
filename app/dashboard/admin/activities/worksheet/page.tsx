@@ -40,7 +40,7 @@ const Worksheets = () => {
     return (
         <main className="min-h-screen flex-1 w-full">
             <div>
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+                <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between w-full lg:mb-4 mb-10 gap-0 md:gap-4">
                     <PageHeader
                         title="Worksheet Management"
                         description="Create and manage worksheets"
