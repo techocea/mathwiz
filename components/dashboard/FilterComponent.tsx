@@ -7,7 +7,7 @@ import {
     SelectValue,
 } from "../ui/select";
 
-const MEDIUMS = ["english", "sinhala"];
+const MEDIUMS = ["English", "Sinhala"];
 const YEARS = ["2025", "2026", "2027"];
 const TYPES = ["worksheet", "homework", "speed-paper", "mini-exam", "paper"];
 

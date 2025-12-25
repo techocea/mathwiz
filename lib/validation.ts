@@ -15,8 +15,8 @@ export const registrationSchema = z.object({
   lastName: z.string().min(1, "This field is required"),
   contact: z.string().min(10, "This field is required"),
   email: z.email("Invalid email format").min(12, "This field is required"),
-  password: z.string().min(6, "This field is required"),
-  confirmPassword: z.string().min(6, "This field is required"),
+  password: z.string().min(6, "This field is required").optional(),
+  confirmPassword: z.string().min(6, "This field is required").optional(),
   school: z.string().min(1, "This field is required"),
   year: z
     .enum(["2025", "2026", "2027"])
@@ -26,7 +26,7 @@ export const registrationSchema = z.object({
     }),
 
   medium: z
-    .enum(["sinhala", "english"])
+    .enum(["Sinhala", "English"])
     .optional()
     .refine((val) => val !== undefined, {
       message: "Please select your medium.",
@@ -52,7 +52,7 @@ export const loginSchema = z.object({
 
 export const markingSchema = z.object({
   title: z.string().min(3),
-  medium: z.enum(["sinhala", "english"]),
+  medium: z.enum(["Sinhala", "English"]),
   year: z.enum(["2025", "2026", "2027"]),
   type: z.enum(["paper", "mini-exam", "worksheet", "homework", "speed-paper"]),
   markingSchemeUrl: z
@@ -87,7 +87,7 @@ export const paymentSchema = z.object({
 
 const baseSchema = z.object({
   title: z.string().min(3),
-  medium: z.enum(["sinhala", "english"]),
+  medium: z.enum(["Sinhala", "English"]),
   year: z.enum(["2025", "2026", "2027"]),
   uploadDeadline: z.preprocess((arg) => {
     if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
@@ -97,36 +97,60 @@ const baseSchema = z.object({
 const paperVariant = baseSchema.extend({
   type: z.literal("paper"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed"
-    ),
+    .any()
+    .refine((val) => val !== undefined && val !== null, "PDF is required")
+    .refine((val) => {
+      if (typeof val === "string") return true;
+      return val instanceof File;
+    }, "PDF file is required")
+    .refine((val) => {
+      if (val instanceof File) return val.size < MAX_FILE_SIZE;
+      return true;
+    }, "File too large")
+    .refine((val) => {
+      if (val instanceof File) return ACCEPTED_FILE_TYPES.includes(val.type);
+      return true;
+    }, "Only PDF allowed"),
   durationMinutes: z.number().min(5).max(180),
 });
 
 const speedPaperVariant = baseSchema.extend({
   type: z.literal("speed-paper"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed"
-    ),
+    .any()
+    .refine((val) => val !== undefined && val !== null, "PDF is required")
+    .refine((val) => {
+      if (typeof val === "string") return true;
+      return val instanceof File;
+    }, "PDF file is required")
+    .refine((val) => {
+      if (val instanceof File) return val.size < MAX_FILE_SIZE;
+      return true;
+    }, "File too large")
+    .refine((val) => {
+      if (val instanceof File) return ACCEPTED_FILE_TYPES.includes(val.type);
+      return true;
+    }, "Only PDF allowed"),
   durationMinutes: z.number().min(5).max(180),
 });
 
 const miniExamVariant = baseSchema.extend({
   type: z.literal("mini-exam"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed"
-    ),
+    .any()
+    .refine((val) => val !== undefined && val !== null, "PDF is required")
+    .refine((val) => {
+      if (typeof val === "string") return true;
+      return val instanceof File;
+    }, "PDF file is required")
+    .refine((val) => {
+      if (val instanceof File) return val.size < MAX_FILE_SIZE;
+      return true;
+    }, "File too large")
+    .refine((val) => {
+      if (val instanceof File) return ACCEPTED_FILE_TYPES.includes(val.type);
+      return true;
+    }, "Only PDF allowed"),
   durationMinutes: z.number().min(5).max(180),
 });
 

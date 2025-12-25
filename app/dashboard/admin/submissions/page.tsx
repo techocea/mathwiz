@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 const Submissions = () => {
   const [type, setType] = useState("paper");
   const [year, setYear] = useState("2026");
-  const [medium, setMedium] = useState("english");
+  const [medium, setMedium] = useState("English");
 
   const {
     data: submissions,

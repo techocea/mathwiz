@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 interface InquiryProps {
   _id: string;
@@ -50,16 +51,14 @@ const InquiryPage = () => {
     );
 
   return (
-
-    <main className="min-h-screen flex-1 container lg:max-w-6xl mx-auto p-6">
+    <main className="min-h-screen flex-1 w-full">
       <div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Inquiry Management</h1>
-            <p className="text-muted-foreground">
-              Manage your class inquiries
-            </p>
-          </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between w-full lg:mb-4 gap-0 md:gap-4">
+
+          <PageHeader
+            title="Inquiry Management"
+            description=" Manage your class inquiries"
+          />
         </div>
 
         <div className="rounded-lg border bg-card">
@@ -90,7 +89,8 @@ const InquiryPage = () => {
                       className="flex items-center justify-center"
                       align="justify"
                     >
-                      {format(new Date(inquiry.createdAt), "dd MM,yyyy")}
+                      {/* {format(new Date(inquiry.createdAt), "dd/MM/yyyy")} */}
+                      {inquiry.createdAt}
                     </TableCell>
                   </TableRow>
                 ))
@@ -106,7 +106,6 @@ const InquiryPage = () => {
         </div>
       </div>
     </main>
-
   );
 };
 

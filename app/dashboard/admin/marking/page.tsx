@@ -10,7 +10,7 @@ import MarkingSchemaTable from "@/components/dashboard/MarkingSchemaTable";
 const MarkingSchemes = () => {
     const [type, setType] = useState("paper");
     const [year, setYear] = useState("2026");
-    const [medium, setMedium] = useState("english");
+    const [medium, setMedium] = useState("English");
 
     const {
         data: markings,

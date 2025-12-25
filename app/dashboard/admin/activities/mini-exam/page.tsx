@@ -13,7 +13,7 @@ import FilterComponent from "@/components/dashboard/FilterComponent";
 
 const MiniExams = () => {
     const router = useRouter();
-    const [medium, setMedium] = useState("english");
+    const [medium, setMedium] = useState("English");
     const [year, setYear] = useState("2026");
 
     const resourceType: ResourceType = "mini-exam";

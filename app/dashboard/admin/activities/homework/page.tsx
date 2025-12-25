@@ -13,7 +13,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 
 const Homework = () => {
     const router = useRouter();
-    const [medium, setMedium] = useState("english");
+    const [medium, setMedium] = useState("English");
     const [year, setYear] = useState("2026");
 
     const resourceType: ResourceType = "homework";

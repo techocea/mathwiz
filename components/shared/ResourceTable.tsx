@@ -13,11 +13,20 @@ import { Button } from "../ui/button";
 import { ResourceProps } from "@/types";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { Eye } from "lucide-react";
+import { Eye, Pen, Trash2 } from "lucide-react";
+import { useDeleteResource } from "@/hooks/useResource";
 
 const ResourceTable = ({ resources, type }: ResourceProps) => {
     const router = useRouter();
+    const { mutate: deleteResource, isPending: isDeleting } = useDeleteResource();
 
+    const handleDeleteResource = ({ resourceId }: { resourceId: string }) => {
+        if (confirm("Are you sure? This cannot be undone.")) {
+            deleteResource({ id: resourceId }, {
+                onSuccess: () => router.push(`/dashboard/admin/activities/${type}`),
+            });
+        }
+    };
     return (
         <Card className="p-2 rounded-lg">
             <Table>
@@ -63,16 +72,27 @@ const ResourceTable = ({ resources, type }: ResourceProps) => {
                                     {format(new Date(r.uploadDeadline), "PP")}
                                 </TableCell>
                                 <TableCell align="center">{r.submissions.length}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button
-                                        size="sm"
-                                        variant="link"
-                                        className="cursor-pointer"
-                                        onClick={() => router.push("/dashboard/admin/submissions")}
-                                    >
-                                        <Eye className="h-4 w-4" />
-                                        View
-                                    </Button>
+                                <TableCell className="gap-2 flex justify-end">
+                                    <>
+                                        <Button
+                                            size="sm"
+                                            className="bg-blue-100 rounded-sm hover:bg-blue-200 text-blue-700"
+                                            onClick={() =>
+                                                router.push(
+                                                    `/dashboard/admin/activities/${type}/${r._id}/edit`
+                                                )
+                                            }
+                                        >
+                                            <Pen className=" h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            className="bg-red-100 rounded-sm hover:bg-red-200 text-destructive"
+                                            onClick={() => handleDeleteResource({ resourceId: r._id })}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </>
                                 </TableCell>
                             </TableRow>
                         ))

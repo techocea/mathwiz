@@ -1,7 +1,6 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import WritePaper from "@/components/shared/WriteTimedPaper";
 import WriteNormalPaper from "@/components/shared/WriteNormalPaper";
 
 interface PageProps {

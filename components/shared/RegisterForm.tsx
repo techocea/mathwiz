@@ -109,8 +109,7 @@ const RegisterForm = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="firstName">
+                                <Label className="font-normal" htmlFor="firstName">
                                     First Name
                                 </Label>
                                 <Input
@@ -126,8 +125,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="lastName">
+                                <Label className="font-normal" htmlFor="lastName">
                                     Last Name
                                 </Label>
                                 <Input
@@ -143,8 +141,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="contact">
+                                <Label className="font-normal" htmlFor="contact">
                                     Contact Number
                                 </Label>
                                 <Input
@@ -160,8 +157,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="email">
+                                <Label className="font-normal" htmlFor="email">
                                     Email
                                 </Label>
                                 <Input
@@ -176,8 +172,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="password">
+                                <Label className="font-normal" htmlFor="password">
                                     Password
                                 </Label>
                                 <Input
@@ -194,8 +189,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="confirmPassword">
+                                <Label className="font-normal" htmlFor="confirmPassword">
                                     Confirm Password
                                 </Label>
                                 <Input
@@ -224,8 +218,7 @@ const RegisterForm = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="school">
+                                <Label className="font-normal" htmlFor="school">
                                     School
                                 </Label>
                                 <Input
@@ -241,8 +234,7 @@ const RegisterForm = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <Label className="font-normal"
-                                    htmlFor="year">
+                                <Label className="font-normal" htmlFor="year">
                                     Year
                                 </Label>
                                 <Controller
@@ -278,8 +270,7 @@ const RegisterForm = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="space-y-2.5 md:col-span-1">
-                                <Label className="font-normal"
-                                    htmlFor="medium">
+                                <Label className="font-normal" htmlFor="medium">
                                     Medium
                                 </Label>
                                 <Controller
@@ -291,39 +282,43 @@ const RegisterForm = () => {
                                                 <SelectValue placeholder="Select medium" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="sinhala">sinhala</SelectItem>
-                                                <SelectItem value="english">english</SelectItem>
+                                                <SelectItem value="Sinhala">Sinhala</SelectItem>
+                                                <SelectItem value="English">English</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     )}
                                 />
                                 {errors.medium && (
-                                    <p className="text-sm text-red-500 mt-1">{errors.medium.message}</p>
+                                    <p className="text-sm text-red-500 mt-1">
+                                        {errors.medium.message}
+                                    </p>
                                 )}
                             </div>
                             <div className="space-y-2.5 md:col-span-2">
                                 <div className="flex flex-col items-start gap-4">
-                                    <Label htmlFor="tuitionType" className="flex font-normal items-center gap-2 capitalize">
+                                    <Label
+                                        htmlFor="tuitionType"
+                                        className="flex font-normal items-center gap-2 capitalize"
+                                    >
                                         Select Tuition Mode
                                     </Label>
                                     <div className="grid grid-cols-3 gap-4">
-                                        {TUITION_KEYS.map((key) => ( // <--- Iterate over correct keys
-                                            <div key={key} // <--- Use the key for better stability
-                                                className="flex items-center gap-2.5">
+                                        {TUITION_KEYS.map((key) => (
+                                            <div key={key} className="flex items-center gap-2.5">
                                                 <Checkbox
-                                                    checked={tuitionType[key]} // <--- Type-safe access
+                                                    checked={tuitionType[key]}
                                                     onCheckedChange={(checked: boolean) =>
                                                         setValue(
                                                             "tuitionType",
                                                             {
                                                                 ...tuitionType,
-                                                                [key]: checked, // <--- Correct key is used
+                                                                [key]: checked,
                                                             },
-                                                            { shouldDirty: true, shouldValidate: true } // <--- Trigger validation
+                                                            { shouldDirty: true, shouldValidate: true }
                                                         )
                                                     }
                                                 />
-                                                {TUITION_LABELS[key]} {/* <--- Use display label */}
+                                                {TUITION_LABELS[key]}
                                             </div>
                                         ))}
                                     </div>

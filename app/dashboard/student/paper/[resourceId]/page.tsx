@@ -1,25 +1,25 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import WritePaper from "@/components/shared/WriteTimedPaper";
 import BlurGradient from "@/components/shared/BlurGradient";
+import WriteTimedResource from "@/components/shared/WriteTimedResource";
 
 interface PageProps {
   params: Promise<{
     type: string;
-    paperId: string;
+    resourceId: string;
   }>;
 }
 
 const WritePapers = async ({ params }: PageProps) => {
-  const { paperId } = await params;
+  const { resourceId } = await params;
 
-  if (!paperId) {
+  if (!resourceId) {
     notFound();
   }
 
   await connectDB();
-  const paper = await Resource.findById(paperId).lean();
+  const paper = await Resource.findById(resourceId).lean();
 
   if (!paper) {
     notFound();
@@ -31,8 +31,8 @@ const WritePapers = async ({ params }: PageProps) => {
     <div className="flex flex-col border-2">
       <BlurGradient />
       <div className="px-4 py-6 lg:py-16">
-        <WritePaper
-          paperId={serializedPaper._id.toString()}
+        <WriteTimedResource
+          resourceId={serializedPaper._id.toString()}
           paper={serializedPaper}
         />
       </div>

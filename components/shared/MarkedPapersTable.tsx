@@ -66,7 +66,7 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell align="center" className="capitalize py-4 font-medium text-muted-foreground text-center" colSpan={3}>
+                            <TableCell align="center" className="capitalize py-4 font-medium text-muted-foreground text-center" colSpan={5}>
                                 no marked papers yet
                             </TableCell>
                         </TableRow>

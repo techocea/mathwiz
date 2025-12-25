@@ -20,98 +20,86 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import axios from "axios";
-import { useState } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { useForm } from "react-hook-form";
+import { ResourceType } from "@/types";
+import Loader from "../layout/Loader";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/sonner";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import { createResourceSchema } from "@/lib/validation";
-import { Clock, Upload, CalendarIcon, Loader2 } from "lucide-react";
+import { Clock, CalendarIcon, Loader2, FileText } from "lucide-react";
+import { useGetResourceById, useUpdateResource } from "@/hooks/useResource";
 
-interface ActivityCreateFormProps {
+const ResourceEditForm = ({
+    resourceId,
+    title,
+    type,
+}: {
+    resourceId: string;
     title: string;
-    type: "paper" | "speed-paper" | "mini-exam" | "homework" | "worksheet";
-}
-
-const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
+    type: ResourceType;
+}) => {
     const router = useRouter();
-    const [isUploading, setIsUploading] = useState(false);
 
     const {
         register,
         handleSubmit,
         watch,
         setValue,
-        formState: { errors },
+        reset,
+        control,
+        formState: { errors, isDirty },
     } = useForm({
         resolver: zodResolver(createResourceSchema),
-        defaultValues: {
-            title: "",
-            medium: "sinhala",
-            year: "2025",
-            uploadDeadline: undefined,
-            paperUrl: undefined,
-            durationMinutes: undefined,
-            type,
-        },
     });
+
+    const {
+        data: resource,
+        isLoading,
+        isError,
+    } = useGetResourceById({ resourceId });
+
+    useEffect(() => {
+        if (resource) {
+            // console.log("Fetched Student Data:", resource),
+            reset({
+                ...resource,
+                // medium: resource.medium ? resource.medium.toLowerCase() : "",
+                year: resource.year ? String(resource.year) : "",
+                uploadDeadline: resource.uploadDeadline
+                    ? new Date(resource.uploadDeadline)
+                    : undefined,
+                durationMinutes: Number(resource.durationMinutes) || 60,
+            });
+        }
+    }, [resource, reset]);
+
+    const { mutate: updateResource, isPending: isUpdating } = useUpdateResource();
+
+    const onSubmit = (values: any) => {
+        updateResource({ id: resourceId, data: values });
+        router.push(`/dashboard/admin/activities/${type}`);
+    };
 
     const durationMinutes = watch("durationMinutes");
     const uploadDeadline = watch("uploadDeadline");
 
-    const onSubmit = async (data: any) => {
-        setIsUploading(true);
-        try {
-            const formData = new FormData();
+    if (isLoading) {
+        return <Loader />;
+    }
 
-            formData.append("type", type);
-            formData.append("year", data.year);
-            formData.append("title", data.title);
-            formData.append("medium", data.medium);
+    if (isError)
+        return <p className="text-red-500">Error loading resource data.</p>;
 
-            formData.append(
-                "uploadDeadline",
-                (data.uploadDeadline as Date).toISOString()
-            );
-
-            if (data.durationMinutes !== undefined)
-                formData.append("durationMinutes", String(data.durationMinutes));
-
-            if (data.paperUrl) formData.append("paperUrl", data.paperUrl);
-
-            const res = await axios.post("/api/admin/resources", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            toast.success(res.data.message || "Created");
-            console.log(res);
-
-            if (res.status === 200) {
-                toast.success(`${title} created successfully`);
-                router.push(`/dashboard/admin/activities/${type}`);
-            } else {
-                toast.error("Something went wrong");
-            }
-        } catch (error: any) {
-            console.log("failed to create activity:", error);
-            toast.error(
-                error?.response?.data?.message || error.message || "Upload failed"
-            );
-        } finally {
-            setIsUploading(false);
-        }
-    };
-
+    // const currentValues = watch();
+    // console.log("Current Form State:", currentValues.medium, currentValues.year);
     return (
         <Card>
             <form
@@ -140,20 +128,25 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                         </div>
                         <div className="space-y-3">
                             <Label htmlFor="medium">Select Medium</Label>
-                            <Select
-                                onValueChange={(value) =>
-                                    setValue("medium", value as "sinhala" | "english")
-                                }
-                                defaultValue="sinhala"
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select medium" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="sinhala">sinhala</SelectItem>
-                                    <SelectItem value="english">english</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <Controller
+                                name="medium"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        key={field.value}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select medium" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Sinhala">Sinhala</SelectItem>
+                                            <SelectItem value="English">English</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
                         </div>
                     </div>
                     {(type === "paper" ||
@@ -174,9 +167,12 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                                         min={5}
                                         max={180}
                                         step={5}
-                                        onValueChange={(value) =>
-                                            setValue("durationMinutes", value[0])
-                                        }
+                                        value={[durationMinutes || 60]}
+                                        onValueChange={(value) => {
+                                            setValue("durationMinutes", value[0], {
+                                                shouldDirty: true,
+                                            });
+                                        }}
                                         className="flex-1"
                                     />
                                 </div>
@@ -184,27 +180,31 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                         )}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-3">
-                            <Label htmlFor="year">Select Batch</Label>
-                            <Select
-                                onValueChange={(value) =>
-                                    setValue("year", value as "2025" | "2026" | "2027")
-                                }
-                                defaultValue="2025"
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select year" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="2025">2025</SelectItem>
-                                    <SelectItem value="2026">2026</SelectItem>
-                                    <SelectItem value="2027">2027</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            {errors.year && (
-                                <p className="text-sm text-red-500">{errors.year.message}</p>
-                            )}
+                            <Label htmlFor="year">Select Year</Label>
+                            <Controller
+                                name="year"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        key={field.value}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select year" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="2025">2025</SelectItem>
+                                            <SelectItem value="2026">2026</SelectItem>
+                                            <SelectItem value="2027">2027</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
                         </div>
-
+                        {errors.year && (
+                            <p className="text-sm text-red-500">{errors.year.message}</p>
+                        )}
                         <div className="space-y-3">
                             <Label htmlFor="uploadDeadline">Upload Deadline</Label>
                             <div className="flex items-center gap-2">
@@ -226,10 +226,11 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                                     <PopoverContent className="w-auto p-0">
                                         <Calendar
                                             mode="single"
-                                            //   selected={uploadDeadline}
-                                            onSelect={(date) =>
-                                                setValue("uploadDeadline", date || undefined)
-                                            }
+                                            // selected={uploadDeadline} // This is now a Date object thanks to useEffect
+                                            onSelect={(date) => {
+                                                setValue("uploadDeadline", date, { shouldDirty: true });
+                                            }}
+                                            autoFocus
                                         />
                                     </PopoverContent>
                                 </Popover>
@@ -241,24 +242,18 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                             )}
                         </div>
                     </div>
+
                     <div className="space-y-3">
                         <Label htmlFor="paperUrl" className="capitalize">
                             Upload {title}
                         </Label>
-                        <Input
-                            id="paperUrl"
-                            type="file"
-                            accept="application/pdf"
-                            onChange={(e) => {
-                                if (e.target.files?.[0]) {
-                                    setValue("paperUrl", e.target.files[0]);
-                                }
-                            }}
-                        />
-                        {errors.paperUrl && (
-                            <p className="text-sm text-red-500">
-                                {String(errors.paperUrl?.message)}
-                            </p>
+                        {resource?.paperUrl && typeof watch("paperUrl") === "string" && (
+                            <div className="flex items-center gap-2 p-2 border border-blue-200 rounded-md bg-white/50">
+                                <FileText className="h-4 w-4 text-blue-500" />
+                                <span className="text-xs truncate flex-1">
+                                    Current PDF: {resource.title}
+                                </span>
+                            </div>
                         )}
                     </div>
                 </CardContent>
@@ -273,18 +268,17 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
                             Cancel
                         </Button>
                         <Button
+                            size="lg"
                             type="submit"
-                            disabled={isUploading}
                             className="cursor-pointer"
+                            disabled={isUpdating || !isDirty}
                         >
-                            <Upload className="h-4 w-4 mr-1" />
-                            {isUploading ? (
-                                <div className="flex gap-2">
-                                    Please Wait{" "}
+                            {isUpdating ? (
+                                <div className="flex items-center gap-2.5">
                                     <Loader2 className="animate-spin transition-all" />
                                 </div>
                             ) : (
-                                <span className="capitalize">create {title}</span>
+                                <p>Update</p>
                             )}
                         </Button>
                     </div>
@@ -294,4 +288,4 @@ const ActivityCreateForm = ({ type, title }: ActivityCreateFormProps) => {
     );
 };
 
-export default ActivityCreateForm;
+export default ResourceEditForm;

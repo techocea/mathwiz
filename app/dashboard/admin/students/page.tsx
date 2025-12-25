@@ -13,7 +13,7 @@ import ViewStudentsTable from "@/components/dashboard/ViewStudentsTable";
 const DisplayStudentsPage = () => {
   const router = useRouter();
   const [year, setYear] = useState("2026");
-  const [medium, setMedium] = useState("english");
+  const [medium, setMedium] = useState("English");
 
   const {
     data: students,
@@ -32,7 +32,7 @@ const DisplayStudentsPage = () => {
   return (
     <main className="min-h-screen flex-1 w-full">
       <div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between w-full lg:mb-4 mb-10 gap-0 md:gap-4">
           <PageHeader
             title="Student Management"
             description="Manage students in your class"

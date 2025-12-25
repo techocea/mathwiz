@@ -1,8 +1,8 @@
 import connectDB from "@/lib/db";
 import { User } from "@/lib/schema";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
 import { getUserFromToken } from "@/helpers/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {

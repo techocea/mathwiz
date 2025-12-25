@@ -20,7 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTimer } from "@/app/providers/TimerContext";
 
 interface PaperProps {
-  paperId: string;
+  resourceId: string;
   paper: {
     _id: string;
     title: string;
@@ -31,7 +31,7 @@ interface PaperProps {
   };
 }
 
-const WritePaper = ({ paperId, paper }: PaperProps) => {
+const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
@@ -72,13 +72,13 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("submissionUrl", submissionUrl);
-    formData.append("paperId", paperId);
+    formData.append("resourceId", resourceId);
 
-    if (!paperId) {
+    if (!resourceId) {
       return toast.error("Missing paper ID");
     }
 
-    const examStartTime = localStorage.getItem(`examStartTime_${paperId}`);
+    const examStartTime = localStorage.getItem(`examStartTime_${resourceId}`);
     if (examStartTime) {
       formData.append("startTime", examStartTime);
     } else {
@@ -94,7 +94,7 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
 
       if (res.status === 200) {
         toast.success("Answer Sheet submitted successfully!");
-        setExamSubmitted(paperId);
+        setExamSubmitted(resourceId);
         router.push("/dashboard/student");
         setSubmissionUrl(null);
       } else {
@@ -104,13 +104,13 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
       toast.error(err?.response?.data?.message);
     } finally {
       setIsUploading(false);
-      setExamSubmitted(paperId);
+      setExamSubmitted(resourceId);
     }
   };
 
   return (
     <div className="lg:max-w-2xl w-full mx-auto">
-      <div className="fixed bottom-4 right-4 z-10">
+      <div className="fixed max-sm:top-28 bottom-8 left-4 z-10">
         <div
           className={`flex items-center space-x-2 min-w-24 lg:p-6 p-4 bg-white/90 backdrop-blur-sm shadow-lg rounded-full border ${isTimeUp ? "border-red-500" : "border-primary/20"
             }`}
@@ -193,4 +193,4 @@ const WritePaper = ({ paperId, paper }: PaperProps) => {
   );
 };
 
-export default WritePaper;
+export default WriteTimedResource;

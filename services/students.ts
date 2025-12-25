@@ -15,3 +15,8 @@ export const getStudents = async ({
   const res = await axios.get(`/api/admin/students?${params.toString()}`);
   return res.data.students || [];
 };
+
+export const getStudentById = async (studentId: string) => {
+  const data = await axios.get(`/api/admin/students/${studentId}`);
+  return data.data.student;
+};

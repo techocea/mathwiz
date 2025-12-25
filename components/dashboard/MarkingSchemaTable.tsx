@@ -9,15 +9,11 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { Eye } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { MarkingProps } from "@/types";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
 import DownloadButton from "../shared/DownloadButton";
 
 const MarkingSchemaTable = ({ markings }: MarkingProps) => {
-    const router = useRouter();
 
     return (
         <Card className="p-2 rounded-lg">

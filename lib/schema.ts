@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     contact: { type: String },
     year: { type: String, enum: ["2025", "2026", "2027"] },
-    medium: { type: String, enum: ["sinhala", "english"] },
+    medium: { type: String, enum: ["Sinhala", "English"] },
     school: { type: String },
     tuitionType: {
       theory: { type: Boolean, default: false },
@@ -29,10 +29,10 @@ const resourceSchema = new mongoose.Schema(
   {
     durationMinutes: { type: Number },
     title: { type: String, required: true },
-    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    medium: { type: String, enum: ["Sinhala", "English"], required: true },
     year: { type: String, enum: ["2025", "2026", "2027"], required: true },
     uploadDeadline: { type: Date, required: true },
-    paperUrl: { type: String, required: true },
+    paperUrl: { type: String },
     cloudinaryPublicId: { type: String, required: true },
     submissions: [
       {
@@ -91,7 +91,7 @@ const submissionSchema = new mongoose.Schema(
 const markingSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    medium: { type: String, enum: ["Sinhala", "English"], required: true },
     year: { type: String, enum: ["2025", "2026", "2027"], required: true },
     markingSchemeUrl: {
       type: String,

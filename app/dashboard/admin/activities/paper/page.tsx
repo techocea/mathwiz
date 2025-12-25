@@ -14,7 +14,7 @@ import FilterComponent from "@/components/dashboard/FilterComponent";
 const Papers = () => {
   const router = useRouter();
   const [year, setYear] = useState("2026");
-  const [medium, setMedium] = useState("english");
+  const [medium, setMedium] = useState("English");
 
   const resourceType: ResourceType = "paper";
 

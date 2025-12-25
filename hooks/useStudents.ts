@@ -1,8 +1,9 @@
-import { getPaymentSlips } from "@/services/dashboard.data";
-import { getStudents } from "@/services/students";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { RegistrationFormValues } from "@/lib/validation";
+import { getPaymentSlips } from "@/services/dashboard.data";
+import { getStudentById, getStudents } from "@/services/students";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useStudentDetails = ({
   year,
@@ -53,6 +54,39 @@ export const useUpdateStudentStatus = () => {
       const message =
         error.response?.data?.message || "Failed to update status";
       toast.error(message);
+    },
+  });
+};
+
+export const useGetStudentById = ({ studentId }: { studentId: string }) => {
+  return useQuery({
+    queryKey: ["student", studentId],
+    queryFn: () => getStudentById(studentId),
+    enabled: !!studentId,
+    retry: 1,
+  });
+};
+
+export const useUpdateStudentMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: RegistrationFormValues;
+    }) => {
+      const response = await axios.patch(`/api/admin/students/${id}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      toast.success("Student updated successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to update student");
     },
   });
 };

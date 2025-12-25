@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Table,
     TableBody,
@@ -9,10 +11,12 @@ import {
 import { Card } from "../ui/card";
 import { StudentProps } from "@/types";
 import { Button } from "../ui/button";
-import { Ban, Check, X } from "lucide-react";
+import { Ban, Check, Pen, Trash2, X } from "lucide-react";
 import { useUpdateStudentStatus } from "@/hooks/useStudents";
+import { useRouter } from "next/navigation";
 
 const ViewStudentsTable = ({ students }: StudentProps) => {
+    const router = useRouter();
     const { mutate: updateStatus, isPending } = useUpdateStudentStatus();
 
     const getStatusStyle = (status: string) => {
@@ -77,12 +81,12 @@ const ViewStudentsTable = ({ students }: StudentProps) => {
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-right">
-                                    <div className="flex justify-end gap-0">
+                                    <div className="flex justify-end gap-1.5">
                                         {s.status === "pending" ? (
                                             <>
                                                 <Button
-                                                    variant="ghost"
                                                     size="sm"
+                                                    className="bg-green-200 rounded-sm hover:bg-green-300 text-green-700"
                                                     disabled={isPending}
                                                     onClick={() =>
                                                         updateStatus({
@@ -91,11 +95,11 @@ const ViewStudentsTable = ({ students }: StudentProps) => {
                                                         })
                                                     }
                                                 >
-                                                    <Check className="text-green-600 h-4 w-4" />
+                                                    <Check className=" h-4 w-4" />
                                                 </Button>
                                                 <Button
-                                                    variant="ghost"
                                                     size="sm"
+                                                    className="bg-red-200 rounded-sm hover:bg-red-300 text-destructive"
                                                     disabled={isPending}
                                                     onClick={() =>
                                                         updateStatus({
@@ -104,23 +108,45 @@ const ViewStudentsTable = ({ students }: StudentProps) => {
                                                         })
                                                     }
                                                 >
-                                                    <X className="text-destructive h-4 w-4" />
+                                                    <X className="h-4 w-4" />
                                                 </Button>
                                             </>
                                         ) : (
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                disabled={isPending}
-                                                onClick={() =>
-                                                    updateStatus({
-                                                        studentId: s._id,
-                                                        newStatus: "banned",
-                                                    })
-                                                }
-                                            >
-                                                <Ban className="h-4 w-4" />
-                                            </Button>
+                                            <>
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-blue-100 rounded-sm hover:bg-blue-200 text-blue-700"
+                                                    disabled={isPending}
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/dashboard/admin/students/${s._id}/edit`
+                                                        )
+                                                    }
+                                                >
+                                                    <Pen className=" h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-red-100 rounded-sm hover:bg-red-200 text-destructive"
+                                                    disabled={isPending}
+                                                //   onClick={handleDeleteStudent(s._id)}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-yellow-100 rounded-sm hover:bg-yellow-200 text-yellow-700"
+                                                    disabled={isPending}
+                                                    onClick={() =>
+                                                        updateStatus({
+                                                            studentId: s._id,
+                                                            newStatus: "banned",
+                                                        })
+                                                    }
+                                                >
+                                                    <Ban className="h-4 w-4" />
+                                                </Button>
+                                            </>
                                         )}
                                     </div>
                                 </TableCell>

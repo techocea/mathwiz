@@ -15,17 +15,17 @@ import {
     DialogFooter,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "sonner";
+import { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { markingSchema } from "@/lib/validation";
 import { Loader2, Pen, Upload } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const MarkingSchemeModal = () => {
     const router = useRouter();
@@ -41,11 +41,12 @@ const MarkingSchemeModal = () => {
         defaultValues: {
             title: "",
             type: "paper",
-            medium: "english",
+            medium: "English",
             year: "2025",
             markingSchemeUrl: undefined,
         },
     });
+
     const onSubmit = async (data: any) => {
         setIsUploading(true);
         try {
@@ -122,16 +123,16 @@ const MarkingSchemeModal = () => {
                                 <Label htmlFor="medium">Select Medium</Label>
                                 <Select
                                     onValueChange={(value) =>
-                                        setValue("medium", value as "sinhala" | "english")
+                                        setValue("medium", value as "Sinhala" | "English")
                                     }
-                                    defaultValue="sinhala"
+                                    defaultValue="Sinhala"
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select medium" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="sinhala">sinhala</SelectItem>
-                                        <SelectItem value="english">english</SelectItem>
+                                        <SelectItem value="Sinhala">sinhala</SelectItem>
+                                        <SelectItem value="English">english</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

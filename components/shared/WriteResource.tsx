@@ -26,10 +26,10 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
     const router = useRouter();
     const { isRunning, currentExamId, startTimer } = useTimer();
 
-    const handleStartExam = (paperId: string, durationMinutes: number) => {
+    const handleStartExam = (resourceId: string, durationMinutes: number) => {
         let isThisExamSubmitted =
-            localStorage.getItem(`examSubmitted_${paperId}`) === "true";
-        if (isRunning && currentExamId !== paperId) {
+            localStorage.getItem(`examSubmitted_${resourceId}`) === "true";
+        if (isRunning && currentExamId !== resourceId) {
             router.push(`/dashboard/student/${type}/${currentExamId}`);
             return;
         }
@@ -39,9 +39,9 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
         }
 
         const examStartTime = new Date().toISOString();
-        localStorage.setItem(`examStartTime_${paperId}`, examStartTime);
-        startTimer(durationMinutes, paperId);
-        router.push(`/dashboard/student/${type}/${paperId}`);
+        localStorage.setItem(`examStartTime_${resourceId}`, examStartTime);
+        startTimer(durationMinutes, resourceId);
+        router.push(`/dashboard/student/${type}/${resourceId}`);
     };
 
     const isExpired = (uploadDeadline: string) => {

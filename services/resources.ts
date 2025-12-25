@@ -19,6 +19,11 @@ export const getResources = async ({
   return res.data.resources || [];
 };
 
+export const getResourceById = async (resourceId: string) => {
+  const data = await axios.get(`/api/admin/resources/${resourceId}`);
+  return data.data.resource;
+};
+
 export const getMarkingSchemes = async ({
   type,
   year,
