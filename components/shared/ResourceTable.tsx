@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { ResourceProps } from "@/types";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { Eye, Pen, Trash2 } from "lucide-react";
+import { Pen, Trash2 } from "lucide-react";
 import { useDeleteResource } from "@/hooks/useResource";
 
 const ResourceTable = ({ resources, type }: ResourceProps) => {
@@ -27,6 +27,7 @@ const ResourceTable = ({ resources, type }: ResourceProps) => {
             });
         }
     };
+
     return (
         <Card className="p-2 rounded-lg">
             <Table>
@@ -87,6 +88,7 @@ const ResourceTable = ({ resources, type }: ResourceProps) => {
                                         </Button>
                                         <Button
                                             size="sm"
+                                            disabled={isDeleting}
                                             className="bg-red-100 rounded-sm hover:bg-red-200 text-destructive"
                                             onClick={() => handleDeleteResource({ resourceId: r._id })}
                                         >

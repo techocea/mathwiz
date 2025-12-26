@@ -88,3 +88,42 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ studentId: string }> }
+) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("adminToken")?.value;
+
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = getUserFromToken(token);
+    if (!user?.email) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    }
+
+    await connectDB();
+    const { studentId } = await params;
+
+    const deletedStudent = await User.findByIdAndDelete(studentId);
+
+    if (!deletedStudent) {
+      return NextResponse.json(
+        { message: "Student not found or deletion failed" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Deleted" }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

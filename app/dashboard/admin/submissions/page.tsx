@@ -31,7 +31,7 @@ const Submissions = () => {
   }
 
   return (
-    <main className="min-h-full flex-1 w-full">
+    <main className="min-h-full w-full">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
         <div>
           <PageHeader

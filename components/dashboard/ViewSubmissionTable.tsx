@@ -82,7 +82,7 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                     ) : (
                         <TableRow>
                             <TableCell colSpan={6} className="text-center py-6">
-                                No papers found
+                                No submissions found
                             </TableCell>
                         </TableRow>
                     )}

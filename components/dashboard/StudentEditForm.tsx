@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import {
     useGetStudentById,
-    useUpdateStudentMutation,
+    useUpdateStudent,
 } from "@/hooks/useStudents";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
@@ -60,7 +60,7 @@ const StudentEditForm = ({ studentId }: { studentId: string }) => {
     }, [student, reset]);
 
     const { mutate: updateStudentData, isPending: isUpdating } =
-        useUpdateStudentMutation();
+        useUpdateStudent();
 
     const tuitionType = watch("tuitionType") || {
         theory: false,

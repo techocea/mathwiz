@@ -67,7 +67,7 @@ export const useGetStudentById = ({ studentId }: { studentId: string }) => {
   });
 };
 
-export const useUpdateStudentMutation = () => {
+export const useUpdateStudent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -87,6 +87,23 @@ export const useUpdateStudentMutation = () => {
     },
     onError: () => {
       toast.error("Failed to update student");
+    },
+  });
+};
+
+export const useDeleteStudent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      await axios.delete(`/api/admin/students/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      toast.success("Student deleted permanently");
+    },
+    onError: () => {
+      toast.error("Failed to delete student");
     },
   });
 };

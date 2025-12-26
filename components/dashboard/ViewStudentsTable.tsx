@@ -12,12 +12,24 @@ import { Card } from "../ui/card";
 import { StudentProps } from "@/types";
 import { Button } from "../ui/button";
 import { Ban, Check, Pen, Trash2, X } from "lucide-react";
-import { useUpdateStudentStatus } from "@/hooks/useStudents";
+import { useDeleteStudent, useUpdateStudentStatus } from "@/hooks/useStudents";
 import { useRouter } from "next/navigation";
 
 const ViewStudentsTable = ({ students }: StudentProps) => {
     const router = useRouter();
     const { mutate: updateStatus, isPending } = useUpdateStudentStatus();
+    const { mutate: deleteStudent, isPending: isDeleting } = useDeleteStudent();
+
+    const handleDeleteStudent = ({ studentId }: { studentId: string }) => {
+        if (confirm("Are you sure? This cannot be undone.")) {
+            deleteStudent(
+                { id: studentId },
+                {
+                    onSuccess: () => router.push(`/dashboard/admin/students`),
+                }
+            );
+        }
+    };
 
     const getStatusStyle = (status: string) => {
         switch (status) {
@@ -129,7 +141,9 @@ const ViewStudentsTable = ({ students }: StudentProps) => {
                                                     size="sm"
                                                     className="bg-red-100 rounded-sm hover:bg-red-200 text-destructive"
                                                     disabled={isPending}
-                                                //   onClick={handleDeleteStudent(s._id)}
+                                                    onClick={() =>
+                                                        handleDeleteStudent({ studentId: s._id })
+                                                    }
                                                 >
                                                     <Trash2 className="h-4 w-4" />
                                                 </Button>
