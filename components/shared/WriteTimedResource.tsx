@@ -163,7 +163,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
                   }
                   accept=".pdf"
                   className="bg-white rounded-none"
-                  disabled={isUploading}
+                  disabled={isUploading || isTimeUp}
                 />
                 <div className="flex justify-end">
                   <Button
