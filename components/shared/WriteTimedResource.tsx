@@ -170,7 +170,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
                     type="submit"
                     variant="default"
                     className="rounded-none"
-                    disabled={isUploading}
+                    disabled={isUploading || isTimeUp}
                   >
                     {isUploading ? (
                       <div>
