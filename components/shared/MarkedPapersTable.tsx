@@ -14,7 +14,7 @@ import DownloadButton from "./DownloadButton";
 
 interface ResourceProps {
     resources: {
-        paperId: {
+        resourceId: {
             title: string;
             firstName: string;
         };
@@ -47,7 +47,7 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                             <TableRow key={r._id}>
                                 <TableCell className="font-medium">
                                     <div className="flex items-center capitalize gap-2">
-                                        {r.paperId?.title}
+                                        {r.resourceId?.title}
                                     </div>
                                 </TableCell>
 
@@ -59,7 +59,7 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                                         variant="ghost"
                                         enableIcon={false}
                                         publicId={r.markedPublicId}
-                                        fileName={`marked-${r.paperId.firstName}-${r.paperId.title}`}
+                                        fileName={`marked-${r.resourceId.firstName}-${r.resourceId.title}`}
                                     />
                                 </TableCell>
                             </TableRow>

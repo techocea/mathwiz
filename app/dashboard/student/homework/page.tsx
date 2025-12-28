@@ -39,7 +39,7 @@ const Homework = () => {
         switch (activeTab) {
             case "activities":
                 return <WriteResource resources={homework} type={resourceType} />;
-            case "marking-schemes":
+            case "markings":
                 return <MarkingSchemesTable resources={markingSchemes} />;
             default:
                 null;

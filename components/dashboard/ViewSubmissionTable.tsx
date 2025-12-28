@@ -45,10 +45,10 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                                         {s.studentId.lastName}
                                     </div>
                                 </TableCell>
-                                <TableCell className="capitalize">{s.paperId.title}</TableCell>
+                                <TableCell className="capitalize">{s.resourceId.title}</TableCell>
                                 <TableCell>{new Date(s.startTime).toLocaleString()}</TableCell>
                                 <TableCell>
-                                    {new Date(s.submittedAt).toLocaleString()}
+                                    {new Date(s.createdAt).toLocaleString()}
                                 </TableCell>
                                 {/* <TableCell>Graded</TableCell> */}
                                 <TableCell align="center" className="cursor-pointer">
@@ -71,7 +71,7 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                                                     enableIcon={false}
                                                     variant="ghost"
                                                     publicId={s.submissionPublicId}
-                                                    fileName={`submission-${s?.studentId?.firstName}-${s?.paperId?.title}`}
+                                                    fileName={`submission-${s?.studentId?.firstName}-${s?.resourceId?.title}`}
                                                 />
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>

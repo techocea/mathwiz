@@ -5,7 +5,7 @@ export type ResourceType =
   | "homework"
   | "speed-paper";
 
-export type ActiveTabTypes = "activities" | "marked-papers" | "marking-schemes";
+export type ActiveTabTypes = "activities" | "marked" | "markings";
 
 export type StatusTypes = "pending" | "approved" | "rejected" | "banned";
 
@@ -46,12 +46,12 @@ export interface SubmissionProps {
     _id: string;
     submissionPublicId: string;
     startTime: string;
-    submittedAt: string;
+    createdAt: string;
     studentId: {
       firstName: string;
       lastName: string;
     };
-    paperId: {
+    resourceId: {
       title: string;
     };
   }[];

@@ -49,7 +49,7 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
     };
 
     return (
-        <Card className="w-full rounded-md border bg-white/80 py-2 px-4 backdrop-blur-sm shadow-sm">
+        <Card className="w-full rounded-md bg-white/80 py-2 px-4">
             <Table>
                 <TableHeader>
                     <TableRow>

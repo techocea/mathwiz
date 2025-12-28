@@ -1,7 +1,6 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import BlurGradient from "@/components/shared/BlurGradient";
 import WriteTimedResource from "@/components/shared/WriteTimedResource";
 
 interface PageProps {
@@ -28,14 +27,11 @@ const WriteSpeedPaper = async ({ params }: PageProps) => {
   const serializedPaper = JSON.parse(JSON.stringify(paper));
 
   return (
-    <div className="flex flex-col border-2">
-      <BlurGradient />
-      <div className="px-4 py-6 lg:py-16">
-        <WriteTimedResource
-          resourceId={serializedPaper._id.toString()}
-          paper={serializedPaper}
-        />
-      </div>
+    <div className="flex flex-col">
+      <WriteTimedResource
+        resourceId={serializedPaper._id.toString()}
+        paper={serializedPaper}
+      />
     </div>
   );
 };

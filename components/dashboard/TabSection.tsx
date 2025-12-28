@@ -20,9 +20,9 @@ const TabSection = ({
             <TabsList>
                 <TabsTrigger value="activities">Activities</TabsTrigger>
                 {resourceType != "homework" && resourceType != "worksheet" && (
-                    <TabsTrigger value="marked-papers">Marked Papers</TabsTrigger>
+                    <TabsTrigger value="marked">Marked</TabsTrigger>
                 )}
-                <TabsTrigger value="marking-schemes">Marking Schemes</TabsTrigger>
+                <TabsTrigger value="markings">Markings</TabsTrigger>
             </TabsList>
         </Tabs>
     );

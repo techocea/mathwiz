@@ -24,7 +24,6 @@ export const registrationSchema = z.object({
     .refine((val) => val !== undefined, {
       message: "Please select your year.",
     }),
-
   medium: z
     .enum(["Sinhala", "English"])
     .optional()

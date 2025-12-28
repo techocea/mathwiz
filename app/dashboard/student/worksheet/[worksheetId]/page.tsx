@@ -28,12 +28,10 @@ const WritePapers = async ({ params }: PageProps) => {
 
   return (
     <div className="flex flex-col">
-
       <WriteNormalPaper
         resourceId={serializedPaper._id.toString()}
         resource={serializedPaper}
       />
-
     </div>
   );
 };

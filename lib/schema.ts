@@ -56,7 +56,7 @@ const submissionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    paperId: {
+    resourceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Resource",
       required: true,
@@ -80,10 +80,6 @@ const submissionSchema = new mongoose.Schema(
     },
     markedPublicId: { type: String },
     startTime: { type: Date },
-    submittedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   { timestamps: true }
 );

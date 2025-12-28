@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { formatTime } from "@/helpers/formatTime";
 import React, { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { useTimer } from "@/app/providers/TimerContext";
 
 interface PaperProps {
@@ -44,14 +43,13 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
     setExamSubmitted,
   } = useTimer();
 
-  // Start the timer if not already running and if the paper exists
   useEffect(() => {
     if (paper && !isRunning && !isTimeUp && currentExamId !== paper._id) {
       startTimer(paper.durationMinutes, paper._id);
     }
   }, [paper, isRunning, isTimeUp, currentExamId, startTimer]);
 
-  //dangerous level
+
   const getDangerLevel = (): string => {
     if (isTimeUp) return "text-destructive";
     if (timeRemaining < 30000) return "text-red-500";
@@ -59,7 +57,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
     return "text-green-500";
   };
 
-  // Calculate progress
+
   const totalDurationMilliSeconds = (paper?.durationMinutes ?? 0) * 60 * 1000;
   const timeElapsed = totalDurationMilliSeconds - timeRemaining;
   const rawProgress = timeElapsed / totalDurationMilliSeconds;
@@ -75,7 +73,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
     formData.append("resourceId", resourceId);
 
     if (!resourceId) {
-      return toast.error("Missing paper ID");
+      return toast.error("Missing resource ID");
     }
 
     const examStartTime = localStorage.getItem(`examStartTime_${resourceId}`);
@@ -109,8 +107,8 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
   };
 
   return (
-    <div className="lg:max-w-2xl w-full mx-auto">
-      <div className="fixed max-sm:top-28 bottom-8 left-4 z-10">
+    <div className="lg:max-w-2xl w-full lg:mx-auto">
+      <div className="fixed bottom-8 left-4 z-10">
         <div
           className={`flex items-center space-x-2 min-w-24 lg:p-6 p-4 bg-white/90 backdrop-blur-sm shadow-lg rounded-full border ${isTimeUp ? "border-red-500" : "border-primary/20"
             }`}
@@ -134,7 +132,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
         </div>
       </div>
 
-      <Card className="bg-white/80 backdrop-blur-sm gap-4">
+      <Card className="bg-white/80 backdrop-blur-sm gap-4 max-sm:px-0">
         <CardHeader className="font-semibold text-xl leading-tight">
           Exam Instructions
         </CardHeader>
@@ -152,7 +150,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
             enableIcon={true}
             variant="outline"
             fileName={`${paper?.title}`}
-            publicId={paper.cloudinaryPublicId}
+            publicId={paper?.cloudinaryPublicId}
           />
           <form onSubmit={handleSubmit} className="w-full mt-2">
             <div className="space-y-2">
@@ -188,7 +186,6 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
           </form>
         </CardFooter>
       </Card>
-      <Separator className="my-8" />
     </div>
   );
 };

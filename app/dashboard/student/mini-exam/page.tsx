@@ -41,9 +41,9 @@ const MiniExams = () => {
         switch (activeTab) {
             case "activities":
                 return <WriteResource resources={miniExams} type={resourceType} />;
-            case "marked-papers":
+            case "marked":
                 return <MarkedPapersTable resources={markedPapers} />;
-            case "marking-schemes":
+            case "markings":
                 return <MarkingSchemesTable resources={markingSchemes} />;
             default:
                 null;
@@ -61,8 +61,9 @@ const MiniExams = () => {
                     <TabSection resourceType={resourceType} activeTab={activeTab} onTabChange={setActiveTab} />
                 </div>
             </div>
-
-            {renderContent()}
+            <div className="w-full">
+                {renderContent()}
+            </div>
         </div>
     );
 };

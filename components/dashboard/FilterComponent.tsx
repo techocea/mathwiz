@@ -31,7 +31,7 @@ const FilterComponent = ({
     onYearChange,
 }: FilterComponentProps) => {
     return (
-        <div className="bg-white rounded-lg flex gap-4 border p-4 mb-4 max-w-xl w-full">
+        <div className="bg-white rounded-lg flex max-sm:flex-col lg:flex-row gap-4 border p-4 mb-4 lg:max-w-xl w-full">
             {(mode === "marking" || mode === "submissions") && (
                 <div className="space-y-3 w-full">
                     <Label htmlFor="type">Select Type</Label>

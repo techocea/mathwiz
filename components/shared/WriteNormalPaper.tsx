@@ -41,7 +41,7 @@ const WriteNormalPaper = ({ resourceId, resource }: ResourceProps) => {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("submissionUrl", submissionUrl);
-    formData.append("paperId", resourceId);
+    formData.append("resourceId", resourceId);
 
     if (!resourceId) {
       return toast.error("Missing resource ID");

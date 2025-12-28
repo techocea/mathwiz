@@ -41,10 +41,10 @@ export async function GET(req: NextRequest) {
     const resourceIds = resources.map((r) => r._id);
 
     const submissions = await Submission.find({
-      paperId: { $in: resourceIds },
+      resourceId: { $in: resourceIds },
     })
       .populate("studentId", "firstName lastName contact")
-      .populate("paperId", "title year medium type");
+      .populate("resourceId", "title year medium type");
 
     if (!submissions || submissions.length === 0) {
       return NextResponse.json(

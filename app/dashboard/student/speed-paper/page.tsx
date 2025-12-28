@@ -41,9 +41,9 @@ const SpeedPapers = () => {
         switch (activeTab) {
             case "activities":
                 return <WriteResource resources={speedPapers} type={resourceType} />;
-            case "marked-papers":
+            case "marked":
                 return <MarkedPapersTable resources={markedPapers} />;
-            case "marking-schemes":
+            case "markings":
                 return <MarkingSchemesTable resources={markingSchemes} />;
             default:
                 null;

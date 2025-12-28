@@ -107,12 +107,12 @@ export async function GET(req: NextRequest) {
     const submissionQuery: Record<string, any> = {
       studentId: user?._id,
       markedPdfUrl: { $exists: true, $ne: null },
-      paperId: { $in: resourceIds },
+      resourceId: { $in: resourceIds },
     };
 
     const submissions = await Submission.find(submissionQuery)
       .populate("studentId", "firstName lastName contact")
-      .populate("paperId", "title year medium type")
+      .populate("resourceId", "title year medium type")
       .sort({ createdAt: -1 });
 
     if (!submissions || submissions.length === 0) {
