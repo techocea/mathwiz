@@ -21,7 +21,7 @@ interface ResourceProps {
         _id: string;
         title: string;
         remark: string;
-        score: string;
+        score: number;
         updatedAt: string;
         markedPdfUrl: string;
         markedPublicId: string;
@@ -29,6 +29,17 @@ interface ResourceProps {
 }
 
 const MarkedPapersTable = ({ resources }: ResourceProps) => {
+    const getScoreColor = (score: number) => {
+        if (score >= 75) {
+            return <span className="text-green-600 font-semibold"> {score}</span>;
+        } else if (score >= 50) {
+            return <span className="text-yellow-600 font-semibold"> {score}</span>;
+        } else if (score < 50) {
+            return <span className="text-red-600 font-semibold"> {score}</span>;
+        }
+        return <span className="text-gray-600 font-semibold"> {score}</span>;
+    };
+
     return (
         <Card className="p-2 rounded-lg">
             <Table>
@@ -50,9 +61,8 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                                         {r.resourceId?.title}
                                     </div>
                                 </TableCell>
-
-                                <TableCell><span className="font-medium text-blue-500">{r.score}</span>/100</TableCell>
-                                <TableCell>{r.remark}</TableCell>
+                                <TableCell>{getScoreColor(r.score)} / 100</TableCell>
+                                <TableCell>{r.remark.charAt(0).toUpperCase() + r.remark.slice(1)}</TableCell>
                                 <TableCell>{format(new Date(r.updatedAt), "PP")}</TableCell>
                                 <TableCell align="right" className="items-end">
                                     <DownloadButton
@@ -66,7 +76,11 @@ const MarkedPapersTable = ({ resources }: ResourceProps) => {
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell align="center" className="capitalize py-4 font-medium text-muted-foreground text-center" colSpan={5}>
+                            <TableCell
+                                align="center"
+                                className="capitalize py-4 font-medium text-muted-foreground text-center"
+                                colSpan={5}
+                            >
                                 no marked papers yet
                             </TableCell>
                         </TableRow>

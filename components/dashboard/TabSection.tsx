@@ -19,7 +19,7 @@ const TabSection = ({
         >
             <TabsList>
                 <TabsTrigger value="activities">Activities</TabsTrigger>
-                {resourceType != "homework" && resourceType != "worksheet" && (
+                {(resourceType === "paper" || resourceType === "mini-exam" || resourceType === "speed-paper") && (
                     <TabsTrigger value="marked">Marked</TabsTrigger>
                 )}
                 <TabsTrigger value="markings">Markings</TabsTrigger>

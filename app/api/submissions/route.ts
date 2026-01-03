@@ -86,71 +86,71 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// export async function GET(req: NextRequest) {
-//   try {
-//     const cookieStore = await cookies();
-//     const token = cookieStore.get("studentToken")?.value;
+export async function GET(req: NextRequest) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("studentToken")?.value;
 
-//     if (!token) {
-//       return NextResponse.json(
-//         { message: "Unauthorized: No token" },
-//         { status: 401 }
-//       );
-//     }
+    if (!token) {
+      return NextResponse.json(
+        { message: "Unauthorized: No token" },
+        { status: 401 }
+      );
+    }
 
-//     const user = getUserFromToken(token);
+    const user = getUserFromToken(token);
 
-//     if (!user?._id) {
-//       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
-//     }
+    if (!user?._id) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    }
 
-//     await connectDB();
+    await connectDB();
 
-//     const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(req.url);
 
-//     const year = searchParams.get("year");
-//     const type = searchParams.get("type");
-//     const medium = searchParams.get("medium");
+    const year = searchParams.get("year");
+    const type = searchParams.get("type");
+    const medium = searchParams.get("medium");
 
-//     const resourceQuery: Record<string, any> = {};
+    const resourceQuery: Record<string, any> = {};
 
-//     if (year) resourceQuery.year = year;
-//     if (medium) resourceQuery.medium = medium;
-//     if (type) resourceQuery.type = type;
+    if (year) resourceQuery.year = year;
+    if (medium) resourceQuery.medium = medium;
+    if (type) resourceQuery.type = type;
 
-//     const resources = await Resource.find(resourceQuery).select("_id");
-//     const resourceIds = resources.map((r) => r._id);
+    const resources = await Resource.find(resourceQuery).select("_id");
+    const resourceIds = resources.map((r) => r._id);
 
-//     const submissionQuery: Record<string, any> = {
-//       studentId: user?._id,
-//       markedPdfUrl: { $exists: true, $ne: null },
-//       resourceId: { $in: resourceIds },
-//     };
+    const submissionQuery: Record<string, any> = {
+      studentId: user?._id,
+      markedPdfUrl: { $exists: true, $ne: null },
+      resourceId: { $in: resourceIds },
+    };
 
-//     const submissions = await Submission.find(submissionQuery)
-//       .populate("studentId", "firstName lastName contact")
-//       .populate("resourceId", "title year medium type")
-//       .sort({ createdAt: -1 });
+    const submissions = await Submission.find(submissionQuery)
+      .populate("studentId", "firstName lastName contact")
+      .populate("resourceId", "title year medium type")
+      .sort({ createdAt: -1 });
 
-//     if (!submissions || submissions.length === 0) {
-//       return NextResponse.json(
-//         { submissions, message: "No submissions found" },
-//         { status: 200 }
-//       );
-//     }
+    if (!submissions || submissions.length === 0) {
+      return NextResponse.json(
+        { submissions, message: "No submissions found" },
+        { status: 200 }
+      );
+    }
 
-//     return NextResponse.json(
-//       {
-//         submissions,
-//         message: "submissions found",
-//       },
-//       { status: 200 }
-//     );
-//   } catch (error: any) {
-//     console.error("Fetch error:", error.message || error);
-//     return NextResponse.json(
-//       { message: "Internal server error" },
-//       { status: 500 }
-//     );
-//   }
-// }
+    return NextResponse.json(
+      {
+        submissions,
+        message: "submissions found",
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Fetch error:", error.message || error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

@@ -6,8 +6,13 @@ import { useMarkingSchemes } from "@/hooks/useResource";
 import { PageHeader } from "@/components/shared/PageHeader";
 import FilterComponent from "@/components/dashboard/FilterComponent";
 import MarkingSchemaTable from "@/components/dashboard/MarkingSchemaTable";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import MarkingSchemeModal from "@/components/dashboard/MarkingSchemeModal";
 
 const MarkingSchemes = () => {
+    const router = useRouter();
     const [type, setType] = useState("paper");
     const [year, setYear] = useState("2026");
     const [medium, setMedium] = useState("English");
@@ -21,8 +26,6 @@ const MarkingSchemes = () => {
         medium,
         year,
     });
-
-
 
     if (isLoading) {
         return <Loader />;
@@ -40,6 +43,8 @@ const MarkingSchemes = () => {
                         title="Marking Schemes Management"
                         description=" Create and manage marksheets"
                     />
+
+                    <MarkingSchemeModal />
                 </div>
 
                 <div>

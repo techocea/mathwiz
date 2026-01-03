@@ -196,7 +196,7 @@ const AdminDashboardPage = () => {
                                     }
                                     className="w-full justify-start cursor-pointer"
                                 >
-                                    <FileText className="mr-2 h-4 w-4" />
+                                    <FileText className="h-4 w-4" />
                                     Manage Papers
                                 </Button>
                                 <Button
@@ -205,7 +205,7 @@ const AdminDashboardPage = () => {
                                     onClick={() => router.push("/dashboard/admin/students")}
                                     className="w-full justify-start cursor-pointer"
                                 >
-                                    <Users className="mr-2 h-4 w-4" />
+                                    <Users className="h-4 w-4" />
                                     Manage Students
                                 </Button>
                                 <MarkingSchemeModal />

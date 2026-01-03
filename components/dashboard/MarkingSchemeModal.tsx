@@ -24,7 +24,7 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { markingSchema } from "@/lib/validation";
-import { Loader2, Pen, Upload } from "lucide-react";
+import { Loader2, Plus, Upload } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const MarkingSchemeModal = () => {
@@ -83,15 +83,16 @@ const MarkingSchemeModal = () => {
             setIsUploading(false);
         }
     };
+
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button
                     size="lg"
                     variant="default"
-                    className="cursor-pointer px-0 flex items-center text-sm font-medium justify-start gap-4"
+                    className="cursor-pointer px-0 flex items-center text-sm font-medium justify-start gap-2"
                 >
-                    <Pen /> Upload Marking Scheme
+                    <Plus /> Upload Marking Scheme
                 </Button>
             </DialogTrigger>
 
@@ -131,8 +132,8 @@ const MarkingSchemeModal = () => {
                                         <SelectValue placeholder="Select medium" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="Sinhala">sinhala</SelectItem>
-                                        <SelectItem value="English">english</SelectItem>
+                                        <SelectItem value="Sinhala">Sinhala</SelectItem>
+                                        <SelectItem value="English">English</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

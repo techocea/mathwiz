@@ -82,3 +82,41 @@ export const useMarkingSchemes = ({
     enabled: Boolean(type && year && medium),
   });
 };
+
+export const useDeleteMarkingSchemes = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      await axios.delete(`/api/admin/marking-schemes/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["markings"] });
+      toast.success("Marking scheme deleted permanently");
+    },
+    onError: () => {
+      toast.error("Failed to delete marking scheme");
+    },
+  });
+};
+
+export const useUpdateMarkingScheme = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: any }) => {
+      const response = await axios.patch(
+        `/api/admin/marking-schemes/${id}`,
+        data
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["markings"] });
+      toast.success("Marking scheme updated successfully!");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Update failed");
+    },
+  });
+};
