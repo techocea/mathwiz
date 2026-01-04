@@ -126,7 +126,7 @@ const MarkingSchemeModal = () => {
                                     onValueChange={(value) =>
                                         setValue("medium", value as "Sinhala" | "English")
                                     }
-                                    defaultValue="Sinhala"
+                                    defaultValue="English"
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select medium" />
