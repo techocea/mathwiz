@@ -44,10 +44,10 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
   } = useTimer();
 
   useEffect(() => {
-    if (paper && !isRunning && !isTimeUp && currentExamId !== paper._id) {
+    if (paper && currentExamId !== paper._id && !isTimeUp) {
       startTimer(paper.durationMinutes, paper._id);
     }
-  }, [paper, isRunning, isTimeUp, currentExamId, startTimer]);
+  }, [paper, isTimeUp, currentExamId, startTimer]);
 
 
   const getDangerLevel = (): string => {
