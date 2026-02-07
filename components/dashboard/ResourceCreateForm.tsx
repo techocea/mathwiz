@@ -174,9 +174,9 @@ const ResourceCreateForm = ({ type, title }: ResourceCreateFormProps) => {
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                     <Slider
                                         id="durationMinutes"
-                                        min={5}
+                                        min={1}
                                         max={180}
-                                        step={5}
+                                        step={1}
                                         onValueChange={(value) =>
                                             setValue("durationMinutes", value[0])
                                         }

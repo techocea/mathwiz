@@ -110,7 +110,7 @@ const paperVariant = baseSchema.extend({
       if (val instanceof File) return ACCEPTED_FILE_TYPES.includes(val.type);
       return true;
     }, "Only PDF allowed"),
-  durationMinutes: z.number().min(5).max(180),
+  durationMinutes: z.number().min(1).max(180),
 });
 
 const speedPaperVariant = baseSchema.extend({

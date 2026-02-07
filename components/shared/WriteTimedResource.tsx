@@ -36,18 +36,20 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
   const [submissionUrl, setSubmissionUrl] = useState<File | null>(null);
   const {
     timeRemaining,
-    isRunning,
     isTimeUp,
     currentExamId,
     startTimer,
+    hasSubmitted,
     setExamSubmitted,
   } = useTimer();
 
+  const isLocked = isTimeUp || hasSubmitted;
+
   useEffect(() => {
-    if (paper && currentExamId !== paper._id && !isTimeUp) {
+    if (paper && currentExamId !== paper._id && !isLocked) {
       startTimer(paper.durationMinutes, paper._id);
     }
-  }, [paper, isTimeUp, currentExamId, startTimer]);
+  }, [paper, isLocked, currentExamId, startTimer]);
 
 
   const getDangerLevel = (): string => {
@@ -65,16 +67,33 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!submissionUrl) return toast.error("Please upload a file");
+
+    if (isLocked) {
+      toast.error("Submission period has ended. Exam is locked.");
+      return;
+    }
+
+    if (!submissionUrl) {
+      toast.error("Please upload a file");
+      return;
+    }
+
+   if (!resourceId) {
+      toast.error("Missing resource ID");
+      return;
+    }
+
+    const alreadySubmitted = localStorage.getItem(`examSubmitted_${resourceId}`) === "true";
+    if (alreadySubmitted) {
+      toast.error("This exam has already been submitted.");
+      return;
+    }
 
     setIsUploading(true);
+
     const formData = new FormData();
     formData.append("submissionUrl", submissionUrl);
     formData.append("resourceId", resourceId);
-
-    if (!resourceId) {
-      return toast.error("Missing resource ID");
-    }
 
     const examStartTime = localStorage.getItem(`examStartTime_${resourceId}`);
     if (examStartTime) {
@@ -163,14 +182,14 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
                   }
                   accept=".pdf"
                   className="bg-white rounded-none"
-                  disabled={isUploading || isTimeUp}
+                  disabled={isUploading || isLocked}
                 />
                 <div className="flex justify-end">
                   <Button
                     type="submit"
                     variant="default"
                     className="rounded-none"
-                    disabled={isUploading || isTimeUp}
+                    disabled={isUploading || isLocked}
                   >
                     {isUploading ? (
                       <div>
