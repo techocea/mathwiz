@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String },
     contact: { type: String },
-    year: { type: String, enum: ["2025", "2026", "2027"] },
-    medium: { type: String, enum: ["Sinhala", "English"] },
+    year: { type: String, enum: ["2028", "2027", "2026"] },
+    medium: { type: String, enum: ["sinhala", "english"] },
     school: { type: String },
     tuitionType: {
       theory: { type: Boolean, default: false },
@@ -22,15 +22,15 @@ const userSchema = new mongoose.Schema(
     },
     role: { type: String, enum: ["admin", "user"], default: "user" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const resourceSchema = new mongoose.Schema(
   {
     durationMinutes: { type: Number },
     title: { type: String, required: true },
-    medium: { type: String, enum: ["Sinhala", "English"], required: true },
-    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
+    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    year: { type: String, enum: ["2028", "2027", "2026"], required: true },
     uploadDeadline: { type: Date, required: true },
     paperUrl: { type: String },
     cloudinaryPublicId: { type: String, required: true },
@@ -46,7 +46,7 @@ const resourceSchema = new mongoose.Schema(
       enum: ["paper", "speed-paper", "mini-exam", "worksheet", "homework"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const submissionSchema = new mongoose.Schema(
@@ -81,14 +81,14 @@ const submissionSchema = new mongoose.Schema(
     markedPublicId: { type: String },
     startTime: { type: Date },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const markingSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    medium: { type: String, enum: ["Sinhala", "English"], required: true },
-    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
+    medium: { type: String, enum: ["sinhala", "english"], required: true },
+    year: { type: String, enum: ["2028", "2027", "2026"], required: true },
     markingSchemeUrl: {
       type: String,
       required: true,
@@ -103,7 +103,7 @@ const markingSchema = new mongoose.Schema(
       enum: ["paper", "speed-paper", "mini-exam", "worksheet", "homework"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const inquirySchema = new mongoose.Schema(
@@ -113,21 +113,21 @@ const inquirySchema = new mongoose.Schema(
     contact: { type: String, required: true },
     message: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const paymentSchema = new mongoose.Schema(
   {
     referenceId: { type: String, required: true },
     name: { type: String, required: true },
-    year: { type: String, enum: ["2025", "2026", "2027"], required: true },
+    year: { type: String, enum: ["2028", "2027", "2026"], required: true },
     paymentSlipUrl: { type: String, required: true },
     cloudinaryPublicId: {
       type: String,
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);

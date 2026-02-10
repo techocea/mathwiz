@@ -57,8 +57,8 @@ const ResourceCreateForm = ({ type, title }: ResourceCreateFormProps) => {
         resolver: zodResolver(createResourceSchema),
         defaultValues: {
             title: "",
-            medium: undefined,
-            year: undefined,
+            medium: "sinhala",
+            year: "2028",
             uploadDeadline: undefined,
             paperUrl: undefined,
             durationMinutes: undefined,
@@ -188,26 +188,26 @@ const ResourceCreateForm = ({ type, title }: ResourceCreateFormProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-3">
                             <Label htmlFor="year">Select Batch</Label>
-                            <Controller
-                                name="year"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select year" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="2025">2025</SelectItem>
-                                            <SelectItem value="2026">2026</SelectItem>
-                                            <SelectItem value="2027">2027</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
+                            <Select
+                                onValueChange={(value) =>
+                                    setValue("year", value as "2028" | "2027" | "2026")
+                                }
+                                defaultValue="2028"
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select year" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="2028">2028</SelectItem>
+                                    <SelectItem value="2027">2027</SelectItem>
+                                    <SelectItem value="2026">2026</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {errors.year && (
+                                <p className="text-sm text-red-500">{errors.year.message}</p>
+                            )}
                         </div>
-                        {errors.year && (
-                            <p className="text-sm text-red-500">{errors.year.message}</p>
-                        )}
+
                         <div className="space-y-3">
                             <Label htmlFor="uploadDeadline">Upload Deadline</Label>
                             <div className="flex items-center gap-2">

@@ -9,135 +9,94 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { useScroll, motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const { scrollY } = useScroll();
-  const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = scrollY.on("change", (value) => {
-      if (value > 400) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    });
-    return () => unsubscribe();
-  }, [scrollY]);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <>
-      <motion.header
-        initial={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
-        animate={{
-          backgroundColor: isScrolled
-            ? "rgba(255, 255, 255, 1)"
-            : "rgba(255, 255, 255, 0)",
-        }}
-        transition={{ duration: 0.3 }}
-        className={`fixed top-0 left-0 right-0 z-50 py-4 px-8 flex items-center justify-between w-full ${isScrolled ? "shadow-md text-black" : " text-white"
-          }`}
-      >
-        <div>
-          <Image
-            src="/mathwiz.png"
-            width={95}
-            height={95}
-            priority
-            quality={100}
-            alt="a good maths in negombo"
-          />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled ? "bg-white/90 backdrop-blur-xl py-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-100" : "bg-transparent py-8"}`}
+    >
+      <div className="lg:max-w-6xl mx-auto px-6 flex justify-between items-center">
+        <Link href="#/" className="flex items-center space-x-3 group">
+          <div>
+            <Image
+              src="/mathwiz.png"
+              width={95}
+              height={95}
+              priority
+              quality={100}
+              alt="a good maths in negombo"
+            />
+          </div>
+        </Link>
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center space-x-10">
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-xs font-bold text-slate-500 hover:text-slate-950 transition-all uppercase tracking-[0.15em] relative group"
+            >
+              {item.label}
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-amber-500 group-hover:w-full transition-all duration-300"></span>
+            </a>
+          ))}
+          <Link
+            href="/registration"
+            className="px-8 py-3 bg-slate-950 text-white text-xs font-black uppercase tracking-widest rounded-full hover:bg-amber-500 hover:text-slate-950 transition-all transform active:scale-95"
+          >
+            Enroll Now
+          </Link>
         </div>
-        <nav className="hidden lg:flex gap-10 items-center">
+
+        {/* Mobile Toggle */}
+        <Button
+          variant="ghost"
+          className="lg:hidden z-[100] text-slate-950 hover:bg-transparent relative"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle Menu"
+        >
+          {mobileMenuOpen ? (
+            <X size={32} className="transition-transform duration-300 rotate-0" />
+          ) : (
+            <Menu size={32} className="transition-transform duration-300" />
+          )}
+        </Button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`lg:hidden fixed inset-0 top-20 h-screen bg-white z-50 transition-all duration-500 ${mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"}`}
+      >
+        <div className="flex flex-col items-center justify-center h-full space-y-8 -mt-10 px-6">
           {NAV_ITEMS.map((item) => (
             <Link
-              key={item.id}
+              key={item.label}
               href={item.href}
-              className="text-sm hover:text-blue-500 transition-colors duration-300"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl font-black text-slate-950 tracking-tighter hover:text-amber-500 transition-colors"
             >
               {item.label}
             </Link>
           ))}
-          <Link href="/registration">
-            <Button
-              variant={isScrolled ? "default" : "outline"}
-              size="lg"
-              className="text-sm rounded-none w-full"
-            >
-              Enroll now
-            </Button>
-          </Link>
-        </nav>
-
-        <div className="lg:hidden z-50 relative">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`${isScrolled ? "text-primary" : "text-white "
-              } cursor-pointer p-2 focus:outline-none`}
-            aria-label="Toggle Menu"
+          <Link
+            href="/registration"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full max-w-xs py-5 bg-slate-950 text-white text-center text-sm font-black uppercase tracking-widest rounded-full"
           >
-            {isOpen ? null : <Menu size={28} />}
-          </button>
-
-          <AnimatePresence>
-            {isOpen && (
-              <>
-                {/* Overlay */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black"
-                  onClick={() => setIsOpen(false)}
-                  style={{ zIndex: 40 }}
-                />
-
-                {/* Mobile Navigation */}
-                <motion.nav
-                  initial={{ x: "100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "100%" }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="fixed top-0 right-0 w-64 h-screen bg-white shadow-lg z-50"
-                >
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="absolute cursor-pointer top-4 right-4 text-gray-800"
-                    aria-label="Close Menu"
-                  >
-                    <X size={28} />
-                  </button>
-
-                  <ul className="flex flex-col p-4 pt-16 space-y-8 text-secondary w-full">
-                    {NAV_ITEMS.map((link) => (
-                      <li key={link.href} className="border-b border-muted/40">
-                        <Link
-                          href={link.href}
-                          className="hover:text-blue-500 transition-colors w-full"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-col gap-4 p-4 pt-8">
-                    <Link href="/login">
-                      <Button
-                        variant="secondary"
-                        size="lg"
-                        className="uppercase rounded-none w-full"
-                      >
-                        Enroll now
-                      </Button>
-                    </Link>
-                  </div>
-                </motion.nav>
-              </>
-            )}
-          </AnimatePresence>
+            Join Class
+          </Link>
         </div>
-      </motion.header>
-    </>
+      </div>
+    </nav>
   );
 }

@@ -89,3 +89,15 @@ export interface PaymentProps {
     paymentSlipUrl: string;
   }[];
 }
+
+export interface ContactData {
+  name: string;
+  contact: string;
+  email: string;
+  message: string;
+}
+
+export interface ContactFormProps {
+  loading: boolean;
+  onSubmit: (data: ContactData) => Promise<void>;
+}
