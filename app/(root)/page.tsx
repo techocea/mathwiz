@@ -1,40 +1,29 @@
 "use client";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ArrowRight,
-  ChevronLeft,
-  Loader2,
-  Mail,
   MapPin,
-  PhoneCall,
+  Phone,
 } from "lucide-react";
-import clsx from "clsx";
 import axios from "axios";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
-import { HIGHLIGHTS, TIMETABLE } from "@/lib/constants";
-import PageWrapper from "@/components/layout/PageWrapper";
-import ContactItem from "@/components/shared/Contact-Item";
+import {
+  FOOTER_SOCIALS,
+  HIGHLIGHTS,
+  PAPER_CLASS_FEATURES,
+  TIMETABLE,
+} from "@/lib/constants";
 import { motion, useScroll, useTransform } from "framer-motion";
 import ScrollTriggered from "@/components/layout/ScrollTriggered";
-
+import FloatingSymbols from "@/components/shared/FloatingSymbols";
+import ContactForm from "@/components/shared/ContactForm";
+import { ContactData } from "@/types";
+import TestimonialSlider from "@/components/shared/TestimonialSlider";
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const ref = useRef(null);
@@ -45,26 +34,19 @@ export default function Home() {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactData) => {
     setIsLoading(true);
 
     try {
       const res = await axios.post("/api/contact", {
-        name,
-        email,
-        contact,
-        message,
+        name: data.name,
+        contact: data.contact,
+        email: data.email,
+        message: data.message,
       });
 
       if (res.status === 200) {
         toast.success("Form submitted successfully");
-        setName("");
-        setEmail("");
-        setContact("");
-        setMessage("");
-      } else {
-        toast.error("Failed to submit the form");
       }
     } catch (error) {
       console.log("Error in submitting the form: ", error);
@@ -75,502 +57,567 @@ export default function Home() {
   };
 
   return (
-    <PageWrapper>
-      <main className="flex scroll-smooth h-full flex-col items-center">
-        {/* NAVBAR */}
-        <div className="w-full">
-          <Navbar />
-        </div>
-        {/* HERO SECTION */}
-        <motion.section
-          ref={ref}
-          style={{ y }}
-          id="hero"
-          className="w-full flex-1"
-        >
-          <div className="relative h-screen overflow-hidden">
-            <div className="absolute inset-0 z-0">
-              <Image
-                src="/2.png"
-                fill
-                priority
-                alt="Best tuition in Negombo"
-                quality={100}
-                className="object-cover"
-              />
+    // <PageWrapper>
+    <main className="flex scroll-smooth h-full w-full flex-col items-center">
+      {/* NAVBAR */}
+      <div className="w-full">
+        <Navbar />
+      </div>
+      {/* HERO SECTION */}
+      <motion.section
+        ref={ref}
+        style={{ y }}
+        id="hero"
+        className="relative w-full min-h-screen flex items-center pt-36 lg:py-36 overflow-hidden bg-white math-grid"
+      >
+        <FloatingSymbols />
+
+        <div className="lg:max-w-6xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center px-4 py-1.5 mb-8 rounded-full bg-slate-900 text-amber-400 text-xs font-bold tracking-[0.2em] uppercase">
+              <span className="w-2 h-2 bg-amber-400 rounded-full mr-3 animate-pulse"></span>
+              G.C.E. Advanced Level 2026 | 2027 | 2028
             </div>
 
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-              <div className="flex flex-col items-center justify-center text-white space-y-6 px-4 text-center">
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-[40px] h-1 bg-white border-2 border-white" />
-                  <h2 className="text-sm sm:text-base md:text-lg font-semibold uppercase tracking-wide">
-                    best maths class in negombo
-                  </h2>
+            <h1 className="text-5xl md:text-7xl font-black text-slate-950 mb-8 leading-[0.9] tracking-tighter">
+              Mastering <br />
+              <span className="text-amber-500 font-serif italic font-normal px-2">
+                Combined
+              </span>{" "}
+              <br />
+              Mathematics.
+            </h1>
+
+            <p className="text-lg text-slate-600 mb-12 max-w-xl leading-relaxed font-normal">
+              Unlock the engineering mindset. Sri Lanka's most logical approach
+              to
+              <span className="text-slate-900 font-bold"> Pure</span> and
+              <span className="text-slate-900 font-bold"> Applied</span>{" "}
+              mathematics.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+              <Link
+                href="/registration"
+                className="group relative w-full sm:w-auto px-12 py-5 bg-slate-950 text-white font-bold rounded-full transition-all overflow-hidden shadow-2xl"
+              >
+                <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span className="relative z-10 group-hover:text-slate-950 transition-colors">
+                  Start Your Journey
+                </span>
+              </Link>
+              <Link
+                href="#time-table"
+                className="w-full sm:w-auto px-12 py-5 border-2 border-slate-200 text-slate-950 font-bold rounded-full hover:bg-slate-50 transition-all flex items-center justify-center"
+              >
+                View Schedule
+              </Link>
+            </div>
+
+            <div className="mt-16 pt-10 border-t border-slate-100 flex items-center sm:items-start justify-center lg:justify-start gap-10">
+              <div>
+                <div className="text-3xl font-black text-slate-950 tracking-tighter">
+                  100 +
                 </div>
-
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight">
-                  CHAMODA
-                  <br /> LIYANAGE
-                </h1>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 w-full max-w-md">
-                  <Link href="/dashboard/student">
-                    <Button
-                      variant="default"
-                      size="lg"
-                      className="uppercase cursor-pointer rounded-none w-full"
-                    >
-                      student portal
-                      <ArrowRight className="ml-2" />
-                    </Button>
-                  </Link>
-                  <Link href="#top-rankers">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="uppercase rounded-none w-full"
-                    >
-                      view results
-                    </Button>
-                  </Link>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  Active Learners
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-slate-950 tracking-tighter">
+                  98%
+                </div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  A/B Pass Rate
                 </div>
               </div>
             </div>
           </div>
-        </motion.section>
 
-        {/* ABOUT SECTION */}
+          <div className="relative hidden lg:block">
+            <div className="absolute -top-10 -right-10 w-96 h-96 bg-amber-500/10 blur-[120px] rounded-full"></div>
+            <div className="absolute -bottom-10 -left-10 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full"></div>
+
+            <div className="relative z-10 bg-white p-3 rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-slate-100 transform rotate-2 hover:rotate-0 transition-all duration-1000">
+              <Image
+                src="/3.png"
+                width={850}
+                height={650}
+                alt="Advanced Level Mathematics Education"
+                className="rounded-3xl w-full h-[650px] object-cover"
+              />
+
+              <div className="absolute top-10 -left-10 dark-glass-card p-6 rounded-3xl shadow-2xl max-w-[240px] animate-float">
+                <div className="text-amber-400 font-black text-2xl mb-1">
+                  100%
+                </div>
+                <div className="text-white/60 text-xs font-bold uppercase tracking-widest leading-tight">
+                  Syllabus Coverage Guarantee
+                </div>
+              </div>
+
+              <div
+                className="absolute bottom-12 -right-10 glass-card p-6 rounded-3xl shadow-2xl max-w-[240px] animate-float"
+                style={{ animationDelay: "1s" }}
+              >
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3].map((i) => (
+                      <img
+                        key={i}
+                        src={`https://picsum.photos/seed/s${i}/40/40`}
+                        className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">
+                    Success Community
+                  </span>
+                </div>
+                <div className="text-slate-950 font-bold text-sm leading-tight">
+                  Join the next cohort of University Entrants.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* HIGHLIGHTS */}
+      <ScrollTriggered>
         <section
-          id="about"
-          className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24"
+          id="highlights"
+          className="py-20 bg-slate-50 border-y border-slate-100 relative overflow-hidden"
         >
-          <ScrollTriggered>
-            <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
-              {/* Text Content */}
-              <div className="flex-1 w-full">
-                <div className="flex flex-col gap-4 text-left">
-                  <h3 className="text-primary text-xs sm:text-sm uppercase font-semibold">
-                    about the tutor &gt;&gt;
-                  </h3>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-secondary">
-                    CHAMODA LIYANAGE
-                  </h3>
-                  <div className="border-l-4 border-primary pl-4 mt-2 text-muted text-sm sm:text-base">
-                    <p>
-                      Chamoda Liyanage is a B.Sc(Hons) Electrical & Electronic
-                      Engineering graduate of the University of Peradeniya. With
-                      7+ years of experience teaching Combined Maths in Negombo,
-                      Chamoda has won the hearts of students across town with
-                      his unique teaching style.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-6 mt-10">
-                  <div>
-                    <h4 className="uppercase font-bold text-lg text-secondary">
-                      acbs - negombo
-                    </h4>
-                    <Link
-                      href="/"
-                      className="flex gap-2 items-center justify-start hover:text-primary transition-all text-sm font-medium hover:underline capitalize"
-                    >
-                      see timetable{" "}
-                      <ChevronLeft className="rotate-180 w-4 h-4" />
-                    </Link>
-                  </div>
-                  <div>
-                    <h4 className="uppercase font-bold text-lg text-secondary">
-                      online paper class
-                    </h4>
-                    <p className="text-sm font-medium capitalize text-muted">
-                      Every Thursday 7.00 PM
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Image */}
-              <div className="mt-10 lg:mt-0 flex-1 flex items-center justify-center w-full">
-                <div className="relative w-[360px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
-                  <Image
-                    src="/banner.png"
-                    width={150}
-                    height={150}
-                    alt="Spinning badge"
-                    className="absolute -top-8 -left-8 z-10 animate-spin [animation-duration:6s]"
-                  />
-                  <Image
-                    src="/main.jpg"
-                    width={342}
-                    height={433}
-                    priority
-                    quality={100}
-                    alt="best tuition in Negombo"
-                    className="rounded-lg shadow-lg w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </ScrollTriggered>
-        </section>
-
-        {/* HIGHLIGHTS */}
-        <ScrollTriggered>
-          <section
-            id="highlights"
-            className="bg-accent w-full py-16 px-4 sm:px-8 md:px-16 lg:px-24"
-          >
-            <div className="flex flex-col items-center justify-center w-full">
-              <div className="lg:max-w-2xl grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-                {HIGHLIGHTS.map((highlight) => (
-                  <Card
-                    key={highlight.id}
-                    className={clsx(
-                      "flex flex-col max-w-[250px] w-full py-6 px-4 rounded-lg shadow-lg",
-                      highlight.shadowColor && `shadow-${highlight.shadowColor}`
-                    )}
-                  >
-                    <CardHeader className="flex flex-col items-center text-center space-y-4">
-                      <CardTitle className="flex items-center gap-3 justify-center">
-                        <div
-                          className={clsx(
-                            "w-10 h-10 rounded-full flex items-center justify-center",
-                            highlight.bgColor,
-                            highlight.itemColor
-                          )}
-                        >
-                          <highlight.icon size={24} />
-                        </div>
-                        <h3
-                          className={clsx(
-                            "text-2xl sm:text-3xl font-bold",
-                            highlight.textColor
-                          )}
-                        >
-                          {highlight.label}
-                        </h3>
-                      </CardTitle>
-                      <p
-                        className={clsx(
-                          "text-sm sm:text-base font-medium capitalize",
-                          highlight.textColor
-                        )}
-                      >
-                        {highlight.description}
-                      </p>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        </ScrollTriggered>
-
-        {/* TOP RESULTS SECTION */}
-        {/* <section
-          id="top-rankers"
-          className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24 h-full"
-        >
-          <ScrollTriggered>
-            <div className="flex flex-col items-center justify-center">
-              <h3 className="text-teal-500 text-sm uppercase font-semibold">
-                &lt;&lt; top results from our paper class &gt;&gt;
-              </h3>
-              <h3 className="text-4xl font-bold text-secondary">TOP RANKERS</h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-8 mt-10">
-                {["/paper1.jpg", "/paper2.jpg"].map((image, index) => (
+          <div className="lg:max-w-6xl mx-auto px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12">
+              {HIGHLIGHTS.map((item) => (
+                <div
+                  key={item.id}
+                  className="relative group text-center md:text-left flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 p-4"
+                >
                   <div
-                    key={index}
-                    className="relative w-full h-[500px] lg:h-[400px]"
+                    className={`w-20 h-20 rounded-2xl ${item.bgColor} flex items-center justify-center ${item.itemColor} transform group-hover:rotate-12 transition-all duration-500 shadow-sm border border-white/50 flex-shrink-0`}
                   >
-                    <Image
-                      src={image}
-                      width={442}
-                      height={433}
-                      priority
-                      quality={100}
-                      alt="best tuition in negombo"
-                      className="rounded-lg shadow-lg object-cover"
-                    />
+                    <item.icon className="w-10 h-10" />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <h1 className="text-4xl font-bold text-slate-950 tracking-tighter mb-1">
+                      {item.label}
+                    </h1>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em] w-full">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Subtle divider for desktop */}
+                  {item.id < 3 && (
+                    <div className="hidden lg:block absolute right-[-24px] top-1/2 -translate-y-1/2 w-px h-12 bg-slate-200"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </ScrollTriggered>
+
+      {/* ABOUT SECTION */}
+      <section
+        id="about"
+        className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24"
+      >
+        <ScrollTriggered>
+          <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-amber-500/10 blur-[100px] rounded-full group-hover:bg-amber-500/20 transition-all duration-700"></div>
+              <div className="relative bg-slate-50 p-3 rounded-4xl shadow-2xl overflow-hidden border border-slate-100">
+                <Image
+                  src="/main.jpg"
+                  width={800}
+                  height={650}
+                  alt="Chamoda Liyanage - Lead Combined Maths Tutor"
+                  className="w-full h-[650px] rounded-3xl object-cover filter hover:grayscale-0 transition-all duration-1000"
+                />
+                <div className="absolute bottom-12 left-12 right-12">
+                  <div className="dark-glass-card p-8 rounded-2xl border border-white/20 shadow-2xl">
+                    <h4 className="text-white font-black text-2xl mb-2 tracking-tight">
+                      Chamoda Liyanage
+                    </h4>
+                    <p className="text-amber-500 text-[10px] font-black uppercase tracking-[0.2em]">
+                      B.Sc(Hons) Electrical & Electronic Engineering
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-10">
+              <div>
+                <h2 className="text-amber-600 font-bold uppercase tracking-[0.3em] text-xs mb-6">
+                  The Lead Strategist
+                </h2>
+                <h1 className="text-5xl md:text-6xl font-black text-slate-950 leading-[0.9] tracking-tighter">
+                  Where Logic <br />
+                  Meets{" "}
+                  <span className="font-serif italic font-normal text-amber-500">
+                    Mastery
+                  </span>
+                  .
+                </h1>
+              </div>
+
+              <p className="text-slate-600 text-base leading-relaxed font-normal">
+                Chamoda Liyanage is a B.Sc(Hons) Electrical & Electronic
+                Engineering graduate of the University of Peradeniya. With 7+
+                years of experience teaching Combined Maths in Negombo, Chamoda
+                has won the hearts of students across town with his unique
+                teaching style.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {[
+                  {
+                    title: "Precision",
+                    desc: "Short-cut logic for complex Pure Maths.",
+                  },
+                  {
+                    title: "Visualisation",
+                    desc: "Mental mapping for Applied mechanics.",
+                  },
+                  {
+                    title: "Prediction",
+                    desc: "Paper patterns based on 15yr data.",
+                  },
+                  {
+                    title: "Mentorship",
+                    desc: "Direct 1-on-1 guidance for top ranks.",
+                  },
+                ].map((item, idx) => (
+                  <div key={idx} className="group">
+                    <div className="text-slate-950 font-bold text-lg mb-2 flex items-center">
+                      <span className="w-2 h-2 bg-amber-500 rounded-full mr-3 group-hover:scale-150 transition-transform"></span>
+                      {item.title}
+                    </div>
+                    <p className="text-slate-500 text-sm font-medium">
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
-            </div>
-          </ScrollTriggered>
-        </section> */}
 
-        {/* ONLINE PAPER CLASS */}
-        <section
-          id="online"
-          className="w-full py-24 px-4 sm:px-8 md:px-16 lg:py-32 lg:px-24"
-        >
-          <ScrollTriggered>
-            <div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-12">
-              <div className="flex-1 flex items-center justify-center mt-10 lg:mt-0">
-                <div className="relative w-[360px] sm:w-[320px] md:w-[342px] h-[420px] sm:h-[460px] md:h-[500px]">
-                  <Image
-                    src="/banner.png"
-                    width={150}
-                    height={150}
-                    alt="banner"
-                    className="absolute -top-8 -left-8 z-10 animate-spin [animation-duration:6s] transition-all"
-                  />
-                  <Image
-                    src="/online.jpg"
-                    width={402}
-                    height={433}
-                    priority
-                    quality={100}
-                    alt="best tuition in negombo"
-                    className="rounded-lg shadow-lg w-full h-full object-cover"
-                  />
-                </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+                <Link
+                  href="#contact"
+                  className="group relative w-full sm:w-auto px-12 py-5 bg-slate-950 text-white font-bold rounded-full transition-all overflow-hidden shadow-2xl"
+                >
+                  <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                  <span className="relative z-10 group-hover:text-slate-950 transition-colors">
+                    Experience a Session
+                  </span>
+                </Link>
               </div>
-              <div className="flex-1">
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-blue-500 text-sm uppercase font-semibold">
-                    online paper class &gt;&gt;
-                  </h3>
-                  <h3 className="text-4xl font-bold capitalize text-secondary">
-                    enhance your paper writing skills with mathwiz.lk
-                  </h3>
-                  <div className="border-l-[4px] border-blue-500 pl-4 mt-4 text-muted">
-                    <p className="text-sm sm:text-base">
-                      Our website provides:
+            </div>
+          </div>
+        </ScrollTriggered>
+      </section>
+
+      {/* ONLINE PAPER CLASS */}
+      <section
+        id="paper-class"
+        className="py-24 lg:py-32 bg-slate-950 relative overflow-hidden w-full math-grid-dark"
+      >
+        <div className="px-6 relative z-10">
+          <div className="mx-auto text-center mb-24">
+            <h2 className="text-amber-500 font-bold uppercase tracking-[0.3em] text-xs mb-6">
+              Exam Excellence Strategy
+            </h2>
+            <h3 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-wider">
+              The{" "}
+              <span className="font-serif italic font-normal text-amber-500">
+                Elite
+              </span>{" "}
+              Paper Program.
+            </h3>
+            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto font-normal">
+              Moving beyond theory. Our paper class is the final refinery where
+              students are forged into top rankers through rigorous testing and
+              logical analysis.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 lg:max-w-5xl w-full mx-auto">
+            {PAPER_CLASS_FEATURES.map((feature, idx) => (
+              <div
+                key={idx}
+                className="group relative bg-white/[0.03] border border-white/10 p-10 lg:p-12 rounded-3xl hover:bg-white/[0.06] transition-all duration-500"
+              >
+                <div className="flex flex-col md:flex-row items-start gap-8">
+                  <div className="w-20 h-20 rounded-2xl bg-amber-500/10 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500 border border-amber-500/20">
+                    {feature.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xl font-black text-white mb-4 tracking-tight group-hover:text-amber-500 transition-colors">
+                      {feature.title}
+                    </h4>
+                    <p className="text-slate-400 text-base leading-relaxed font-normal">
+                      {feature.description}
                     </p>
-                    <ul className="text-sm sm:text-base pl-6">
-                      <li className="list-disc">
-                        The ability to write papers online.
-                      </li>
-                      <li className="list-disc">
-                        The website trains the student to write the paper on
-                        time.
-                      </li>
-                      <li className="list-disc">
-                        By joining our paper class, the student will face the
-                        real A/L exam experience.
-                      </li>
-                    </ul>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-4 mt-8">
-                  <div className="flex gap-4 items-center justify-start">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                      <PhoneCall size={24} className="text-white" />
+                {/* Animated Progress Line Decor */}
+                <div className="absolute bottom-0 left-12 right-12 h-1 bg-white/5 overflow-hidden rounded-full">
+                  <div className="w-full h-full bg-gradient-to-right from-amber-500 to-transparent -translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="lg:max-w-5xl w-full mx-auto mt-24 p-12 bg-amber-500 rounded-4xl relative overflow-hidden group shadow-2xl shadow-amber-500/20">
+            <div className="absolute -bottom-32 right-0 p-8 text-slate-950/10 text-[180px] font-black pointer-events-none select-none italic font-serif">
+              A+
+            </div>
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+              <div className="max-w-2xl">
+                <h4 className="text-3xl lg:text-4xl font-black text-slate-950 mb-4 tracking-normal">
+                  Ready to conquer the 2027/28 Exam?
+                </h4>
+                <p className="text-slate-900/80 text-base leading-relaxed font-normal">
+                  Limited seats available for the next Physical Paper session in
+                  Negombo & Nugegoda.
+                </p>
+              </div>
+              <Link
+                href="/registration"
+                className="px-12 py-5 bg-slate-950 text-white font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all shadow-xl whitespace-nowrap"
+              >
+                Secure My Rank
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TIMETABLE */}
+      <ScrollTriggered>
+        <section id="time-table" className="py-24 lg:py-32 bg-white relative">
+          <div className="lg:max-w-6xl mx-auto px-6">
+            <div className="flex flex-col md:flex-row lg:items-end justify-between mb-12 lg:mb-20 gap-8">
+              <div className="max-w-2xl">
+                <h2 className="text-amber-600 font-bold uppercase tracking-[0.3em] text-xs mb-6">
+                  Strategic Locations
+                </h2>
+                <h3 className="text-5xl lg:text-7xl font-black text-slate-950 tracking-tighter">
+                  Class <br />
+                  <span className="font-serif italic font-normal text-amber-500">
+                    Logistics
+                  </span>
+                  .
+                </h3>
+              </div>
+              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-8">
+                Join the most sought-after physical and online mathematics
+                batches across Sri Lanka's educational hubs.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+              {TIMETABLE.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative bg-slate-50 border border-slate-100 p-10 rounded-2xl hover:bg-white hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] hover:border-amber-500/20 transition-all duration-700"
+                >
+                  <div className="flex justify-between w-full mb-10">
+                    <div>
+                      <h4 className="text-3xl font-bold text-slate-950 mb-3 tracking-tight group-hover:text-amber-600 transition-colors">
+                        {item.city}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        <div className="inline-flex px-4 py-1.5 bg-slate-950 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-full">
+                          {item.type}
+                        </div>
+                        {item.isTemporary && (
+                          <div className="inline-flex px-4 py-1.5 bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-widest rounded-full animate-pulse">
+                            Temporary
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between py-5 border-b border-slate-200 group-hover:border-amber-500/10 transition-colors">
+                      <span className="font-black text-slate-950 uppercase tracking-widest text-xs">
+                        Primary Session
+                      </span>
+                      <div className="text-right">
+                        <span className="block font-bold text-slate-900 text-lg">
+                          {item.day1}
+                        </span>
+                        <span className="block text-sm font-bold text-slate-400 uppercase tracking-tighter">
+                          {item.day1Start} - {item.day1Finish}
+                        </span>
+                      </div>
+                    </div>
+
+                    {item.day2 && (
+                      <div className="flex items-center justify-between py-5 border-b border-slate-200 group-hover:border-amber-500/10 transition-colors">
+                        <span className="font-black text-slate-950 uppercase tracking-widest text-xs">
+                          Support Session
+                        </span>
+                        <div className="text-right">
+                          <span className="block font-bold text-slate-900 text-lg">
+                            {item.day2}
+                          </span>
+                          <span className="block text-sm font-bold text-slate-400 uppercase tracking-tighter">
+                            {item.day2Start} - {item.day2Finish}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-10 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
+                      Enrolling: Open
+                    </span>
+                    <a
+                      href="/registration"
+                      className="text-sm font-black text-slate-950 hover:text-amber-600 transition-colors flex items-center group/btn"
+                    >
+                      <span>Reserve Spot</span>
+                      <svg
+                        className="ml-2 w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-24 text-center">
+            <div className="inline-block p-2 bg-slate-50 rounded-full">
+              <div className="px-10 py-4 bg-white rounded-full shadow-sm flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <span className="text-slate-500 font-bold text-sm">
+                  Need Batch Information?
+                </span>
+                <a
+                  href="#contact"
+                  className="text-amber-600 font-black text-sm uppercase tracking-widest hover:underline decoration-2"
+                >
+                  Contact Academy Office →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </ScrollTriggered>
+
+      {/* TESTIMONIALS */}
+      <ScrollTriggered>
+        <section id="testimonials" className="py-24 lg:py-32 bg-white">
+          <div className="lg:max-w-6xl w-full mx-auto px-6">
+            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+              <div className="max-w-2xl">
+                <h2 className="text-amber-600 font-bold uppercase tracking-widest text-sm mb-4">
+                  Success Stories
+                </h2>
+                <h3 className="text-4xl md:text-5xl font-extrabold text-slate-900">
+                  Voices of Excellence
+                </h3>
+              </div>
+              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-8">
+                Proven results that speak louder than words. Our students
+                consistently secure top island ranks.
+              </p>
+            </div>
+
+            <TestimonialSlider />
+          </div>
+        </section>
+      </ScrollTriggered>
+
+      {/* CONTACT SECTION */}
+      <ScrollTriggered>
+        <section
+          id="contact"
+          className="py-24 lg:py-32 bg-white relative overflow-hidden"
+        >
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-slate-50"></div>
+
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden grid md:grid-cols-2 shadow-2xl border border-slate-100">
+              <div className="p-10 md:p-16 bg-slate-900 text-white">
+                <h2 className="text-4xl font-bold mb-6">Enroll Now.</h2>
+                <p className="text-slate-400 mb-10 leading-relaxed text-sm">
+                  Unlock your true potential. Our classes are designed to guide
+                  you from basic concepts to advanced paper techniques.
+                </p>
+
+                <div className="space-y-8">
+                  <div className="flex items-center space-x-5">
+                    <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-amber-500 border border-white/10">
+                      <Phone />
                     </div>
                     <div>
-                      <h3 className="uppercase font-bold text-xl text-secondary">
-                        need more details
-                      </h3>
-                      <a
-                        href="tel:+94717028634"
-                        className="text-4xl font-bold text-primary"
-                      >
-                        +94 71 702 8634
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ScrollTriggered>
-        </section>
-
-        {/* TIMETABLE */}
-        <ScrollTriggered>
-          <section
-            id="timetable"
-            className="bg-accent py-24 px-4 sm:px-8 md:px-16 lg:px-24 w-full h-full"
-          >
-            <div className="max-w-7xl mx-auto flex flex-col items-center justify-center">
-              <h3 className="text-blue-500 text-sm uppercase font-semibold">
-                &lt;&lt; our class timetable &gt;&gt;
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-4 mt-10 w-full">
-                {TIMETABLE.map((timetable) => (
-                  <Card
-                    key={timetable.id}
-                    className="flex flex-col text-center w-full py-0 rounded-none shadow-lg"
-                  >
-                    <CardHeader className="bg-gradient-to-r from-[#000000] to-[#2563EB]">
-                      <CardTitle className="flex gap-2 py-2.5 items-center text-white uppercase justify-center w-full">
-                        {timetable.city}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-5 px-6">
-                      <CardDescription>
-                        <div className="flex flex-col gap-4">
-                          <h3 className="text-center font-semibold capitalize text-black text-xl">
-                            {timetable.type}
-                          </h3>
-                          <div className="flex flex-col text-center text-white gap-2">
-                            <div className="p-2 bg-gradient-to-r from-[#000000] to-[#2563EB]">
-                              {timetable.day1} - {timetable.day1Start} -{" "}
-                              {timetable.day1Finish}
-                            </div>
-                            <div className="p-2 bg-gradient-to-r from-[#000000] to-[#2563EB]">
-                              {timetable.day2} - {timetable.day2Start} -{" "}
-                              {timetable.day2Finish}
-                            </div>
-                          </div>
-                        </div>
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        </ScrollTriggered>
-
-        {/* CONTACT SECTION */}
-
-        <ScrollTriggered>
-          <section
-            id="contact"
-            className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24 h-full"
-          >
-            <div className="flex flex-col lg:flex-row items-start justify-center gap-20">
-              <div className="flex-1 w-full">
-                <h3 className="text-blue-500 text-sm uppercase font-semibold mb-8">
-                  Get in Touch &gt;&gt;
-                </h3>
-                <form className="flex flex-col gap-6" onSubmit={onSubmit}>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name *"
-                    onChange={(e) => setName(e.target.value)}
-                    value={name}
-                    aria-label="Name"
-                    className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Your Email *"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    aria-label="Email"
-                    className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"
-                  />
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    name="phone"
-                    placeholder="Phone Number *"
-                    onChange={(e) => {
-                      if (/^\d*$/.test(e.target.value)) {
-                        // Accept only if value is digits
-                        setContact(e.target.value);
-                      }
-                    }}
-                    value={contact}
-                    aria-label="Phone"
-                    className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary"
-                  />
-                  <textarea
-                    name="message"
-                    placeholder="Message *"
-                    onChange={(e) => setMessage(e.target.value)}
-                    value={message}
-                    rows={4}
-                    aria-label="Message"
-                    className="border-b-2 border-gray-200 p-2 placeholder:uppercase placeholder:text-xs focus:outline-none focus:border-primary resize-none"
-                  />
-                  <Button
-                    size="lg"
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-fit rounded-none cursor-pointer   hover:bg-primary/90 transition"
-                  >
-                    {isLoading ? (
-                      <div className="flex gap-2 ">
-                        Please wait
-                        <Loader2 className="animate-spin transition-all" />
+                      <div className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">
+                        Direct Hotline
                       </div>
-                    ) : (
-                      <p>Send Message</p>
-                    )}
-                  </Button>
-                </form>
-              </div>
-
-              {/* Contact Info + Image */}
-              <div className="flex-1 w-full">
-                <div className="relative w-full h-[540px] rounded-lg overflow-hidden">
-                  <Image
-                    src="/3.png"
-                    alt="Contact background"
-                    fill
-                    priority
-                    className="object-cover"
-                    quality={100}
-                  />
-                  <div className="absolute inset-0 bg-black/50 flex flex-col gap-4 justify-center px-8 py-6">
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      Our Contacts
-                    </h3>
-                    <p className="text-white text-sm">
-                      Give us a call or drop by anytime. We aim to respond
-                      within 24 hours on business days.
-                    </p>
-
-                    <div className="flex flex-col gap-4 mt-4">
-                      <ContactItem
-                        icon={<MapPin className="text-white" />}
-                        title="Our Address"
-                        text="ACBS Negombo"
-                      />
-                      <ContactItem
-                        icon={<Mail className="text-white" />}
-                        title="Our Mailbox"
-                        text="chamodasj@gmail.com"
-                      />
-                      <ContactItem
-                        icon={<PhoneCall className="text-white" />}
-                        title="Our Phone"
-                        text="071 702 8634"
-                      />
+                      <div className="text-xl font-bold">+94 71 702 8634</div>
                     </div>
-
-                    <div className="flex gap-3 mt-6">
-                      {[
-                        {
-                          href: "https://www.instagram.com/chamoda_liyanage/",
-                          src: "/Instagram.png",
-                          alt: "Instagram",
-                        },
-                        {
-                          href: "#",
-                          src: "/Facebook.png",
-                          alt: "Facebook",
-                        },
-                        { href: "#", src: "/TikTok.png", alt: "TikTok" },
-                        { href: "#", src: "/YouTube.png", alt: "YouTube" },
-                      ].map((item, index) => (
-                        <Link key={index} href={item.href} target="_blank">
-                          <Image
-                            src={item.src}
-                            width={35}
-                            height={35}
-                            className="w-[35px] h-[35px]"
-                            alt={item.alt}
-                          />
-                        </Link>
-                      ))}
+                  </div>
+                  <div className="flex items-center space-x-5">
+                    <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-amber-500 border border-white/10">
+                      <MapPin />
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">
+                        Regional Office
+                      </div>
+                      <div className="text-xl font-bold">Negombo & Wattala</div>
                     </div>
                   </div>
                 </div>
+
+                <div className="mt-16 pt-10 border-t border-white/5">
+                  <span className="text-slate-500 text-sm block mb-4 uppercase font-bold tracking-tighter">
+                    Connect with us
+                  </span>
+                  <div className="flex space-x-4">
+                    {FOOTER_SOCIALS.map((social) => (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-slate-300 hover:text-amber-500 text-sm font-bold transition-colors"
+                      >
+                        {social.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-10 md:p-16">
+                <ContactForm loading={isLoading} onSubmit={onSubmit} />
               </div>
             </div>
-          </section>
-        </ScrollTriggered>
-      </main>
-    </PageWrapper>
+          </div>
+        </section>
+      </ScrollTriggered>
+    </main>
+    // </PageWrapper>
   );
 }

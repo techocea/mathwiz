@@ -1,10 +1,10 @@
-import { Award, Layers, UsersRound } from "lucide-react";
+import { Award, Target, UsersRound } from "lucide-react";
 
 export const NAV_ITEMS = [
   {
     id: 1,
     label: "Home",
-    href: "#home",
+    href: "/",
   },
   {
     id: 2,
@@ -25,6 +25,49 @@ export const NAV_ITEMS = [
     id: 5,
     label: "Pay Online",
     href: "/pay-online",
+  },
+];
+
+export const FOOTER_SOCIALS = [
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/__chamiya_._95/",
+  },
+  {
+    name: "Facebook",
+    href: "https://web.facebook.com/chamoda.jasenthuliyana.2025",
+  },
+  {
+    name: "Tiktok",
+    href: "https://www.tiktok.com/@mathwiz00?is_from_webapp=1&sender_device=pc",
+  },
+  {
+    name: "YouTube",
+    href: "http://www.youtube.com/@mathwiz_chamodaliyanage",
+  },
+];
+
+export const FOOTER_LINKS = [
+  {
+    title: "Site Map",
+    links: [
+      { label: "Home", href: "#home" },
+      { label: "Lead Tutor", href: "#about" },
+      { label: "Timetable", href: "#timetable" },
+      { label: "Success Stories", href: "#testimonials" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { label: "Nugegoda, Sri Lanka", href: null },
+      { label: "Wattala, Sri Lanka", href: null },
+      { label: "Negombo, Sri Lanka", href: null },
+      {
+        label: "info@mathwiz.lk",
+        href: "mailto:info@mathwiz.lk",
+      },
+    ],
   },
 ];
 
@@ -63,76 +106,152 @@ export const HIGHLIGHTS = [
   {
     id: 1,
     icon: Award,
-    label: "7+",
-    description: "years experience",
-    bgColor: "bg-blue-200",
-    shadowColor: "blue-200",
-    itemColor: "text-blue-600",
-    textColor: "text-blue-600",
+    label: "8+",
+    description: "Years of Excellence",
+    bgColor: "bg-amber-100",
+    shadowColor: "amber-100",
+    itemColor: "text-amber-600",
+    textColor: "text-slate-900",
   },
   {
     id: 2,
     icon: UsersRound,
     label: "200+",
-    description: "students enrolled",
-    bgColor: "bg-green-200",
+    description: "Students Enrolled",
+    bgColor: "bg-green-100",
     shadowColor: "green-200",
     itemColor: "text-green-600",
-    textColor: "text-green-600",
+    textColor: "text-green-900",
   },
   {
     id: 3,
-    icon: Layers,
-    label: "150+",
-    description: "papers written",
-    bgColor: "bg-red-200",
-    shadowColor: "red-200",
-    itemColor: "text-red-600",
-    textColor: "text-red-600",
+    icon: Target,
+    label: "98%",
+    description: "Pass Rate (2023)",
+    bgColor: "bg-blue-100",
+    shadowColor: "blue-100",
+    itemColor: "text-blue-600",
+    textColor: "text-slate-900",
   },
 ];
 
 export const TIMETABLE = [
+  // 2028 Batch
   {
     id: 1,
-    city: "ACBS Negombo",
-    type: "Theory - 2025",
-    day1: "Sunday",
-    day1Start: "2.00PM",
-    day1Finish: "7.00PM",
+    city: "ACBS - Negombo (English Medium)",
+    type: "AL 2028 - Theory",
+    day1: "Thursday",
+    day1Start: "08.30 AM",
+    day1Finish: "12.30 PM",
+    isTemporary: true,
   },
   {
     id: 2,
-    city: "ACBS Negombo",
-    type: "Theory - 2026",
-    day1: "Monday",
-    day1Start: "3.00PM",
-    day1Finish: "7.00PM",
-    day2: "Wednesday",
-    day2Start: "3.00PM",
-    day2Finish: "7.00PM",
+    city: "ACBS - Negombo (Sinhala Medium)",
+    type: "AL 2028 - Theory",
+    day1: "Wednesday",
+    day1Start: "08.30 AM",
+    day1Finish: "12.30 PM",
+    isTemporary: true,
   },
   {
     id: 3,
-    city: "Farade Education - Wattala",
-    type: "Theory - 2027",
-    day1: "Saturday",
-    day1Start: "8:30AM",
-    day1Finish: "12:30PM",
-    day2: "Saturday",
-    day2Start: "1:30PM",
-    day2Finish: "5:30PM",
-    day3: "Sunday",
-    day3Start: "9:00AM",
-    day3Finish: "12:00PM",
+    city: "Farade - Wattala (English Medium)",
+    type: "AL 2028 - Theory",
+    day1: "Sunday",
+    day1Start: "02.30 PM",
+    day1Finish: "05.30 PM",
   },
+  // 2027 Batch
   {
     id: 4,
-    city: "ACBS Negombo",
-    type: "සිද්ධාන්ත - 2026",
-    day1: "අගහරුවාදා",
-    day1Start: "ප.ව. 3.00",
-    day1Finish: "ප.ව. 7.00",
+    city: "ACBS - Negombo (English Medium)",
+    type: "AL 2027 - Theory",
+    day1: "Saturday",
+    day1Start: "02.00 PM",
+    day1Finish: "07.00 PM",
+  },
+  {
+    id: 5,
+    city: "ACBS - Negombo (Sinhala Medium)",
+    type: "AL 2027 - Theory",
+    day1: "Saturday",
+    day1Start: "08.00 AM",
+    day1Finish: "01.00 PM",
+  },
+  {
+    id: 6,
+    city: "Farade - Wattala (English Medium)",
+    type: "AL 2027 - Theory",
+    day1: "Sunday",
+    day1Start: "09.00 AM",
+    day1Finish: "02.00 PM",
+  },
+  {
+    id: 7,
+    city: "Online",
+    type: "AL 2027 - Online Sessions",
+    day1: "Tuesday",
+    day1Start: "08.30 PM",
+    day1Finish: "10.30 PM",
+    day2: "Friday",
+    day2Start: "08.30 PM",
+    day2Finish: "10.30 PM",
+  },
+];
+
+export const PAPER_CLASS_FEATURES = [
+  {
+    title: "Speed Papers",
+    description:
+      "Intensive rapid-fire testing sessions designed to build split-second decision-making for Pure Mathematics MCQ and structured essay sections under pressure.",
+    icon: "⚡",
+  },
+  {
+    title: "Predictive Model Papers",
+    description:
+      "Exclusive full-length papers crafted based on 15 years of exam trend analysis, focusing on high-probability Applied Mathematics mechanics and complex derivations.",
+    icon: "🎯",
+  },
+  {
+    title: "Marking Scheme Discussion",
+    description:
+      "Detailed step-by-step breakdown of how to earn maximum marks through precise logical derivations and correct mathematical notation used by GCE examiners.",
+    icon: "📝",
+  },
+  {
+    title: "Time Management Matrix",
+    description:
+      "Specific strategies to help you navigate Combined Maths Paper I and II efficiently, ensuring you have enough time for high-mark structured questions.",
+    icon: "⏰",
+  },
+];
+
+export const TESTIMONIALS = [
+  {
+    id: "1",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1770713697/testimonials/tharindu_dwxawx.mp4",
+    // thumbnail: "/1.png",
+  },
+  {
+    id: "2",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1770713647/testimonials/aashif_acfihc.mp4",
+    // thumbnail: "/2.png",
+  },
+  {
+    id: "3",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1770713625/testimonials/evan_xq3zhm.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "4",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1770713475/testimonials/tashani_clxgcn.mp4",
+    // thumbnail: "/3.png",
   },
 ];
 

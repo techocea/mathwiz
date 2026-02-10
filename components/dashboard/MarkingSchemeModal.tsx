@@ -42,7 +42,7 @@ const MarkingSchemeModal = () => {
             title: "",
             type: "paper",
             medium: "english",
-            year: "2025",
+            year: "2028",
             markingSchemeUrl: undefined,
         },
     });
@@ -142,7 +142,7 @@ const MarkingSchemeModal = () => {
                                 <Label htmlFor="year">Select Batch</Label>
                                 <Select
                                     onValueChange={(value) =>
-                                        setValue("year", value as "2025" | "2026" | "2027")
+                                        setValue("year", value as "2028" | "2027" | "2026")
                                     }
                                     defaultValue="2025"
                                 >
@@ -150,9 +150,9 @@ const MarkingSchemeModal = () => {
                                         <SelectValue placeholder="Select year" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="2025">2025</SelectItem>
-                                        <SelectItem value="2026">2026</SelectItem>
+                                        <SelectItem value="2028">2028</SelectItem>
                                         <SelectItem value="2027">2027</SelectItem>
+                                        <SelectItem value="2026">2026</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 {errors.year && (

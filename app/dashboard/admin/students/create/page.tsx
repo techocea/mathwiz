@@ -47,7 +47,7 @@ const CreateStudentsPage = () => {
       password: "",
       confirmPassword: "",
       school: "",
-      year: "2025",
+      year: "2028",
       tuitionType: {
         paper: false,
         revision: false,
@@ -223,7 +223,7 @@ const CreateStudentsPage = () => {
                     </Label>
                     <Select
                       onValueChange={(value) =>
-                        setValue("year", value as "2025" | "2026" | "2027")
+                        setValue("year", value as "2028" | "2027" | "2026")
                       }
                       defaultValue="2025"
                     >
@@ -231,9 +231,9 @@ const CreateStudentsPage = () => {
                         <SelectValue placeholder="Select year" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="2025">2025</SelectItem>
-                        <SelectItem value="2026">2026</SelectItem>
+                        <SelectItem value="2028">2028</SelectItem>
                         <SelectItem value="2027">2027</SelectItem>
+                        <SelectItem value="2026">2026</SelectItem>
                       </SelectContent>
                     </Select>
                     {errors.year && (

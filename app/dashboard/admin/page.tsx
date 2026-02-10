@@ -15,7 +15,6 @@ import {
     getPaperCount,
     getInquiriesCount,
 } from "@/services/dashboard.data";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/layout/Loader";
 import { Button } from "@/components/ui/button";
@@ -51,8 +50,6 @@ const AdminDashboardPage = () => {
         queryKey: ["dashboard-counts", "inquiries"],
         queryFn: getInquiriesCount,
     });
-
-
 
     const isLoading =
         isAdminLoading ||
@@ -194,7 +191,9 @@ const AdminDashboardPage = () => {
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    onClick={() => router.push("/dashboard/admin/activities/paper")}
+                                    onClick={() =>
+                                        router.push("/dashboard/admin/activities/paper")
+                                    }
                                     className="w-full justify-start cursor-pointer"
                                 >
                                     <FileText className="mr-2 h-4 w-4" />
