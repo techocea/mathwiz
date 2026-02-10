@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
     Carousel,
     CarouselContent,
@@ -17,7 +17,7 @@ import { getThumbnail } from "@/helpers/getThumbnail";
 const TestimonialSlider = () => {
     const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
     return (
-        <div className="w-full px-12 py-12">
+        <div className="w-full px-4 lg:px-12 py-12">
             <Carousel
                 opts={{
                     align: "start",

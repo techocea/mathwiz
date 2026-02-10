@@ -60,6 +60,7 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <Button
+          size={"icon"}
           variant="ghost"
           className="lg:hidden z-[100] text-slate-950 hover:bg-transparent relative"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -53,14 +53,13 @@ export const FOOTER_LINKS = [
     links: [
       { label: "Home", href: "#home" },
       { label: "Lead Tutor", href: "#about" },
-      { label: "Timetable", href: "#timetable" },
+      { label: "Timetable", href: "#time-table" },
       { label: "Success Stories", href: "#testimonials" },
     ],
   },
   {
     title: "Contact",
     links: [
-      { label: "Nugegoda, Sri Lanka", href: null },
       { label: "Wattala, Sri Lanka", href: null },
       { label: "Negombo, Sri Lanka", href: null },
       {

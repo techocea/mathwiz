@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowRight,
   MapPin,
   Phone,
 } from "lucide-react";
@@ -16,11 +17,11 @@ import {
   PAPER_CLASS_FEATURES,
   TIMETABLE,
 } from "@/lib/constants";
+import { ContactData } from "@/types";
+import ContactForm from "@/components/shared/ContactForm";
 import { motion, useScroll, useTransform } from "framer-motion";
 import ScrollTriggered from "@/components/layout/ScrollTriggered";
 import FloatingSymbols from "@/components/shared/FloatingSymbols";
-import ContactForm from "@/components/shared/ContactForm";
-import { ContactData } from "@/types";
 import TestimonialSlider from "@/components/shared/TestimonialSlider";
 
 export default function Home() {
@@ -57,7 +58,6 @@ export default function Home() {
   };
 
   return (
-    // <PageWrapper>
     <main className="flex scroll-smooth h-full w-full flex-col items-center">
       {/* NAVBAR */}
       <div className="w-full">
@@ -224,13 +224,13 @@ export default function Home() {
       {/* ABOUT SECTION */}
       <section
         id="about"
-        className="w-full py-24 px-4 sm:px-8 md:px-16 lg:px-24"
+        className="w-full px-4 md:px-8 py-24 lg:px-24"
       >
         <ScrollTriggered>
-          <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
+          <div className="container mx-auto grid lg:grid-cols-2 gap-24 items-center">
             <div className="relative group">
               <div className="absolute -inset-4 bg-amber-500/10 blur-[100px] rounded-full group-hover:bg-amber-500/20 transition-all duration-700"></div>
-              <div className="relative bg-slate-50 p-3 rounded-4xl shadow-2xl overflow-hidden border border-slate-100">
+              <div className="relative bg-slate-50 lg:p-3 rounded-4xl shadow-2xl overflow-hidden border border-slate-100">
                 <Image
                   src="/main.jpg"
                   width={800}
@@ -238,8 +238,8 @@ export default function Home() {
                   alt="Chamoda Liyanage - Lead Combined Maths Tutor"
                   className="w-full h-[650px] rounded-3xl object-cover filter hover:grayscale-0 transition-all duration-1000"
                 />
-                <div className="absolute bottom-12 left-12 right-12">
-                  <div className="dark-glass-card p-8 rounded-2xl border border-white/20 shadow-2xl">
+                <div className="absolute bottom-12 max-sm:left-2 left-8 max-sm:right-2 right-12 max-sm:max-w-xs w-full">
+                  <div className="w-fit dark-glass-card p-8 rounded-2xl border border-white/20 shadow-2xl">
                     <h4 className="text-white font-black text-2xl mb-2 tracking-tight">
                       Chamoda Liyanage
                     </h4>
@@ -251,7 +251,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="space-y-10">
+            <div className="space-y-10 max-sm:px-2">
               <div>
                 <h2 className="text-amber-600 font-bold uppercase tracking-[0.3em] text-xs mb-6">
                   The Lead Strategist
@@ -349,7 +349,7 @@ export default function Home() {
             {PAPER_CLASS_FEATURES.map((feature, idx) => (
               <div
                 key={idx}
-                className="group relative bg-white/[0.03] border border-white/10 p-10 lg:p-12 rounded-3xl hover:bg-white/[0.06] transition-all duration-500"
+                className="group relative bg-white/[0.03] border border-white/10 p-6 lg:p-12 rounded-3xl hover:bg-white/[0.06] transition-all duration-500"
               >
                 <div className="flex flex-col md:flex-row items-start gap-8">
                   <div className="w-20 h-20 rounded-2xl bg-amber-500/10 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500 border border-amber-500/20">
@@ -359,7 +359,7 @@ export default function Home() {
                     <h4 className="text-xl font-black text-white mb-4 tracking-tight group-hover:text-amber-500 transition-colors">
                       {feature.title}
                     </h4>
-                    <p className="text-slate-400 text-base leading-relaxed font-normal">
+                    <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-normal">
                       {feature.description}
                     </p>
                   </div>
@@ -373,7 +373,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="lg:max-w-5xl w-full mx-auto mt-24 p-12 bg-amber-500 rounded-4xl relative overflow-hidden group shadow-2xl shadow-amber-500/20">
+          <div className="lg:max-w-5xl w-full mx-auto mt-24 p-8 lg:p-12 bg-amber-500 rounded-4xl relative overflow-hidden group shadow-2xl shadow-amber-500/20">
             <div className="absolute -bottom-32 right-0 p-8 text-slate-950/10 text-[180px] font-black pointer-events-none select-none italic font-serif">
               A+
             </div>
@@ -384,7 +384,7 @@ export default function Home() {
                 </h4>
                 <p className="text-slate-900/80 text-base leading-relaxed font-normal">
                   Limited seats available for the next Physical Paper session in
-                  Negombo & Nugegoda.
+                  Negombo & Wattala.
                 </p>
               </div>
               <Link
@@ -415,7 +415,7 @@ export default function Home() {
                   .
                 </h3>
               </div>
-              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-8">
+              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-4 lg:pl-8">
                 Join the most sought-after physical and online mathematics
                 batches across Sri Lanka's educational hubs.
               </p>
@@ -425,11 +425,11 @@ export default function Home() {
               {TIMETABLE.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative bg-slate-50 border border-slate-100 p-10 rounded-2xl hover:bg-white hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] hover:border-amber-500/20 transition-all duration-700"
+                  className="group relative bg-slate-50 border border-slate-100 p-8 lg:p-10 rounded-2xl hover:bg-white hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] hover:border-amber-500/20 transition-all duration-700"
                 >
                   <div className="flex justify-between w-full mb-10">
                     <div>
-                      <h4 className="text-3xl font-bold text-slate-950 mb-3 tracking-tight group-hover:text-amber-600 transition-colors">
+                      <h4 className="text-xl lg:text-3xl font-bold text-slate-950 mb-3 tracking-tight group-hover:text-amber-600 transition-colors">
                         {item.city}
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -451,10 +451,10 @@ export default function Home() {
                         Primary Session
                       </span>
                       <div className="text-right">
-                        <span className="block font-bold text-slate-900 text-lg">
+                        <span className="block font-bold text-slate-900 text-base lg:text-lg">
                           {item.day1}
                         </span>
-                        <span className="block text-sm font-bold text-slate-400 uppercase tracking-tighter">
+                        <span className="block text-xs lg:text-sm font-bold text-slate-400 uppercase tracking-tighter">
                           {item.day1Start} - {item.day1Finish}
                         </span>
                       </div>
@@ -477,29 +477,17 @@ export default function Home() {
                     )}
                   </div>
 
-                  <div className="mt-10 flex items-center justify-between">
+                  <div className="mt-10 flex flex-col md:flex-row items-center justify-between">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
                       Enrolling: Open
                     </span>
-                    <a
+                    <Link
                       href="/registration"
-                      className="text-sm font-black text-slate-950 hover:text-amber-600 transition-colors flex items-center group/btn"
+                      className="text-sm font-black text-slate-950 hover:text-amber-600 transition-colors flex items-center group/btn max-sm:mt-4"
                     >
                       <span>Reserve Spot</span>
-                      <svg
-                        className="ml-2 w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2.5"
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </a>
+                      <ArrowRight />
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -537,7 +525,7 @@ export default function Home() {
                   Voices of Excellence
                 </h3>
               </div>
-              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-8">
+              <p className="text-slate-500 md:max-w-xs text-sm border-l-2 border-amber-500 pl-4 lg:pl-8">
                 Proven results that speak louder than words. Our students
                 consistently secure top island ranks.
               </p>
@@ -556,10 +544,10 @@ export default function Home() {
         >
           <div className="absolute bottom-0 left-0 w-full h-1/2 bg-slate-50"></div>
 
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden grid md:grid-cols-2 shadow-2xl border border-slate-100">
-              <div className="p-10 md:p-16 bg-slate-900 text-white">
-                <h2 className="text-4xl font-bold mb-6">Enroll Now.</h2>
+          <div className="mx-auto px-6 relative z-10">
+            <div className="lg:max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden grid md:grid-cols-2 shadow-2xl border border-slate-100">
+              <div className="py-10 px-4 md:p-16 bg-slate-900 text-white">
+                <h2 className="text-2xl lg:text-4xl font-bold mb-6">Enroll Now.</h2>
                 <p className="text-slate-400 mb-10 leading-relaxed text-sm">
                   Unlock your true potential. Our classes are designed to guide
                   you from basic concepts to advanced paper techniques.
@@ -590,13 +578,13 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="mt-16 pt-10 border-t border-white/5">
+                <div className="mt-6 lg:mt-16 pt-10 border-t border-white/5">
                   <span className="text-slate-500 text-sm block mb-4 uppercase font-bold tracking-tighter">
                     Connect with us
                   </span>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-wrap gap-4">
                     {FOOTER_SOCIALS.map((social) => (
-                      <a
+                      <Link
                         key={social.name}
                         href={social.href}
                         target="_blank"
@@ -604,20 +592,20 @@ export default function Home() {
                         className="text-slate-300 hover:text-amber-500 text-sm font-bold transition-colors"
                       >
                         {social.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
               </div>
 
-              <div className="p-10 md:p-16">
+              <div className="px-6 py-10 md:p-16">
                 <ContactForm loading={isLoading} onSubmit={onSubmit} />
               </div>
             </div>
           </div>
         </section>
       </ScrollTriggered>
-    </main>
+    </main >
     // </PageWrapper>
   );
 }
