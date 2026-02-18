@@ -32,17 +32,19 @@ export const useGetResourceById = ({ resourceId }: { resourceId: string }) => {
   });
 };
 
-export const useUpdateResource = () => {
+export const useUpdateResource = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
+      console.log("Mutation started for ID:", id);
       const response = await axios.patch(`/api/admin/resources/${id}`, data);
       return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
       toast.success("Resource updated successfully!");
+      if (onSuccessCallback) onSuccessCallback(); // Navigate here
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Update failed");
@@ -107,7 +109,7 @@ export const useUpdateMarkingScheme = () => {
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
       const response = await axios.patch(
         `/api/admin/marking-schemes/${id}`,
-        data
+        data,
       );
       return response.data;
     },

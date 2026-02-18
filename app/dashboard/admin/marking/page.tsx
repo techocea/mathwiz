@@ -15,7 +15,7 @@ const MarkingSchemes = () => {
     const router = useRouter();
     const [type, setType] = useState("paper");
     const [year, setYear] = useState("2026");
-    const [medium, setMedium] = useState("English");
+    const [medium, setMedium] = useState("english");
 
     const {
         data: markings,

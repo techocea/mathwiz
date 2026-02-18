@@ -1,7 +1,8 @@
 import connectDB from "@/lib/db";
 import { Resource } from "@/lib/schema";
 import { notFound } from "next/navigation";
-import WriteTimedResource from "@/components/shared/WriteTimedResource";
+import WriteTimedResourceWrapper from "@/components/shared/WriteTimedResourceWrapper";
+
 
 interface PageProps {
   params: Promise<{
@@ -28,7 +29,7 @@ const WriteSpeedPaper = async ({ params }: PageProps) => {
 
   return (
     <div className="flex flex-col">
-      <WriteTimedResource
+      <WriteTimedResourceWrapper
         resourceId={serializedPaper._id.toString()}
         paper={serializedPaper}
       />

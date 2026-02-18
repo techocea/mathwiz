@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ resourceId: string }> }
+  { params }: { params: Promise<{ resourceId: string }> },
 ) {
   try {
     const cookieStore = await cookies();
@@ -28,26 +28,26 @@ export async function GET(
     if (!resource) {
       return NextResponse.json(
         { message: "Resource not found", resource: null },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { message: "Resource fetched successfully", resource },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching resource:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ resourceId: string }> }
+  { params }: { params: Promise<{ resourceId: string }> },
 ) {
   try {
     const cookieStore = await cookies();
@@ -63,8 +63,10 @@ export async function PATCH(
     }
 
     await connectDB();
+
     const { resourceId } = await params;
     const body = await req.json();
+
     const updatedResource = await Resource.findByIdAndUpdate(resourceId, body, {
       new: true,
       runValidators: true,
@@ -73,26 +75,26 @@ export async function PATCH(
     if (!updatedResource) {
       return NextResponse.json(
         { message: "Resource not found or update failed", resource: null },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { message: "Resource updated successfully", resource: updatedResource },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error updating resource:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ resourceId: string }> }
+  { params }: { params: Promise<{ resourceId: string }> },
 ) {
   try {
     const cookieStore = await cookies();
@@ -115,7 +117,7 @@ export async function DELETE(
     if (!deletedResource) {
       return NextResponse.json(
         { message: "Resource not found or deletion failed" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -124,7 +126,7 @@ export async function DELETE(
     console.error("Error deleting resource:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

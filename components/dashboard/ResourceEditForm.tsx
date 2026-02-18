@@ -54,6 +54,7 @@ const ResourceEditForm = ({
         watch,
         setValue,
         reset,
+        clearErrors,
         control,
         formState: { errors, isDirty },
     } = useForm({
@@ -71,21 +72,33 @@ const ResourceEditForm = ({
             // console.log("Fetched Student Data:", resource),
             reset({
                 ...resource,
-                // medium: resource.medium ? resource.medium.toLowerCase() : "",
+                medium: resource.medium ? resource.medium : "",
                 year: resource.year ? String(resource.year) : "",
                 uploadDeadline: resource.uploadDeadline
                     ? new Date(resource.uploadDeadline)
                     : undefined,
                 durationMinutes: Number(resource.durationMinutes) || 60,
             });
+            clearErrors("paperUrl");
         }
-    }, [resource, reset]);
+    }, [resource, reset, clearErrors]);
 
-    const { mutate: updateResource, isPending: isUpdating } = useUpdateResource();
+    const { mutate: updateResource, isPending: isUpdating } = useUpdateResource(() => {
+        router.push(`/dashboard/admin/activities/${type}`);
+    });
+
+
+    // 1. Ensure you are using the hook with the callback
 
     const onSubmit = (values: any) => {
-        updateResource({ id: resourceId, data: values });
-        router.push(`/dashboard/admin/activities/${type}`);
+        // 2. Clean the data
+        const { _id, __v, createdAt, updatedAt, submissions, ...updateData } = values;
+
+        // 3. LOG HERE to see if it even reaches this point
+        console.log("Submitting these values:", updateData);
+
+        // 4. Trigger mutation (DO NOT put router.push here)
+        updateResource({ id: resourceId, data: updateData });
     };
 
     const durationMinutes = watch("durationMinutes");
@@ -103,9 +116,9 @@ const ResourceEditForm = ({
     return (
         <Card>
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit, (errors) => console.log("Validation Errors:", errors))}
                 className="space-y-6"
-                encType="multipart/form-data"
+            // encType="multipart/form-data"
             >
                 <CardHeader>
                     <CardTitle className="text-2xl capitalize">{title} details</CardTitle>
@@ -141,8 +154,8 @@ const ResourceEditForm = ({
                                             <SelectValue placeholder="Select medium" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Sinhala">Sinhala</SelectItem>
-                                            <SelectItem value="English">English</SelectItem>
+                                            <SelectItem value="sinhala">Sinhala</SelectItem>
+                                            <SelectItem value="english">English</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -164,10 +177,10 @@ const ResourceEditForm = ({
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                     <Slider
                                         id="durationMinutes"
-                                        min={5}
+                                        min={1}
                                         max={180}
-                                        step={5}
-                                        value={[durationMinutes || 60]}
+                                        step={1}
+                                        value={[durationMinutes]}
                                         onValueChange={(value) => {
                                             setValue("durationMinutes", value[0], {
                                                 shouldDirty: true,
@@ -194,9 +207,9 @@ const ResourceEditForm = ({
                                             <SelectValue placeholder="Select year" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="2025">2025</SelectItem>
-                                            <SelectItem value="2026">2026</SelectItem>
+                                            <SelectItem value="2028">2028</SelectItem>
                                             <SelectItem value="2027">2027</SelectItem>
+                                            <SelectItem value="2026">2026</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -214,7 +227,7 @@ const ResourceEditForm = ({
                                             variant="outline"
                                             className={cn(
                                                 "w-full justify-start text-left font-normal",
-                                                !uploadDeadline && "text-muted-foreground"
+                                                !uploadDeadline && "text-muted-foreground",
                                             )}
                                         >
                                             <CalendarIcon className="mr-2 h-4 w-4" />

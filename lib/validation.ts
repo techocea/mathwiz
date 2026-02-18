@@ -25,7 +25,7 @@ export const registrationSchema = z.object({
       message: "Please select your year.",
     }),
   medium: z
-    .enum(["Sinhala", "English"])
+    .enum(["sinhala", "english"])
     .optional()
     .refine((val) => val !== undefined, {
       message: "Please select your medium.",
@@ -96,36 +96,30 @@ const baseSchema = z.object({
 const paperVariant = baseSchema.extend({
   type: z.literal("paper"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed",
-    ),
+    .any()
+    .refine((val) => val && (typeof val === "string" || val instanceof File), {
+      message: "PDF file is required",
+    }),
   durationMinutes: z.number().min(5).max(180),
 });
 
 const speedPaperVariant = baseSchema.extend({
   type: z.literal("speed-paper"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed",
-    ),
+    .any()
+    .refine((val) => val && (typeof val === "string" || val instanceof File), {
+      message: "PDF file is required",
+    }),
   durationMinutes: z.number().min(5).max(180),
 });
 
 const miniExamVariant = baseSchema.extend({
   type: z.literal("mini-exam"),
   paperUrl: z
-    .custom<File>((val) => val instanceof File, "PDF file is required")
-    .refine((file) => file.size < MAX_FILE_SIZE, "File too large")
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Only PDF allowed",
-    ),
+    .any()
+    .refine((val) => val && (typeof val === "string" || val instanceof File), {
+      message: "PDF file is required",
+    }),
   durationMinutes: z.number().min(5).max(180),
 });
 

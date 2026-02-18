@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     if (!validated.success) {
       return NextResponse.json(
         { message: "Validation failed" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       if (!file || typeof (file as any).arrayBuffer !== "function") {
         return NextResponse.json(
           { message: "PDF file is required" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -65,13 +65,13 @@ export async function POST(req: NextRequest) {
       if (size > MAX_FILE_SIZE) {
         return NextResponse.json(
           { message: "File must be smaller than 30MB" },
-          { status: 400 }
+          { status: 400 },
         );
       }
       if (!["application/pdf"].includes(mime)) {
         return NextResponse.json(
           { message: "Only PDF files are accepted" },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -111,19 +111,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: `${type} created`, resource: doc },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error creating resource:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: "Validation failed", errors: error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { message: "Failed to create resource", error: (error as Error).message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -147,7 +147,7 @@ export async function GET(req: NextRequest) {
     const resources = await Resource.find(query)
       .populate({
         path: "submissions",
-        populate: { path: "studentId", select: "email firstName  contact" },
+        populate: { path: "studentId", select: "email firstName contact" },
       })
       .lean();
 
@@ -159,7 +159,7 @@ export async function GET(req: NextRequest) {
         },
         {
           status: 200,
-        }
+        },
       );
     }
 
@@ -170,7 +170,7 @@ export async function GET(req: NextRequest) {
       },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     console.error("Error in fetching Resources: ", error);
@@ -180,7 +180,7 @@ export async function GET(req: NextRequest) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

@@ -9,7 +9,8 @@ import React from "react";
 import QueryProvider from "../providers/QueryProvider";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import BlurGradient from "@/components/shared/BlurGradient";
-import Snowfall from "../../components/layout/Snowfall";
+// import Snowfall from "../../components/layout/Snowfall";
+// import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const poppins = Poppins({
     variable: "--font-poppins",
@@ -43,7 +44,7 @@ export default function DashboardLayout({
                             <Sonner position="top-right" />
                             <BlurGradient />
                             <DashboardNavbar />
-                            <Snowfall />
+                            {/* <Snowfall /> */}
                             {children}
                         </div>
                     </body>

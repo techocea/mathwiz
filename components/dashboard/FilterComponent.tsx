@@ -7,8 +7,8 @@ import {
     SelectValue,
 } from "../ui/select";
 
-const MEDIUMS = ["English", "Sinhala"];
-const YEARS = ["2025", "2026", "2027"];
+const MEDIUMS = ["english", "sinhala"];
+const YEARS = ["2026", "2027", "2028"];
 const TYPES = ["worksheet", "homework", "speed-paper", "mini-exam", "paper"];
 
 interface FilterComponentProps {
@@ -58,7 +58,7 @@ const FilterComponent = ({
                     <SelectContent>
                         {MEDIUMS.map((m, idx) => (
                             <SelectItem key={idx} value={m}>
-                                {m}
+                                {m.charAt(0).toUpperCase() + m.slice(1)}
                             </SelectItem>
                         ))}
                     </SelectContent>

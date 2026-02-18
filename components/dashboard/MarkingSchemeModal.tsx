@@ -126,14 +126,14 @@ const MarkingSchemeModal = () => {
                                     onValueChange={(value) =>
                                         setValue("medium", value as "sinhala" | "english")
                                     }
-                                    defaultValue="English"
+                                    defaultValue="english"
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select medium" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="Sinhala">Sinhala</SelectItem>
-                                        <SelectItem value="English">English</SelectItem>
+                                        <SelectItem value="sinhala">Sinhala</SelectItem>
+                                        <SelectItem value="english">English</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

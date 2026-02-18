@@ -10,7 +10,7 @@ const StudentDashboard = () => {
     const router = useRouter();
 
     return (
-        <div className="animate-fade-in">
+        <div>
             <PageHeader
                 title="Welcome to Student Portal"
                 description="Select an assessment type to view your marked answers and marking schemes."

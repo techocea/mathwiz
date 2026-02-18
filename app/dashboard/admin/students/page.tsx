@@ -13,7 +13,7 @@ import ViewStudentsTable from "@/components/dashboard/ViewStudentsTable";
 const DisplayStudentsPage = () => {
   const router = useRouter();
   const [year, setYear] = useState("2026");
-  const [medium, setMedium] = useState("English");
+  const [medium, setMedium] = useState("english");
 
   const {
     data: students,
