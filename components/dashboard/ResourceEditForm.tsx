@@ -23,7 +23,7 @@ import {
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { ResourceType } from "@/types";
+import { ResourceType } from "@/global";
 import Loader from "../layout/Loader";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -69,7 +69,6 @@ const ResourceEditForm = ({
 
     useEffect(() => {
         if (resource) {
-            // console.log("Fetched Student Data:", resource),
             reset({
                 ...resource,
                 medium: resource.medium ? resource.medium : "",
@@ -83,21 +82,16 @@ const ResourceEditForm = ({
         }
     }, [resource, reset, clearErrors]);
 
-    const { mutate: updateResource, isPending: isUpdating } = useUpdateResource(() => {
-        router.push(`/dashboard/admin/activities/${type}`);
-    });
-
-
-    // 1. Ensure you are using the hook with the callback
+    const { mutate: updateResource, isPending: isUpdating } = useUpdateResource(
+        () => {
+            router.push(`/dashboard/admin/activities/${type}`);
+        },
+    );
 
     const onSubmit = (values: any) => {
-        // 2. Clean the data
-        const { _id, __v, createdAt, updatedAt, submissions, ...updateData } = values;
-
-        // 3. LOG HERE to see if it even reaches this point
+        const { _id, __v, createdAt, updatedAt, submissions, ...updateData } =
+            values;
         console.log("Submitting these values:", updateData);
-
-        // 4. Trigger mutation (DO NOT put router.push here)
         updateResource({ id: resourceId, data: updateData });
     };
 
@@ -111,12 +105,12 @@ const ResourceEditForm = ({
     if (isError)
         return <p className="text-red-500">Error loading resource data.</p>;
 
-    // const currentValues = watch();
-    // console.log("Current Form State:", currentValues.medium, currentValues.year);
     return (
         <Card>
             <form
-                onSubmit={handleSubmit(onSubmit, (errors) => console.log("Validation Errors:", errors))}
+                onSubmit={handleSubmit(onSubmit, (errors) =>
+                    console.log("Validation Errors:", errors),
+                )}
                 className="space-y-6"
             // encType="multipart/form-data"
             >

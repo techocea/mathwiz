@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { ResourceType } from "@/types";
+import { ResourceType } from "@/global";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/layout/Loader";

@@ -101,3 +101,5 @@ export interface ContactFormProps {
   loading: boolean;
   onSubmit: (data: ContactData) => Promise<void>;
 }
+
+declare module "*.css";

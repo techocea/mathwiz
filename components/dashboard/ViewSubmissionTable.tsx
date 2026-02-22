@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { SubmissionProps } from "@/types";
+import { SubmissionProps } from "@/global";
 import { MoreHorizontal } from "lucide-react";
 import DownloadButton from "../shared/DownloadButton";
 import UploadMarkedAnswerModal from "./UploadMarkedAnswerModal";

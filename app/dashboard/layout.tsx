@@ -10,7 +10,8 @@ import QueryProvider from "../providers/QueryProvider";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import BlurGradient from "@/components/shared/BlurGradient";
 // import Snowfall from "../../components/layout/Snowfall";
-// import '@react-pdf-viewer/core/lib/styles/index.css';
+//@ts-ignore
+import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const poppins = Poppins({
     variable: "--font-poppins",

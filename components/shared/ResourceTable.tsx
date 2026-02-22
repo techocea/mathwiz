@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
-import { ResourceProps } from "@/types";
+import { ResourceProps } from "@/global";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Pen, Trash2 } from "lucide-react";

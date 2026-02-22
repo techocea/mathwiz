@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ActiveTabTypes, ResourceType } from "@/types";
+import { ActiveTabTypes, ResourceType } from "@/global";
 
 interface TabSectionProps {
     activeTab: ActiveTabTypes;

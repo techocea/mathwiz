@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { useTimer } from "@/app/providers/TimerContext";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
+import Link from "next/link";
 
 interface PaperProps {
   resourceId: string;
@@ -66,12 +67,18 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
 
   if (isLocked) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-slate-50 p-6 text-center">
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
         <Lock size={48} className="text-slate-400 mb-4" />
         <h2 className="text-xl font-bold">Exam Session Ended</h2>
         <p className="text-slate-500">
           You have already submitted or the time has expired.
         </p>
+        <Button asChild className="mt-4">
+          <Link href="/dashboard/student" className="flex items-center gap-2">
+            <Heading1 size={16} />
+            Back to Dashboard
+          </Link>
+        </Button>
       </div>
     );
   }
@@ -267,7 +274,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
             <div className="absolute inset-0 z-10 pointer-events-none border border-black/5 rounded-lg" />
 
             <iframe
-              src={`${paper.paperUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+              src={`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(paper.paperUrl)}&embedded=true&rm=minimal&chrome=false`}
               className="w-full h-[800px] bg-white rounded-lg shadow-lg"
               title="PDF Viewer"
             />

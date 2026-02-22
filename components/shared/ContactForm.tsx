@@ -3,7 +3,7 @@
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
-import { ContactData, ContactFormProps } from "@/types";
+import { ContactData, ContactFormProps } from "@/global";
 import { Loader2 } from "lucide-react";
 
 const ContactForm = ({ loading, onSubmit }: ContactFormProps) => {

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { PaymentProps } from "@/types";
+import { PaymentProps } from "@/global";
 import { MoreHorizontal } from "lucide-react";
 import DownloadButton from "../shared/DownloadButton";
 

@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createResourceSchema } from "@/lib/validation";
 import { Clock, CalendarIcon, Loader2 } from "lucide-react";
-import { ResourceType } from "@/types";
+import { ResourceType } from "@/global";
 
 interface ResourceCreateFormProps {
     title: string;

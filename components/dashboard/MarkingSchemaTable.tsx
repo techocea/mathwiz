@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { MarkingProps } from "@/types";
+import { MarkingProps } from "@/global";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useDeleteMarkingSchemes } from "@/hooks/useResource";

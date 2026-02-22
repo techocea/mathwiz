@@ -162,9 +162,20 @@ export const TIMETABLE = [
     day1Start: "02.30 PM",
     day1Finish: "05.30 PM",
   },
-  // 2027 Batch
   {
     id: 4,
+    city: "Online",
+    type: "AL 2028 - Online Sessions",
+    day1: "Monday",
+    day1Start: "08.30 PM",
+    day1Finish: "10.00 PM",
+    day2: "Thursday",
+    day2Start: "08.30 PM",
+    day2Finish: "10.00 PM",
+  },
+  // 2027 Batch
+  {
+    id: 5,
     city: "ACBS - Negombo (English Medium)",
     type: "AL 2027 - Theory",
     day1: "Saturday",
@@ -172,7 +183,7 @@ export const TIMETABLE = [
     day1Finish: "07.00 PM",
   },
   {
-    id: 5,
+    id: 6,
     city: "ACBS - Negombo (Sinhala Medium)",
     type: "AL 2027 - Theory",
     day1: "Saturday",
@@ -180,7 +191,7 @@ export const TIMETABLE = [
     day1Finish: "01.00 PM",
   },
   {
-    id: 6,
+    id: 7,
     city: "Farade - Wattala (English Medium)",
     type: "AL 2027 - Theory",
     day1: "Sunday",
@@ -188,7 +199,7 @@ export const TIMETABLE = [
     day1Finish: "02.00 PM",
   },
   {
-    id: 7,
+    id: 8,
     city: "Online",
     type: "AL 2027 - Online Sessions",
     day1: "Tuesday",
@@ -250,6 +261,24 @@ export const TESTIMONIALS = [
     id: "4",
     videoUrl:
       "https://res.cloudinary.com/didspg6kj/video/upload/v1770713475/testimonials/tashani_clxgcn.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "5",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1771770450/testimonials/Kaveeja-testimonial_jdhpbw.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "6",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1771771030/testimonials/shanje-reexp_wcmsp6.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "7",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1771771485/testimonials/shrish-testimonial1_drixlr.mp4",
     // thumbnail: "/3.png",
   },
 ];

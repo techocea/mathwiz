@@ -17,7 +17,7 @@ import {
   PAPER_CLASS_FEATURES,
   TIMETABLE,
 } from "@/lib/constants";
-import { ContactData } from "@/types";
+import { ContactData } from "@/global";
 import ContactForm from "@/components/shared/ContactForm";
 import { motion, useScroll, useTransform } from "framer-motion";
 import ScrollTriggered from "@/components/layout/ScrollTriggered";
@@ -469,7 +469,7 @@ export default function Home() {
                           <span className="block font-bold text-slate-900 text-lg">
                             {item.day2}
                           </span>
-                          <span className="block text-sm font-bold text-slate-400 uppercase tracking-tighter">
+                          <span className="block text-xs lg:text-sm font-bold text-slate-400 uppercase tracking-tighter">
                             {item.day2Start} - {item.day2Finish}
                           </span>
                         </div>

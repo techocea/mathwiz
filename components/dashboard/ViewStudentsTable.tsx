@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Card } from "../ui/card";
-import { StudentProps } from "@/types";
+import { StudentProps } from "@/global";
 import { Button } from "../ui/button";
 import { Ban, Check, Pen, Trash2, X } from "lucide-react";
 import { useDeleteStudent, useUpdateStudentStatus } from "@/hooks/useStudents";

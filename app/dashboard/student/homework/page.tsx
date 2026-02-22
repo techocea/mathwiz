@@ -10,7 +10,7 @@ import {
     useStudentResources,
 } from "@/hooks/useStudentResources";
 import { useState } from "react";
-import { ActiveTabTypes } from "@/types";
+import { ActiveTabTypes } from "@/global";
 import MarkingSchemesTable from "@/components/shared/MarkingSchemesTable";
 
 const Homework = () => {
