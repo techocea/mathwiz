@@ -100,7 +100,7 @@ const paperVariant = baseSchema.extend({
     .refine((val) => val && (typeof val === "string" || val instanceof File), {
       message: "PDF file is required",
     }),
-  durationMinutes: z.number().min(5).max(180),
+  durationMinutes: z.number().min(1).max(180),
 });
 
 const speedPaperVariant = baseSchema.extend({
@@ -110,7 +110,7 @@ const speedPaperVariant = baseSchema.extend({
     .refine((val) => val && (typeof val === "string" || val instanceof File), {
       message: "PDF file is required",
     }),
-  durationMinutes: z.number().min(5).max(180),
+  durationMinutes: z.number().min(1).max(180),
 });
 
 const miniExamVariant = baseSchema.extend({

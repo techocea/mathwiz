@@ -24,7 +24,7 @@ interface WriteResourceProps {
 
 const WriteResource = ({ resources, type }: WriteResourceProps) => {
     const router = useRouter();
-    const { isRunning, currentExamId, startTimer } = useTimer();
+    const { isRunning, currentExamId, startTimer, isTimeUp } = useTimer();
 
     const handleStartExam = (resourceId: string, durationMinutes: number) => {
         let isThisExamSubmitted =
@@ -96,9 +96,11 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
                                                 const buttonText =
                                                     isRunning && currentExamId === r._id
                                                         ? "Continue Exam"
-                                                        : isThisExamSubmitted
-                                                            ? "Submitted"
-                                                            : "Start Exam";
+                                                        : isTimeUp
+                                                            ? "Time's Up"
+                                                            : isThisExamSubmitted
+                                                                ? "Submitted"
+                                                                : "Start Exam";
 
                                                 const isDisabled =
                                                     (isRunning && currentExamId !== r._id) ||

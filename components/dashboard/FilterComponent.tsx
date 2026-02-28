@@ -42,7 +42,7 @@ const FilterComponent = ({
                         <SelectContent>
                             {TYPES.map((t, idx) => (
                                 <SelectItem key={idx} value={t}>
-                                    {t.replace("-", " ")}
+                                    {t.charAt(0).toUpperCase() + t.replace("-", " ").slice(1)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
