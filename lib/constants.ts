@@ -281,6 +281,36 @@ export const TESTIMONIALS = [
       "https://res.cloudinary.com/didspg6kj/video/upload/v1771771485/testimonials/shrish-testimonial1_drixlr.mp4",
     // thumbnail: "/3.png",
   },
+  {
+    id: "8",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1772487295/testimonials/Copy_of_gimhana-testimonial_bqjpm6.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "9",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1772487329/testimonials/Copy_of_sanjana-testimonial_jzjhsv.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "10",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1771771485/testimonials/shrish-testimonial1_drixlr.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "11",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1772487860/testimonials/Copy_of_shyam-testimonial_bxsk6t.mp4",
+    // thumbnail: "/3.png",
+  },
+  {
+    id: "12",
+    videoUrl:
+      "https://res.cloudinary.com/didspg6kj/video/upload/v1772488083/testimonials/Copy_of_sanupa-testimonial_r0g5ct.mp4",
+    // thumbnail: "/3.png",
+  },
 ];
 
 export const INSTRUCTIONS = [

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
     Carousel,
     CarouselContent,
@@ -8,17 +7,35 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Play, X } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { TESTIMONIALS } from "@/lib/constants";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Play } from "lucide-react";
+import { TESTIMONIALS } from "@/lib/constants";
 import { getThumbnail } from "@/helpers/getThumbnail";
+import { type CarouselApi } from "@/components/ui/carousel";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const TestimonialSlider = () => {
+    const [api, setApi] = useState<CarouselApi>();
+    const [current, setCurrent] = useState(0);
+    const [count, setCount] = useState(0);
     const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!api) return
+
+        setCount(api.scrollSnapList().length)
+        setCurrent(api.selectedScrollSnap())
+
+        api.on("select", () => {
+            setCurrent(api.selectedScrollSnap())
+        })
+    }, [api])
+
     return (
         <div className="w-full px-4 lg:px-12 py-12">
             <Carousel
+                setApi={setApi}
                 opts={{
                     align: "start",
                     loop: true,
@@ -60,6 +77,20 @@ const TestimonialSlider = () => {
                 {/* Navigation Arrows */}
                 <CarouselPrevious className="hidden md:flex -left-12 border-slate-200 text-slate-900 hover:bg-amber-500 hover:text-white transition-colors" />
                 <CarouselNext className="hidden md:flex -right-12 border-slate-200 text-slate-900 hover:bg-amber-500 hover:text-white transition-colors" />
+
+                <div className="flex justify-center gap-2 mt-8">
+                    {Array.from({ length: count }).map((_, index) => (
+                        <button
+                            key={index}
+                            className={`h-2 w-2 rounded-full transition-all duration-300 ${current === index
+                                    ? "bg-amber-500 w-6" // Active dot style
+                                    : "bg-slate-300 hover:bg-slate-400"
+                                }`}
+                            onClick={() => api?.scrollTo(index)} // Navigate on click
+                            aria-label={`Go to slide ${index + 1}`}
+                        />
+                    ))}
+                </div>
             </Carousel>
 
             {/* Video Modal (Unchanged) */}
@@ -69,13 +100,18 @@ const TestimonialSlider = () => {
             >
                 <DialogContent className="max-w-[95vw] lg:max-w-6xl p-0 bg-transparent border-none overflow-visible shadow-none">
                     {/* Screen Reader Title */}
-                    <DialogTitle className="sr-only">Student Success Story Video</DialogTitle>
+                    <DialogTitle className="sr-only">
+                        Student Success Story Video
+                    </DialogTitle>
 
                     <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-[0_0_50px_-12px_rgba(245,158,11,0.3)] border border-white/10">
                         {selectedVideo && (
                             <iframe
                                 // Ensure we are delivering the video correctly
-                                src={selectedVideo.replace("/upload/", "/upload/f_auto,q_auto/")}
+                                src={selectedVideo.replace(
+                                    "/upload/",
+                                    "/upload/f_auto,q_auto/",
+                                )}
                                 className="w-full h-full"
                                 allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                                 allowFullScreen
@@ -95,7 +131,6 @@ const TestimonialSlider = () => {
                     </div>
                 </DialogContent>
             </Dialog>
-
         </div>
     );
 };
