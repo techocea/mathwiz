@@ -141,9 +141,15 @@ export const createResourceSchema = z.discriminatedUnion("type", [
   homeworkVariant,
 ]);
 
+export const onlineClassSchema = z.object({
+  year: z.enum(["2028", "2027", "2026"]),
+  zoomLink: z.url("Invalid URL format"),
+});
+
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type ContactFormValues = z.infer<typeof contactSchema>;
 export type PaymentFormValues = z.infer<typeof paymentSchema>;
 export type MarkingSchemaFormValues = z.infer<typeof markingSchema>;
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;
 export type MarkedAnswerSchemaFormValues = z.infer<typeof markedAnswerSchema>;
+export type OnlineClassFormValues = z.infer<typeof onlineClassSchema>;

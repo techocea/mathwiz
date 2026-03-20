@@ -130,6 +130,14 @@ const paymentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+const onlineClassSchema = new mongoose.Schema(
+  {
+    year: { type: String, enum: ["2028", "2027", "2026"], required: true },
+    zoomLink: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
 export const Resource =
   mongoose.models.Resource || mongoose.model("Resource", resourceSchema);
@@ -141,3 +149,6 @@ export const Inquiries =
   mongoose.models.Inquiries || mongoose.model("Inquiries", inquirySchema);
 export const Payments =
   mongoose.models.Payments || mongoose.model("Payments", paymentSchema);
+export const OnlineClasses =
+  mongoose.models.OnlineClasses ||
+  mongoose.model("OnlineClasses", onlineClassSchema);
