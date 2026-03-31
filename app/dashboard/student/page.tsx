@@ -1,16 +1,43 @@
 "use client";
 
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
 import { ASSESSMENT_TYPES } from "@/lib/constants";
 import { ArrowRight, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useCurrentStudent } from "@/hooks/useCurrentStudent";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 const StudentDashboard = () => {
     const router = useRouter();
+    const [classLink, setClassLink] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const { data: student } = useCurrentStudent();
 
-    const zoomLink = true;
+    useEffect(() => {
+        const fetchClassLink = async () => {
+            if (!student?.year) return;
+            try {
+                const response = await axios.get(
+                    `/api/admin/online-class?year=${student.year}`,
+                );
+                console.log("Full response:", response?.data);
+                const classes = response?.data?.classes;
+                const zoomLink = classes?.[0]?.zoomLink;
+                // console.log("Fetched class link:", zoomLink);
+                setClassLink(zoomLink || null);
+            } catch (error) {
+                console.error("Failed to fetch class link:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchClassLink();
+    }, [student?.year]);
 
     return (
         <div>
@@ -19,59 +46,63 @@ const StudentDashboard = () => {
                 description="Select an assessment type to view your marked answers and marking schemes."
             />
 
-            <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className={`group relative overflow-hidden rounded-3xl p-12 transition-all duration-700 ${zoomLink
-                    ? "bg-slate-950 text-white"
-                    : "bg-slate-100 text-slate-400"
-                    }`}
-            >
-                <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 blur-[120px] rounded-full -mr-48 -mt-48 transition-transform group-hover:scale-110"></div>
+            {classLink && (
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className={`group relative overflow-hidden rounded-3xl p-12 transition-all duration-700 ${classLink
+                        ? "bg-slate-950 text-white"
+                        : "bg-slate-100 text-slate-400"
+                        }`}
+                >
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 blur-[120px] rounded-full -mr-48 -mt-48 transition-transform group-hover:scale-110"></div>
 
-                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-                    <div className="max-w-xl space-y-6">
-                        <div className="flex items-center gap-3">
-                            <span
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] ${zoomLink
-                                    ? "bg-teal-500 text-slate-950"
-                                    : "bg-slate-200 text-slate-500"
-                                    }`}
-                            >
-                                {zoomLink ? (
-                                    <>
-                                        <span className="w-2 h-2 bg-slate-950 rounded-full animate-pulse"></span>
-                                        Live Session Active
-                                    </>
-                                ) : (
-                                    "No Active Session"
-                                )}
-                            </span>
+                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                        <div className="max-w-xl space-y-6">
+                            <div className="flex items-center gap-3">
+                                <span
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] ${classLink
+                                        ? "bg-teal-500 text-slate-950"
+                                        : "bg-slate-200 text-slate-500"
+                                        }`}
+                                >
+                                    {classLink ? (
+                                        <>
+                                            <span className="w-2 h-2 bg-slate-950 rounded-full animate-pulse"></span>
+                                            Live Session Active
+                                        </>
+                                    ) : (
+                                        "No Active Session"
+                                    )}
+                                </span>
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-black leading-[1.1] tracking-tight">
+                                Join Your Live Class 🚀
+                            </h2>
+                            <p className="text-slate-400 text-lg leading-relaxed">
+                                Get your notes ready. The online class with Mathwiz starts in 5 minutes. Click to join the room.
+
+                            </p>
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-black leading-[1.1] tracking-tight">
-                            Combined Maths: <br />
-                            <span className="text-teal-400">Integration Mastery</span>
-                        </h2>
-                        <p className="text-slate-400 text-lg leading-relaxed">
-                            Join Mathwiz for today's deep dive into complex integration
-                            techniques. Live Q&A session starts in 5 minutes.
-                        </p>
-                    </div>
 
-                    <button
-                        disabled={!zoomLink}
-                        className={`group flex items-center justify-center gap-4 px-10 py-5 rounded-2xl font-black text-base transition-all ${zoomLink
-                            ? "bg-white text-slate-950 hover:bg-teal-400 hover:scale-105 active:scale-95 shadow-xl"
-                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                            }`}
-                    >
-                        <Video className="w-6 h-6" />
-                        Join Live Class
-                        <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
-                    </button>
-                </div>
-            </motion.div>
+                        <Button
+                            disabled={!classLink}
+                            onClick={() => {
+                                if (classLink) window.open(classLink, "_blank");
+                            }}
+                            className={`group flex items-center justify-center gap-4 px-10 py-5 rounded-2xl font-black text-base transition-all ${classLink
+                                ? "bg-white text-slate-950 hover:bg-teal-400 hover:scale-105 active:scale-95 shadow-xl"
+                                : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                                }`}
+                        >
+                            <Video className="w-6 h-6" />
+                            Join Live Class
+                            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
+                        </Button>
+                    </div>
+                </motion.div>
+            )}
 
             <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {ASSESSMENT_TYPES.map((type, idx) => (
