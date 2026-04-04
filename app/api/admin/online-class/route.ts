@@ -20,6 +20,12 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
 
+    // Ensure TTL index for auto-deletion after 1 day (86400 seconds)
+    await OnlineClasses.collection.createIndex(
+      { createdAt: 1 },
+      { expireAfterSeconds: 60 },
+    );
+
     const { zoomLink, year } = await req.json();
 
     if (!zoomLink || !year) {

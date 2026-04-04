@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  ArrowRight,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { ArrowRight, MapPin, Phone } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -23,6 +19,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import ScrollTriggered from "@/components/layout/ScrollTriggered";
 import FloatingSymbols from "@/components/shared/FloatingSymbols";
 import TestimonialSlider from "@/components/shared/TestimonialSlider";
+import PromoPopup from "@/components/shared/PromoPopup";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -222,10 +219,7 @@ export default function Home() {
       </ScrollTriggered>
 
       {/* ABOUT SECTION */}
-      <section
-        id="about"
-        className="w-full px-4 md:px-8 py-24 lg:px-24"
-      >
+      <section id="about" className="w-full px-4 md:px-8 py-24 lg:px-24">
         <ScrollTriggered>
           <div className="container mx-auto grid lg:grid-cols-2 gap-24 items-center">
             <div className="relative group">
@@ -547,7 +541,9 @@ export default function Home() {
           <div className="mx-auto px-6 relative z-10">
             <div className="lg:max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden grid md:grid-cols-2 shadow-2xl border border-slate-100">
               <div className="py-10 px-4 md:p-16 bg-slate-900 text-white">
-                <h2 className="text-2xl lg:text-4xl font-bold mb-6">Enroll Now.</h2>
+                <h2 className="text-2xl lg:text-4xl font-bold mb-6">
+                  Enroll Now.
+                </h2>
                 <p className="text-slate-400 mb-10 leading-relaxed text-sm">
                   Unlock your true potential. Our classes are designed to guide
                   you from basic concepts to advanced paper techniques.
@@ -605,7 +601,7 @@ export default function Home() {
           </div>
         </section>
       </ScrollTriggered>
-    </main >
-    // </PageWrapper>
+      <PromoPopup />
+    </main>
   );
 }

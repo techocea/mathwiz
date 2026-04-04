@@ -63,7 +63,6 @@ const submissionSchema = new mongoose.Schema(
     },
     submissionUrl: {
       type: String,
-      required: true,
     },
     submissionPublicId: {
       type: String,
@@ -78,8 +77,14 @@ const submissionSchema = new mongoose.Schema(
       type: Number,
       min: 0,
     },
+    status: {
+      type: String,
+      enum: ["started", "submitted", "marked"],
+      default: "started",
+    },
     markedPublicId: { type: String },
     startTime: { type: Date },
+    submitTime: { type: Date },
   },
   { timestamps: true },
 );

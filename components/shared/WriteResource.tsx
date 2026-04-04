@@ -26,7 +26,10 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
     const router = useRouter();
     const { isRunning, currentExamId, startTimer, isTimeUp } = useTimer();
 
-    const handleStartExam = (resourceId: string, durationMinutes: number) => {
+    const handleStartExam = async (
+        resourceId: string,
+        durationMinutes: number,
+    ) => {
         let isThisExamSubmitted =
             localStorage.getItem(`examSubmitted_${resourceId}`) === "true";
         if (isRunning && currentExamId !== resourceId) {
@@ -39,9 +42,20 @@ const WriteResource = ({ resources, type }: WriteResourceProps) => {
         }
 
         const examStartTime = new Date().toISOString();
-        localStorage.setItem(`examStartTime_${resourceId}`, examStartTime);
-        startTimer(durationMinutes, resourceId);
-        router.push(`/dashboard/student/${type}/${resourceId}`);
+        try {
+            await fetch("/api/submissions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ resourceId, startTime: examStartTime }),
+            });
+
+            localStorage.setItem(`examStartTime_${resourceId}`, examStartTime);
+            startTimer(durationMinutes, resourceId);
+            router.push(`/dashboard/student/${type}/${resourceId}`);
+        } catch (error) {
+            console.error("Start-log failed", error);
+            router.push(`/dashboard/student/${type}/${resourceId}`);
+        }
     };
 
     const isExpired = (uploadDeadline: string) => {

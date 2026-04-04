@@ -10,11 +10,13 @@ import { useEffect, useState } from "react";
 import { useCurrentStudent } from "@/hooks/useCurrentStudent";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import PerformanceChart from "@/components/dashboard/PerformanceChart";
 
 const StudentDashboard = () => {
     const router = useRouter();
     const [classLink, setClassLink] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
     const { data: student } = useCurrentStudent();
 
     useEffect(() => {
@@ -81,8 +83,8 @@ const StudentDashboard = () => {
                                 Join Your Live Class 🚀
                             </h2>
                             <p className="text-slate-400 text-lg leading-relaxed">
-                                Get your notes ready. The online class with Mathwiz starts in 5 minutes. Click to join the room.
-
+                                Get your notes ready. The online class with Mathwiz starts in 5
+                                minutes. Click to join the room.
                             </p>
                         </div>
 
@@ -127,28 +129,7 @@ const StudentDashboard = () => {
                 ))}
             </div>
 
-            {/* <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {ASSESSMENT_TYPES.map((type) => (
-                    <Card
-                        key={type.value}
-                        onClick={() => router.push(`/dashboard/student/${type.value}`)}
-                        className="group relative bg-card rounded-xl border shadow-card hover:shadow-card-hover px-6 text-left transition-all duration-200 hover:border-primary/30 cursor-pointer"
-                    >
-                        <CardHeader className="flex items-center justify-between w-full">
-                            <span className="text-3xl">{type.icon}</span>
-                            <ArrowRight className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </CardHeader>
-                        <CardContent>
-                            <h3 className="text-lg font-semibold text-foreground mb-1">
-                                {type.label}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                                View marked answers & schemes
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div> */}
+            {/* <PerformanceChart /> */}
         </div>
     );
 };

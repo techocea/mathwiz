@@ -11,13 +11,10 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { BookOpen, Clock, Heading1, Loader2, Lock } from "lucide-react";
-import DownloadButton from "./DownloadButton";
 import { Button } from "@/components/ui/button";
-import { formatTime } from "@/helpers/formatTime";
+import { formatTimeInMS } from "@/helpers/formatTime";
 import React, { useEffect, useState } from "react";
-import { Progress } from "@/components/ui/progress";
 import { useTimer } from "@/app/providers/TimerContext";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
 import Link from "next/link";
 
 interface PaperProps {
@@ -162,7 +159,7 @@ const WriteTimedResource = ({ resourceId, paper }: PaperProps) => {
               <span
                 className={`text-2xl font-mono font-black tracking-tighter leading-none ${getDangerLevel()}`}
               >
-                {formatTime(timeRemaining)}
+                {formatTimeInMS(timeRemaining)}
               </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                 Time Remaining

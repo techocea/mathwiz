@@ -12,11 +12,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import LogoutButton from "@/components/shared/LogoutButton";
+import { DesktopNavbarProps } from "@/global";
+import { useCurrentStudent } from "@/hooks/useCurrentStudent";
+
 
 const DashboardNavbar = () => {
   const pathname = usePathname();
@@ -24,17 +27,12 @@ const DashboardNavbar = () => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
 
+  const { data: student } = useCurrentStudent();
+
+
   const isActive = (path: string) => pathname === path;
 
-  const DesktopNavLink = ({
-    href,
-    icon: Icon,
-    label,
-  }: {
-    href: string;
-    icon: any;
-    label: string;
-  }) => (
+  const DesktopNavLink = ({ href, icon: Icon, label }: DesktopNavbarProps) => (
     <Link
       href={href}
       className={`flex items-center gap-2 text-sm font-medium transition-all hover:text-blue-600 ${isActive(href) ? "text-blue-600" : "text-muted-foreground"
@@ -46,7 +44,7 @@ const DashboardNavbar = () => {
   );
 
   return (
-    <header className="fixed top-0 left-0 z-50 bg-white/80 backdrop-blur-md border-b py-3 px-6 lg:px-8 flex items-center justify-between w-full">
+    <header className="fixed top-0 left-0 z-50 bg-white border-b py-3 px-6 lg:px-8 flex items-center justify-between w-full">
       <div className="flex items-center gap-8">
         {/* Logo Section */}
         <Link
@@ -88,8 +86,8 @@ const DashboardNavbar = () => {
               >
                 <div
                   className={`flex items-center gap-1 cursor-pointer text-sm font-medium transition-colors ${pathname.includes("/resources")
-                      ? "text-blue-600"
-                      : "text-muted-foreground"
+                    ? "text-blue-600"
+                    : "text-muted-foreground"
                     }`}
                 >
                   <BookOpen size={20} className="mr-1" />
@@ -145,7 +143,8 @@ const DashboardNavbar = () => {
 
       {/* Desktop Logout */}
       {pathname.startsWith("/dashboard/student") ? (
-        <div className="block">
+        <div className="flex gap-2 items-center justify-center">
+          <p className="text-secondary font-medium max-sm:text-sm">{student?.email}</p>
           <LogoutButton />
         </div>
       ) : (
@@ -214,8 +213,8 @@ const DashboardNavbar = () => {
                   <button
                     onClick={() => setIsResourcesOpen(!isResourcesOpen)}
                     className={`flex items-center justify-between w-full p-3 rounded-xl transition-all ${isResourcesOpen
-                        ? "bg-blue-50 text-blue-600"
-                        : "text-gray-600 hover:bg-gray-50"
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-50"
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -294,8 +293,8 @@ const MobileNavLink = ({ href, icon, label, active, onClick }: any) => (
     href={href}
     onClick={onClick}
     className={`flex items-center gap-3 p-3 rounded-xl transition-all font-medium text-sm ${active
-        ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-        : "text-gray-600 hover:bg-gray-100"
+      ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+      : "text-gray-600 hover:bg-gray-100"
       }`}
   >
     {icon}

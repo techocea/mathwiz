@@ -18,6 +18,20 @@ import { SubmissionProps } from "@/global";
 import { MoreHorizontal } from "lucide-react";
 import DownloadButton from "../shared/DownloadButton";
 import UploadMarkedAnswerModal from "./UploadMarkedAnswerModal";
+import { formatTime } from "@/helpers/formatTime";
+
+const getStatusStyle = (status: string) => {
+    switch (status) {
+        case "started":
+            return "bg-yellow-200 text-yellow-700";
+        case "submitted":
+            return "bg-green-200 text-green-700";
+        case "marked":
+            return "bg-blue-200 text-blue-800";
+        default:
+            return "bg-yellow-100 text-yellow-700";
+    }
+};
 
 const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
     return (
@@ -29,7 +43,7 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                         <TableHead>Paper Title</TableHead>
                         <TableHead>Start Time</TableHead>
                         <TableHead>Submit Time</TableHead>
-                        {/* <TableHead>Status</TableHead> */}
+                        <TableHead>Status</TableHead>
                         <TableHead align="center" className="text-center">
                             Actions
                         </TableHead>
@@ -46,11 +60,16 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                                     </div>
                                 </TableCell>
                                 <TableCell className="capitalize">{s.resourceId.title}</TableCell>
-                                <TableCell>{new Date(s.startTime).toLocaleString()}</TableCell>
-                                <TableCell>
-                                    {new Date(s.createdAt).toLocaleString()}
+                                <TableCell>{formatTime(s.startTime)}</TableCell>
+                                <TableCell> {s.submitTime ? formatTime(s.submitTime) : "Not Submitted"}</TableCell>
+                                <TableCell><span
+                                    className={`inline-flex items-center px-2 py-1 rounded-full capitalize text-xs font-medium ${getStatusStyle(
+                                        s.status
+                                    )}`}
+                                >
+                                    {s.status}
+                                </span>
                                 </TableCell>
-                                {/* <TableCell>Graded</TableCell> */}
                                 <TableCell align="center" className="cursor-pointer">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
@@ -63,9 +82,6 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                                             align="end"
                                             className="border-2 w-full relative"
                                         >
-                                            <DropdownMenuItem asChild>
-                                                <UploadMarkedAnswerModal submissionId={s._id} />
-                                            </DropdownMenuItem>
                                             <DropdownMenuItem>
                                                 <DownloadButton
                                                     enableIcon={false}
@@ -73,6 +89,9 @@ const ViewSubmissionTable = ({ submissions }: SubmissionProps) => {
                                                     publicId={s.submissionPublicId}
                                                     fileName={`submission-${s?.studentId?.firstName}-${s?.resourceId?.title}`}
                                                 />
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <UploadMarkedAnswerModal submissionId={s._id} />
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>

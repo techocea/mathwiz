@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -22,21 +22,41 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
 
+    const contentType = req.headers.get("content-type") || "";
+
+    // CASE A: Starting the exam (JSON)
+    if (contentType.includes("application/json")) {
+      const { resourceId, startTime } = await req.json();
+
+      const submission = await Submission.findOneAndUpdate(
+        { studentId: user._id, resourceId },
+        { startTime: new Date(startTime), status: "started" },
+        { upsert: true, new: true },
+      );
+
+      // Link to resource if not already linked
+      await Resource.findByIdAndUpdate(resourceId, {
+        $addToSet: { submissions: submission._id },
+      });
+
+      return NextResponse.json({ message: "Exam started" });
+    }
+
+    // CASE B: Submitting the paper (FormData)
     const formData = await req.formData();
     const resourceId = formData.get("resourceId")?.toString();
-    const startTime = formData.get("startTime")?.toString();
-    const submissionUrl = formData.get("submissionUrl") as File | null;
+    const submissionUrl = formData.get("submissionUrl") as File;
 
     if (!submissionUrl || !resourceId) {
       return NextResponse.json(
         { message: "Missing file or resourceId" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const buffer = Buffer.from(await submissionUrl.arrayBuffer());
     const fileStr = `data:${submissionUrl.type};base64,${buffer.toString(
-      "base64"
+      "base64",
     )}`;
     const timestamp = Date.now();
     const publicId = `student-${user._id}-paper-${resourceId}-${timestamp}`;
@@ -50,38 +70,33 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
 
-    let paperStartTime: Date | undefined;
-    if (startTime) {
-      paperStartTime = new Date(startTime); // Convert the string to a Date object
-    } else {
-      console.warn(
-        "startTime not provided in submission. Storing as null/undefined."
-      );
-    }
-
-    const submission = await Submission.create({
-      submissionUrl: uploadRes.secure_url,
-      submissionPublicId: uploadRes.public_id,
-      studentId: user._id,
-      startTime: paperStartTime,
-      resourceId,
-    });
-
-    await Resource.findByIdAndUpdate(resourceId, {
-      $push: { submissions: submission._id },
-    });
+    await Submission.findOneAndUpdate(
+      {
+        studentId: user._id,
+        resourceId,
+      },
+      {
+        $set: {
+          submissionUrl: uploadRes.secure_url,
+          submissionPublicId: uploadRes.public_id,
+          status: "submitted",
+          submitTime: new Date(),
+        },
+      },
+      { upsert: true, new: true },
+    );
 
     return NextResponse.json(
       {
         message: "Submission successful",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Submission error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -94,7 +109,7 @@ export async function GET(req: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -135,7 +150,7 @@ export async function GET(req: NextRequest) {
     if (!submissions || submissions.length === 0) {
       return NextResponse.json(
         { submissions, message: "No submissions found" },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -144,13 +159,13 @@ export async function GET(req: NextRequest) {
         submissions,
         message: "submissions found",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.error("Fetch error:", error.message || error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -66,6 +66,7 @@ export const markingSchema = z.object({
 export const markedAnswerSchema = z.object({
   score: z.number().min(0).max(100),
   remark: z.string().min(3),
+  status: z.enum(["started", "submitted", "marked"]).optional(),
   markedPdfUrl: z
     .custom<File>((val) => val instanceof File, "PDF file is required")
     .refine((file) => file.size < MAX_FILE_SIZE, "File too large")

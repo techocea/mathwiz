@@ -11,21 +11,21 @@ export async function POST(
     params,
   }: {
     params: Promise<{ submissionId: string }>;
-  }
+  },
 ) {
   try {
     await connectDB();
 
     const formData = await req.formData();
 
-    const score = Number(formData.get("score"));
+    const score = Number(formData.get("score") || 0);
     const remark = String(formData.get("remark") ?? "");
     const markedPdfUrl = formData.get("markedPdfUrl") as File;
 
     if (!markedPdfUrl || !remark)
       return NextResponse.json(
         { message: "All fields required" },
-        { status: 400 }
+        { status: 400 },
       );
 
     const awaitedParams = (await params).submissionId;
@@ -37,7 +37,7 @@ export async function POST(
 
     const buffer = Buffer.from(await markedPdfUrl.arrayBuffer());
     const fileStr = `data:${markedPdfUrl.type};base64,${buffer.toString(
-      "base64"
+      "base64",
     )}`;
     const publicId = `${remark
       .replace(/\s+/g, "-")
@@ -52,19 +52,21 @@ export async function POST(
 
     submission.score = score;
     submission.remark = remark;
+    submission.status = "marked";
     submission.markedPdfUrl = uploadRes.secure_url;
     submission.markedPublicId = uploadRes.public_id;
 
     const updatedSubmission = await submission.save();
+
     return NextResponse.json(
-      { message: "Submission evaluated", updatedSubmission },
-      { status: 200 }
+      { message: "Submission evaluated", status: updatedSubmission.status },
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error uploading the marked paper:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -77,7 +79,7 @@ export async function GET(req: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -118,7 +120,7 @@ export async function GET(req: NextRequest) {
     if (!submissions || submissions.length === 0) {
       return NextResponse.json(
         { submissions, message: "No submissions found" },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -127,13 +129,13 @@ export async function GET(req: NextRequest) {
         submissions,
         message: "submissions found",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.error("Fetch error:", error.message || error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

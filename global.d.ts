@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type ResourceType =
   | "paper"
   | "mini-exam"
@@ -6,8 +8,8 @@ export type ResourceType =
   | "speed-paper";
 
 export type ActiveTabTypes = "activities" | "marked" | "markings";
-
 export type StatusTypes = "pending" | "approved" | "rejected" | "banned";
+export type SubmissionStatusTypes = "started" | "submitted" | "marked";
 
 export interface ResourceFilters {
   year: string;
@@ -45,8 +47,9 @@ export interface SubmissionProps {
   submissions: {
     _id: string;
     submissionPublicId: string;
+    status: SubmissionStatusTypes;
     startTime: string;
-    createdAt: string;
+    submitTime: string;
     studentId: {
       firstName: string;
       lastName: string;
@@ -103,3 +106,9 @@ export interface ContactFormProps {
 }
 
 declare module "*.css";
+
+export interface DesktopNavbarProps {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+}
